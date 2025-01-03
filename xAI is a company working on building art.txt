@@ -1,0 +1,5 @@
+xAI is a company working on building artificial intelligence to accelerate human scientific discovery. We are guided by our mission to advance our collective understanding of the universe.
+
+Our team is led by Elon Musk, CEO of Tesla and SpaceX. Collectively our team contributed some of the most widely used methods in the field, in particular the Adam optimizer, Batch Normalization, Layer Normalization, and the discovery of adversarial examples. We further introduced innovative techniques and analyses such as Transformer-XL, Autoformalization, the Memorizing Transformer, Batch Size Scaling, μTransfer, and SimCLR. We have worked on and led the development of some of the largest breakthroughs in the field including AlphaStar, AlphaCode, Inception, Minerva, GPT-3.5, and GPT-4.
+
+Our team is advised by Dan Hendrycks who currently serves as the director of the Center for AI Safety.
