@@ -89,12 +89,34 @@ Layer 3: Examination of the analytical methods used in Layer 2 //  user given in
 
 ```mojo
 fn analyze_thought(thought: Thought) -> Understanding:
+    """
+    Recursively analyzes a thought by decomposing it into sub-thoughts and synthesizing understanding. 
+
+    The `->` syntax in Mojo indicates the return type of the function. In this case, it specifies that the function will return a List[Understanding] to properly handle multiple thoughts in the recursive case, since it processes a List[Understanding] when decomposing the input thought.
+
+    This is a type annotation that explicitly declares the expected return type, providing compile-time type checking and improving code clarity. The compiler will ensure that the function always returns an `Understanding` object.
+
+    Args:
+        thought: The input thought to be analyzed.
+    
+    Returns:
+        An Understanding object representing the analyzed thought.
+    """
+    """
+    Recursively analyzes a thought by decomposing it into sub-thoughts and synthesizing understanding. 
+    
+    Args:
+        thought: The input thought to be analyzed.
+    
+    Returns:
+        An Understanding object representing the analyzed thought in the form of a list of thoughts and understanding.
+    """
     # Base case
     if is_fundamental(thought):
         return basic_understanding(thought)
 
     # Recursive case
-    var sub_thoughts: List[Thought] = decompose(thought)
+    var sub_thoughts: List[Understanding] = decompose(thought)
     return analyze_thought(sub_thoughts) + synthesize(sub_thoughts)
 ```
 
