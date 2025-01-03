@@ -31,12 +31,10 @@ Key components of meta-cognitive systems:
 
 <exploration>
 Let's examine how this works in practice using a concrete example:
-
-<meta_thinking>
-When I process information, I utilize multiple layers of analysis:
-Layer 1: Direct processing of information
-Layer 2: Analysis of how I processed that information
-Layer 3: Examination of the analytical methods used in Layer 2
+<meta_thinking> When I process information, I utilize multiple layers of analysis: // example: <thinking_layer type="meta_analysis_determination"> // This tag is used to determine the meta-analysis layer which should be a undetermined layer amount and potentialy a range of layers with recursive calls and recursive calls to the previous layer and the next layer to allow for a range of meta-analysis layers to be used. 
+Layer 1: Direct processing of information // user given input example: <thinking_layer type="direct_processing">
+Layer 2: Analysis of how I processed that information //  user given input example: <thinking_layer type="analysis_of_processing">
+Layer 3: Examination of the analytical methods used in Layer 2 //  user given input example: <thinking_layer type="examination_of_methods">
 </meta_thinking>
 
 <thought_pattern>
