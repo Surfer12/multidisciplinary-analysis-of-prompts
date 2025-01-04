@@ -6,6 +6,14 @@
 		{
 			"name": "ClaudeMetaResearch",
 			"path": "../ClaudeMetaResearch"
+		},
+		{
+			"name": "cognitive-design-framework",
+			"path": "../cognitive-design-framework"
+		},
+		{
+			"name": "my-magic-mojo-crossintegration-pattern-prompt-proj",
+			"path": "../my-magic-mojo-crossintegration-pattern-prompt-proj"
 		}
 	],
 	"settings": {}
