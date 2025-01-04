@@ -65,7 +65,7 @@ fn analyze_thought(thought: Thought):
 
     The function no longer specifies a return type, allowing for more flexibility in handling the recursive case.
 
-    Args:
+    Args: 
         thought: The input thought to be analyzed.
     
     Returns:
