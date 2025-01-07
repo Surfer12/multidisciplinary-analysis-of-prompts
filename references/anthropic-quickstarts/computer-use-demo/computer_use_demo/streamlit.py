@@ -30,6 +30,7 @@ from computer_use_demo.loop import (
     sampling_loop,
 )
 from computer_use_demo.tools import ToolResult
+from cognitive_framework.tools.meta_cognitive import MetaCognitiveToolCollection, MetaComputerTool
 
 CONFIG_DIR = PosixPath("~/.anthropic").expanduser()
 API_KEY_FILE = CONFIG_DIR / "api_key"
@@ -100,12 +101,75 @@ def _reset_model():
     ]
 
 
+def setup_meta_cognitive_state():
+    """Initialize meta-cognitive state in session"""
+    if "meta_cognitive_state" not in st.session_state:
+        st.session_state.meta_cognitive_state = {
+            "patterns": [],
+            "adaptations": [],
+            "metrics": {}
+        }
+    if "tool_history" not in st.session_state:
+        st.session_state.tool_history = []
+
+
+def render_meta_cognitive_insights():
+    """Render meta-cognitive insights in the sidebar"""
+    with st.sidebar:
+        st.subheader("Meta-Cognitive Insights")
+
+        # Show execution patterns
+        if st.session_state.meta_cognitive_state["patterns"]:
+            with st.expander("Execution Patterns", expanded=True):
+                for pattern in st.session_state.meta_cognitive_state["patterns"][-5:]:
+                    st.write(f"- Type: {pattern['type']}")
+                    if "changes" in pattern:
+                        st.write(f"  Changes: {pattern['changes']}")
+                    st.write(f"  Time: {pattern['timestamp']}")
+
+        # Show adaptations
+        if st.session_state.meta_cognitive_state["adaptations"]:
+            with st.expander("Tool Adaptations", expanded=True):
+                for adaptation in st.session_state.meta_cognitive_state["adaptations"][-5:]:
+                    st.write(f"- {adaptation['type']}")
+                    if "reason" in adaptation:
+                        st.write(f"  Reason: {adaptation['reason']}")
+
+        # Show metrics
+        if st.session_state.meta_cognitive_state["metrics"]:
+            with st.expander("Performance Metrics", expanded=True):
+                metrics = st.session_state.meta_cognitive_state["metrics"]
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.metric("Stability", f"{metrics.get('execution_stability', 0):.2f}")
+                with col2:
+                    st.metric("Pattern Diversity", metrics.get("pattern_diversity", 0))
+
+
+def update_meta_cognitive_state(tool_result: ToolResult):
+    """Update meta-cognitive state with tool execution results"""
+    if hasattr(tool_result, "patterns"):
+        st.session_state.meta_cognitive_state["patterns"].extend(tool_result.patterns)
+
+    if hasattr(tool_result, "adaptations"):
+        st.session_state.meta_cognitive_state["adaptations"].extend(tool_result.adaptations)
+
+    if hasattr(tool_result, "metrics"):
+        st.session_state.meta_cognitive_state["metrics"].update(tool_result.metrics)
+
+    # Update tool history
+    st.session_state.tool_history.append({
+        "timestamp": datetime.now().isoformat(),
+        "tool_result": tool_result
+    })
+
+
 async def main():
-    """Render loop for streamlit"""
+    """Main streamlit application with meta-cognitive enhancements"""
     setup_state()
+    setup_meta_cognitive_state()
 
     st.markdown(STREAMLIT_STYLE, unsafe_allow_html=True)
-
     st.title("Claude Computer Use Demo")
 
     if not os.getenv("HIDE_WARNING", False):
@@ -172,7 +236,30 @@ async def main():
         else:
             st.session_state.auth_validated = True
 
-    chat, http_logs = st.tabs(["Chat", "HTTP Exchange Logs"])
+    # Create meta-cognitive tool collection
+    tool_collection = MetaCognitiveToolCollection(
+        MetaComputerTool(),
+        config={
+            "observation": {"state_tracking": True, "pattern_analysis": True},
+            "adaptation": {"enabled": True, "threshold": 0.7}
+        }
+    )
+
+    chat, http_logs, insights = st.tabs(["Chat", "HTTP Exchange Logs", "Meta-Cognitive Insights"])
+
+    with insights:
+        st.subheader("Tool Execution History")
+        if st.session_state.tool_history:
+            for entry in reversed(st.session_state.tool_history[-10:]):
+                with st.expander(f"Execution at {entry['timestamp']}", expanded=False):
+                    result = entry["tool_result"]
+                    st.json({
+                        "success": result.success,
+                        "patterns": getattr(result, "patterns", []),
+                        "metrics": getattr(result, "metrics", {}),
+                        "metadata": getattr(result, "metadata", {})
+                    })
+
     new_message = st.chat_input(
         "Type a message to send to Claude to control the computer..."
     )
@@ -224,7 +311,7 @@ async def main():
 
         with track_sampling_loop():
             # run the agent sampling loop with the newest message
-            st.session_state.messages = await sampling_loop(
+            messages = await sampling_loop(
                 system_prompt_suffix=st.session_state.custom_system_prompt,
                 model=st.session_state.model,
                 provider=st.session_state.provider,
@@ -240,7 +327,11 @@ async def main():
                 ),
                 api_key=st.session_state.api_key,
                 only_n_most_recent_images=st.session_state.only_n_most_recent_images,
+                tool_collection=tool_collection
             )
+
+        # Render meta-cognitive insights
+        render_meta_cognitive_insights()
 
 
 def maybe_add_interruption_blocks():

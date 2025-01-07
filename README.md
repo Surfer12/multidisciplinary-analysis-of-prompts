@@ -1,123 +1,150 @@
-# Cognitive Framework Research Project
+# Claude Computer Use Demo with Meta-Cognitive Tools
 
-A comprehensive framework for developing, analyzing, and researching cognitive systems, focusing on emergent patterns, meta-cognitive analysis, and AI system interactions.
+This repository contains an enhanced version of the Anthropic Computer Use Demo, integrated with meta-cognitive tools for pattern recognition, adaptation, and performance monitoring.
 
-## Project Structure
+## Features
 
+- **Meta-Cognitive Capabilities**
+  - Pattern recognition in tool execution
+  - Adaptive behavior based on resource usage
+  - Performance monitoring and metrics
+  - State tracking and analysis
+
+- **Enhanced UI**
+  - Real-time visualization of patterns
+  - Performance metrics dashboard
+  - Tool execution history
+  - Adaptation insights
+
+## Prerequisites
+
+- Docker and Docker Compose
+- Anthropic API key
+- (Optional) AWS credentials for Bedrock
+- (Optional) Google Cloud credentials for Vertex AI
+
+## Quick Start
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/computer-use-demo.git
+cd computer-use-demo
 ```
-.
-├── packages/                    # Source code packages
-│   ├── core/                   # Core framework implementation
-│   ├── mojo/                   # Mojo language implementations
-│   └── typescript/             # TypeScript implementations
-├── docs/                       # Documentation
-│   ├── meta-analysis/         # Meta-level analysis
-│   ├── research/              # Research findings
-│   └── technical-specs/       # Technical specifications
-├── config/                     # Configuration files
-│   ├── yaml/                  # YAML configurations
-│   └── ini/                   # INI configurations
-├── examples/                   # Example implementations
-├── references/                # External references
-└── templates/                 # Project templates
+
+2. Set up environment variables:
+```bash
+# Create .env file
+cat > .env << EOL
+ANTHROPIC_API_KEY=your_api_key_here
+CLOUD_ML_REGION=your_region  # Optional, for Google Cloud
+EOL
 ```
 
-## Packages
+3. Build and run with Docker Compose:
+```bash
+docker-compose up --build
+```
 
-### Core Package
-- Framework fundamentals
-- Base implementations
-- Common utilities
-
-### Mojo Package
-- High-performance implementations
-- Cognitive processing modules
-- System optimizations
-
-### TypeScript Package
-- Web-based implementations
-- UI components
-- Client-side utilities
-
-## Documentation
-
-- `/docs/meta-analysis/`: Meta-level analysis
-- `/docs/research/`: Research findings
-- `/docs/technical-specs/`: Technical specifications
-- `/docs/guides/`: Usage documentation
+4. Access the application:
+- Web Interface: http://localhost:8501
+- VNC (for debugging): localhost:5900
 
 ## Configuration
 
-- `.cursorrules`: Cursor IDE configuration files
-- `config/yaml/`: YAML configuration files
-- `config/ini/`: INI configuration files
+### API Providers
 
-## Getting Started
+The demo supports multiple API providers:
+- Anthropic (default)
+- AWS Bedrock
+- Google Vertex AI
 
-1. **Clone the Repository**
-   ```bash
-   git clone [repository-url]
-   cd cognitive-framework-research
-   ```
+Configure the provider in the web interface under Settings.
 
-2. **Install Dependencies**
-   ```bash
-   # Core package
-   cd packages/core
-   pip install -r requirements.txt
+### Meta-Cognitive Settings
 
-   # TypeScript package
-   cd ../typescript
-   npm install
-
-   # Mojo package
-   cd ../mojo
-   # Follow Mojo installation instructions
-   ```
-
-3. **Run Tests**
-   ```bash
-   # Run core tests
-   cd packages/core
-   python -m pytest
-
-   # Run TypeScript tests
-   cd ../typescript
-   npm test
-
-   # Run Mojo tests
-   cd ../mojo
-   mojo test
-   ```
+Adjust meta-cognitive behavior in the UI:
+- Pattern analysis sensitivity
+- Adaptation thresholds
+- Performance monitoring intervals
 
 ## Development
 
-1. **Package Development**
-   - Each package can be developed independently
-   - Follow package-specific README files
-   - Maintain consistent coding standards
+### Project Structure
 
-2. **Documentation**
-   - Update relevant documentation
-   - Follow documentation standards
-   - Keep examples up to date
+```
+.
+├── computer_use_demo/     # Core demo code
+├── cognitive_framework/   # Meta-cognitive framework
+├── examples/             # Example workflows
+├── docs/                # Documentation
+├── scripts/             # Startup scripts
+└── config/              # Configuration files
+```
 
-3. **Testing**
-   - Write tests for new features
-   - Maintain test coverage
-   - Run full test suite before commits
+### Running Tests
+
+```bash
+# Inside the container
+pytest packages/core/tests/
+```
+
+### Adding New Features
+
+1. Extend meta-cognitive capabilities:
+   - Add new pattern types in `MetaComputerTool`
+   - Implement new observers
+   - Enhance the visitor system
+
+2. Improve visualization:
+   - Add new metrics
+   - Create custom charts
+   - Enhance the UI
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Connection Errors**
+   - Check API key configuration
+   - Verify network connectivity
+   - Ensure correct provider settings
+
+2. **Display Issues**
+   - Restart the container
+   - Check Xvfb logs
+   - Verify VNC connection
+
+3. **Performance Problems**
+   - Adjust resource limits in docker-compose.yml
+   - Monitor container metrics
+   - Check adaptation thresholds
+
+### Debugging
+
+1. Access container logs:
+```bash
+docker-compose logs -f
+```
+
+2. Connect via VNC:
+```bash
+# Use any VNC viewer
+vncviewer localhost:5900
+```
+
+3. Access shell:
+```bash
+docker-compose exec computer-use-demo bash
+```
 
 ## Contributing
 
 1. Fork the repository
 2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
+3. Implement changes
+4. Add tests
+5. Submit a pull request
 
 ## License
 
-[License Information]
-
-## Contact
-
-[Contact Information]
+MIT License - See LICENSE file for details

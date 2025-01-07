@@ -1,43 +1,52 @@
-# Multi-stage build for development environment
-FROM python:3.9-slim as python-base
+FROM python:3.11-slim
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git \
+    xvfb \
+    x11vnc \
+    xterm \
+    firefox-esr \
+    tint2 \
     curl \
-    build-essential \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs \
-    && rm -rf /var/lib/apt/lists/*
-
-# Set up Python environment
+# Set up working directory
 WORKDIR /app
-COPY packages/core/requirements/*.txt ./requirements/
-RUN python -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
-RUN pip install -r requirements/dev.txt
 
-# Set up TypeScript environment
-COPY packages/typescript/package*.json ./
-RUN npm install
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Set up Mojo environment
-# Add Mojo installation steps here
+# Copy the cognitive framework and computer use demo
+COPY packages/core/cognitive_framework /app/cognitive_framework
+COPY references/anthropic-quickstarts/computer-use-demo/computer_use_demo /app/computer_use_demo
 
-# Development stage
-FROM python-base as dev
-WORKDIR /app
-COPY . .
+# Copy example workflows and documentation
+COPY examples /app/examples
+COPY docs /app/docs
 
-# Install development dependencies
-RUN cd packages/core && pip install -e ".[dev]"
-RUN cd packages/typescript && npm install
+# Set up virtual display
+ENV DISPLAY=:1
 
-# Set up development environment
-ENV PYTHONPATH=/app/packages/core/src
-ENV NODE_PATH=/app/packages/typescript/node_modules
+# Copy startup scripts
+COPY scripts/start_all.sh /app/
+COPY scripts/start_xvfb.sh /app/
+RUN chmod +x /app/start_all.sh /app/start_xvfb.sh
 
-CMD ["bash"]
+# Create necessary directories
+RUN mkdir -p /app/.config/tint2
+
+# Copy tint2 configuration
+COPY config/tint2rc /app/.config/tint2/tint2rc
+
+# Set up environment variables
+ENV PYTHONPATH=/app
+ENV ANTHROPIC_API_KEY=""
+ENV CLOUD_ML_REGION=""
+
+# Expose Streamlit port
+EXPOSE 8501
+
+# Start the application
+CMD ["./start_all.sh"]
