@@ -1,0 +1,24 @@
+{
+    "name": "modularml.github.io",
+    "version": "0.0.1",
+    "repository": "github:modularml/mojodojo.dev",
+    "author": "Mojo Dojo <jackos@me.com>",
+    "license": "MIT",
+    "devDependencies": {
+        "@vuepress/plugin-back-to-top": "next",
+        "@vuepress/plugin-docsearch": "next",
+        "@vuepress/plugin-google-analytics": "next",
+        "@vuepress/plugin-medium-zoom": "next",
+        "@vuepress/plugin-shiki": "next",
+        "@vuepress/theme-default": "next",
+        "@vuepress/bundler-vite": "next",
+        "@vuepress/plugin-feed": "next", 
+        "@vuepress/plugin-comment": "next",
+        "vuepress": "next"
+    },
+    "scripts": {
+        "dev": "vuepress dev",
+        "build": "vuepress build",
+        "docs": "bash -c ./jupyter_to_md.sh"
+    }
+}
