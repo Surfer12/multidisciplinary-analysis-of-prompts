@@ -1,0 +1,174 @@
+The user wants to reformat the selected code, which is already in a Mojo-like syntax for defining structs, into actual valid Mojo code.
+
+The current selection uses a syntax that resembles Mojo but has a few key differences:
+- It doesn't have the `from typing import Optional, List` statement.
+- It uses a colon after the struct name instead of parentheses.
+- It doesn't use `var` for the fields.
+- It uses `= None` for optional fields instead of `Optional[...]`.
+
+To reformat it to valid Mojo, I need to:
+1. Add the necessary import statement.
+2. Change the struct definition syntax to use parentheses.
+3. Add `var` to the beginning of each field definition.
+4. Change the optional field syntax to use `Optional[...]`. ```
+// Start of Selection
+from typing import Optional, List
+
+struct Concept:
+    var id: Int
+    var name: String
+    var relevant_input_excerpt: String
+
+struct StageAnalysisItem:
+    var title: String
+    var concepts: Optional[List[Concept]]
+    var perspectives: Optional[List[Perspective]]
+    var connections: Optional[List[Connection]]
+    var patterns: Optional[List[Pattern]]
+    var assumptions: Optional[List[Assumption]]
+    var markers: Optional[List[Marker]]
+    var visualization: Optional[Visualization]
+    var refinements: Optional[List[Refinement]]
+    var reflection: Optional[Reflection]
+    var summary: Optional[String]
+    var description: Optional[String]
+    var links: Optional[List[Link]]
+    var unexpected_insight: Optional[String]
+    var map_structure: Optional[MapStructure]
+    var map_details: Optional[MapDetails]
+
+struct Perspective:
+    var name: String
+    var validity: String
+    var rating: Int
+    var explanation: String
+
+struct Connection:
+    var concepts: List[String]
+    var relationship: String
+    var description: String
+
+struct Pattern:
+    var description: String
+
+struct Assumption:
+    var statement: String
+    var counter_argument: String
+
+struct Marker:
+    var name: String
+    var description: String
+    var significance: Optional[String]
+
+struct Visualization:
+    var core_cluster: List[String]
+    var central_ring: List[String]
+    var adaptive_refinement_layer: String
+
+struct Refinement:
+    var change: Optional[String]
+    var reasoning: Optional[String]
+    var refinement: Optional[String]
+
+struct Reflection:
+    var strengths: String
+    var areas_for_improvement: String
+    var alignment_with_ecosystem: String
+
+struct EmergentFramework:
+    var title: String
+    var components: List[Component]
+    var summary: String
+
+struct Component:
+    var name: String
+    var description: String
+
+struct MojoCodeExample:
+    var title: String
+    var description: String
+    var code: String
+
+struct LowLevelUtilization:
+    var low_level_mechanics: String
+    var performance_enhancements: String
+    var security_considerations: String
+
+struct Task:
+    var title: String
+    var priorityMarker: String
+    var dependencies: List[Int]
+
+struct TaskManager:
+    var tasks: List[Task]
+
+struct Link:
+    var concepts: List[String]
+    var relationship: String
+    var description: String
+
+struct MapStructure:
+    var core_cluster: List[String]
+    var spoke_like_links: String
+    var recursive_loops: String
+
+struct MapDetails:
+    var nucleus: String
+    var inner_circle: String
+    var outer_circle: String
+
+struct FinalEmergentConceptualFramework:
+    var title: String
+    var core_concepts: List[CoreConcept]
+    var cognitive_markers: List[CognitiveMarker]
+    var dynamic_interplay: DynamicInterplay
+    var adaptive_protection_evolution: AdaptiveProtectionEvolution
+    var summary: String
+
+struct CoreConcept:
+    var name: String
+
+struct CognitiveMarker:
+    var name: String
+    var description: String
+
+struct DynamicInterplay:
+    var nucleus: String
+    var emergent_loops: String
+    var contextual_infusion: String
+
+struct AdaptiveProtectionEvolution:
+    var light_guardrails: String
+    var emergent_monitoring: String
+    var user_impact: String
+
+struct ProjectPlanExecutionStrategyOverview:
+    var description: String
+    var summary: String
+
+struct SampleProjectPlan:
+    var stage_1: StageAnalysisItem
+    var stage_2: StageAnalysisItem
+    var stage_3: StageAnalysisItem
+    var stage_4: StageAnalysisItem
+    var stage_5: StageAnalysisItem
+    var stage_6: StageAnalysisItem
+    var stage_7: StageAnalysisItem
+    var stage_8: StageAnalysisItem
+    var stage_9: StageAnalysisItem
+
+struct RevisedSystemPrompt:
+    var prompt: String
+
+struct AnalysisResult:
+    var stage_analysis: List[StageAnalysisItem]
+    var emergent_framework: EmergentFramework
+    var mojo_code_example_1: MojoCodeExample
+    var low_level_utilization_and_suggestions_1: LowLevelUtilization
+    var mojo_code_example_2: MojoCodeExample
+    var low_level_utilization_and_suggestions_2: LowLevelUtilization
+    var conclusion: String
+    var sample_project_plan: SampleProjectPlan
+    var final_emergent_conceptual_framework: FinalEmergentConceptualFramework
+    var project_plan_execution_strategy_overview: ProjectPlanExecutionStrategyOverview
+    var revised_system_prompt: String

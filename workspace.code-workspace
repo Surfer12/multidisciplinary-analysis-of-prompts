@@ -1,0 +1,52 @@
+{
+    "folders": [
+        {
+            "name": "✨ Root",
+            "path": "."
+        },
+        {
+            "name": "📦 Core Package",
+            "path": "packages/core"
+        },
+        {
+            "name": "🔥 Mojo Package",
+            "path": "packages/mojo"
+        },
+        {
+            "name": "🌐 TypeScript Package",
+            "path": "packages/typescript"
+        },
+        {
+            "name": "📚 Documentation",
+            "path": "docs"
+        }
+    ],
+    "settings": {
+        "search.exclude": {
+            "**/node_modules": true,
+            "**/bower_components": true,
+            "**/*.code-search": true,
+            "**/dist": true,
+            "**/build": true
+        },
+        "files.watcherExclude": {
+            "**/.git/objects/**": true,
+            "**/.git/subtree-cache/**": true,
+            "**/node_modules/**": true,
+            "**/dist/**": true,
+            "**/build/**": true
+        }
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-python.python",
+            "ms-python.vscode-pylance",
+            "ms-python.black-formatter",
+            "dbaeumer.vscode-eslint",
+            "esbenp.prettier-vscode",
+            "yzhang.markdown-all-in-one",
+            "bierner.markdown-mermaid",
+            "davidanson.vscode-markdownlint"
+        ]
+    }
+}

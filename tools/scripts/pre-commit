@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# Pre-commit hook for quality checks
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m'
+
+echo "🔍 Running pre-commit checks..."
+
+# Check Python files
+echo "Checking Python files..."
+cd packages/core
+source .venv/bin/activate
+python -m black . --check
+if [ $? -ne 0 ]; then
+    echo -e "${RED}❌ Python formatting check failed${NC}"
+    exit 1
+fi
+
+python -m pylint src tests
+if [ $? -ne 0 ]; then
+    echo -e "${RED}❌ Python linting failed${NC}"
+    exit 1
+fi
+
+python -m mypy src
+if [ $? -ne 0 ]; then
+    echo -e "${RED}❌ Python type checking failed${NC}"
+    exit 1
+fi
+cd ../..
+
+# Check TypeScript files
+echo "Checking TypeScript files..."
+cd packages/typescript
+npm run lint
+if [ $? -ne 0 ]; then
+    echo -e "${RED}❌ TypeScript linting failed${NC}"
+    exit 1
+fi
+
+npm run format:check
+if [ $? -ne 0 ]; then
+    echo -e "${RED}❌ TypeScript formatting check failed${NC}"
+    exit 1
+fi
+cd ../..
+
+# Check Mojo files
+echo "Checking Mojo files..."
+cd packages/mojo
+# Add Mojo-specific checks here
+cd ../..
+
+echo -e "${GREEN}✅ All checks passed!${NC}"
+exit 0
