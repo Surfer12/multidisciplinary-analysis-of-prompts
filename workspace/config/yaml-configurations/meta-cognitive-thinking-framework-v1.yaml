@@ -1,0 +1,481 @@
+The user wants to rewrite the selected text into YAML format. I need to identify the different sections and their corresponding data to structure them appropriately in YAML.
+
+The main sections are:
+- Introduction
+- Stage Analysis (repeated 9 times)
+- Emergent Framework
+- Mojo Code Example (2 examples)
+- Low-Level Utilization and Suggestions for Improvement (for each Mojo example)
+- Conclusion
+- Project Plan & Execution Strategy Overview
+- Revised System Prompt
+
+I will structure the YAML with these sections as top-level keys. analysis—each enclosed in `<stage_analysis>` tags—and conclude with a final emergent framework in `<emergent_framework>` tags. In line with your instructions, I have also included a code example written in **Mojo** to illustrate how one might manage and process conceptual data structures programmatically. Afterward, there is a short, unrelated Mojo code snippet that demonstrates the same principle (data processing with emergent structures) in a different context. Explanations on low-level usage, performance, and security enhancements follow each snippet.
+
+stage_analysis:
+  stage_1:
+    title: "Stage 1: Initial Conceptualization"
+    concepts:
+      - id: 1
+        name: "Fluid Learning Paradigm"
+        relevant_input_excerpt: "...emphasizing conceptual exploration and flexible thinking within a learning ecosystem..."
+      - id: 2
+        name: "Emergent Patterns and Cognitive Markers"
+        relevant_input_excerpt: "...create and combine cognitive markers freely to represent complex ideas..."
+      - id: 3
+        name: "Adaptive Refinement Process"
+        relevant_input_excerpt: "...continuously refine and evolve your framework... Reflect on your own process..."
+      - id: 4
+        name: "Holistic Ecosystem Integration"
+        relevant_input_excerpt: "...focus on conceptual exploration and linking rather than strict hierarchical analysis..."
+    summary: "These concepts highlight the fluid, adaptable, and self-referential nature of the framework we will construct."
+  stage_2:
+    title: "Stage 2: Multiple Perspectives"
+    perspectives:
+      - name: "Structured Emergence"
+        validity: "This perspective suggests that while we want fluidity, we can still implement a meta-structure to track emergent changes."
+        rating: 7
+        explanation: "It balances structured oversight with emergent growth. Some rigidity might limit full creativity."
+      - name: "Organic Collaboration of Concepts"
+        validity: "Each concept evolves as part of an organic web, continuously reacting to changes in other concepts."
+        rating: 9
+        explanation: "This approach greatly encourages synergy and real-time adjustments but may lack clarity in mapping large systems."
+      - name: "Minimal Intervention Approach"
+        validity: "The system remains nearly unstructured, allowing patterns to surface spontaneously."
+        rating: 6
+        explanation: "While this can foster novel insights, minimal guidance may hamper practical application and clarity."
+    summary: "Each perspective remains valid in certain contexts. The second perspective (Organic Collaboration) appears strongest for fostering flexible learning."
+  stage_3:
+    title: "Stage 3: Conceptual Linking"
+    connections:
+      - concepts: ["Fluid Learning Paradigm", "Holistic Ecosystem Integration"]
+        relationship: "↔"
+        description: "They form the overarching environment in which any conceptual exploration happens, ensuring that ideas are not siloed."
+      - concepts: ["Emergent Patterns and Cognitive Markers", "Adaptive Refinement Process"]
+        relationship: "→"
+        description: "As patterns emerge, they feed into the iterative refinement of the framework, which in turn evolves how we track and create cognitive markers."
+      - concepts: ["Adaptive Refinement Process", "Holistic Ecosystem Integration"]
+        relationship: "↔"
+        description: "The continuous refinement maintains the health and interconnectedness of the ecosystem, preventing fragmentation."
+    summary: "This network of connections reveals that each concept is both a lens (influencing how we see the system) and a node (interacting with the other concepts)."
+  stage_4:
+    title: "Stage 4: Emergent Pattern Recognition"
+    patterns:
+      - description: "The interplay between “Holistic Ecosystem Integration” and “Adaptive Refinement Process” creates a feedback loop where even minor changes in one domain can cascade into large-scale ecosystem evolution."
+      - description: "Integrating “Emergent Patterns and Cognitive Markers” with a “Fluid Learning Paradigm” suggests that markers themselves can evolve in real time, capturing newly discovered connections on the fly."
+    summary: "These observations underscore the importance of a design that remains continuously open to new inputs and relationships."
+  stage_5:
+    title: "Stage 5: Assumption Challenging"
+    assumptions:
+      - statement: "Cognitive markers are inherently stable once created."
+        counter_argument: "They may need to dissolve or mutate to reflect newly emerging patterns."
+      - statement: "A single perspective (e.g., “Organic Collaboration”) should guide the entire framework."
+        counter_argument: "Different perspectives may be used in parallel, yielding more robust exploration."
+      - statement: "Adaptive refinement is purely reactive."
+        counter_argument: "Refinement can be proactive, nudging the system to look for unknown unknowns."
+    summary: "Challenging these assumptions reminds us to keep the framework flexible and to allow multiple strategies to coexist for deeper exploration."
+  stage_6:
+    title: "Stage 6: Cognitive Marker Exploration"
+    markers:
+      - name: "“Flux-Node” Marker"
+        description: "A marker that indicates rapidly evolving intersections of concepts—particularly useful for highlighting hot spots where multiple concepts converge or transform quickly."
+      - name: "“Bridge-Node” Marker"
+        description: "A marker for connections between seemingly disparate areas of the framework, capturing newly formed links."
+      - name: "“Feedback-Loop” Marker"
+        description: "A marker representing self-referential cycles, focusing on how a concept re-enters and modifies the ecosystem over time."
+    summary: "Each marker provides an interpretative tool to trace—and possibly influence—the evolution of concepts and their relationships."
+  stage_7:
+    title: "Stage 7: Recursive Conceptual Mapping"
+    visualization:
+      core_cluster: ["Fluid Learning Paradigm", "Holistic Ecosystem Integration"]
+      central_ring: ["Emergent Patterns and Cognitive Markers"]
+      adaptive_refinement_layer: "This meta-layer continuously sweeps through the environment, adjusting or merging markers, and creating new pathways."
+    summary: "This layered map enables us to see how each element can trigger shifts in the others, fostering recursion and iterative expansions."
+  stage_8:
+    title: "Stage 8: Ongoing Conceptual Refinement"
+    refinements:
+      - change: "Moved “Adaptive Refinement Process” from outer orbit to cross-layer"
+        reasoning: "Recognizes that refinement impacts every aspect—both core clusters and central rings."
+      - change: "Introduced “Bridge-Node” Markers at all conceptual boundaries"
+        reasoning: "This emphasizes cross-pollination and fosters new linkages among evolving concepts."
+      - change: "Allowed Markers to be Merged or Replaced"
+        reasoning: "Ensures the system remains dynamic, enabling markers to transform as new patterns are discovered."
+    summary: "This continuous updating process is central to the fluid and emergent nature of the framework."
+  stage_9:
+    title: "Stage 9: Meta-reflection on Framework"
+    reflection:
+      strengths: "The framework remains adaptive and non-hierarchical, capturing real-time concept evolution and cross-pollination."
+      areas_for_improvement: "It may benefit from occasional structural checkpoints to avoid total fluidity leading to conceptual drift."
+      alignment_with_ecosystem: "By letting cognitive markers and emergent patterns take center stage, the framework naturally embodies the fluid and evolving approach to learning."
+    summary: "Overall, the system strikes a balance between open exploration and iterative guidance, providing an environment for continuous, emergent growth."
+
+emergent_framework:
+  title: "Final Conceptual Framework"
+  components:
+    - name: "Fluid Learning Paradigm & Holistic Ecosystem Integration"
+      description: "Establishes a broad context, preventing rigid boundaries and encouraging connections."
+    - name: "Emergent Patterns and Cognitive Markers"
+      description: "Serve as signposts that highlight where ideas merge, conflict, or generate new structures; remain mutable to mirror ongoing insights."
+    - name: "Adaptive Refinement"
+      description: "Functions as a cross-system mechanism, continuously scanning, merging, or restructuring concepts and markers in real time."
+    - name: "Recursive Ecosystem Design"
+      description: "Recognizes that any change loops back to influence the overall configuration, spawning emergent relationships and further conceptual evolution."
+  summary: "By layering concepts and empowering cognitive markers to evolve, this emergent framework captures the fluid and dynamic nature essential for a flexible learning ecosystem."
+
+mojo_code_example_1:
+  title: "Mojo Code Example: Managing and Processing Emergent Structures"
+  description: |
+    Below is an illustrative **Mojo** code snippet that demonstrates how one might define and manage evolving conceptual nodes (e.g., for storing our “Flux-Node,” “Bridge-Node,” and “Feedback-Loop” markers), track their relationships, and refine them in an ongoing manner.
+  code: |
+    # This Mojo code implements a basic structure for storing evolving concepts.
+    # It uses a Graph data model to illustrate fluid linkages among conceptual nodes.
+
+    struct ConceptNode:
+        name: str                    # The identifier for the concept node
+        markerType: str = "Default"  # Type of marker (e.g., Flux-Node, Bridge-Node, Feedback-Loop)
+        connections: List[Int]       # Indices of connected nodes
+
+    # Graph structure to hold nodes and facilitate emergent changes
+    struct ConceptGraph:
+        nodes: List[ConceptNode]
+
+        fn addNode(self, nodeName: str, marker: str = "Default") -> Int:
+            # Create a new node
+            let newNode = ConceptNode(name=nodeName, markerType=marker, connections=[])
+            # Insert into node list
+            self.nodes.append(newNode)
+            # Return index of new node
+            return self.nodes.size - 1
+
+        fn linkNodes(self, indexA: Int, indexB: Int):
+            # Bidirectional link for conceptual synergy
+            self.nodes[indexA].connections.append(indexB)
+            self.nodes[indexB].connections.append(indexA)
+
+        fn refineMarkers(self):
+            # Example of emergent refinement logic
+            # For demonstration, we convert any node with
+            # more than 2 connections into a "Bridge-Node"
+            for i in range(self.nodes.size):
+                let node = self.nodes[i]
+                if node.connections.size > 2 and node.markerType != "Bridge-Node":
+                    self.nodes[i].markerType = "Bridge-Node"
+
+        fn printGraph(self):
+            # Debug / output method
+            for i in range(self.nodes.size):
+                let node = self.nodes[i]
+                print(f"Node {i} - Name: {node.name}, Marker: {node.markerType}, Connections: {node.connections}")
+
+    # Demonstration usage
+    fn main():
+        var myGraph = ConceptGraph(nodes=[])
+
+        let idxA = myGraph.addNode("Fluid Paradigm", marker="Flux-Node")
+        let idxB = myGraph.addNode("Ecosystem Integration")
+        let idxC = myGraph.addNode("Emergent Patterns", marker="Feedback-Loop")
+        let idxD = myGraph.addNode("Adaptive Refinement")
+
+        myGraph.linkNodes(idxA, idxB)
+        myGraph.linkNodes(idxB, idxC)
+        myGraph.linkNodes(idxC, idxD)
+        myGraph.linkNodes(idxA, idxD)
+
+        # Apply emergent refinement
+        myGraph.refineMarkers()
+
+        # Print out the resulting structure
+        myGraph.printGraph()
+  low_level_utilization_and_suggestions:
+    low_level_mechanics: |
+      - `ConceptNode` and `ConceptGraph` are data structures stored in contiguous memory (lists).
+      - Bidirectional connections are appended to the list of connections to maintain symmetrical relationships in the graph.
+    performance_enhancements: |
+      - We could cache frequently accessed node indices in a hash map to reduce lookup times if the graph becomes large.
+      - Storing connections in a more memory-efficient data structure (e.g., a specialized adjacency list with compressed references) can reduce overhead for dense graphs.
+    security_considerations: |
+      - Validate node indices before linking (`linkNodes`) to prevent out-of-bounds errors.
+      - If this were part of a larger system, ensure references to concept nodes are controlled to avoid unauthorized modifications.
+
+mojo_code_example_2:
+  title: "Additional Mojo Example: Unrelated Context, Same Principle"
+  description: |
+    Below is another **Mojo** snippet illustrating the concept of emergent data structures—this time for a *task management* system where tasks evolve links to each other and gain different “priority markers” as they become more interdependent.
+  code: |
+    struct Task:
+        title: str
+        priorityMarker: str = "Normal"
+        dependencies: List[Int]
+
+    struct TaskManager:
+        tasks: List[Task]
+
+        fn addTask(self, title: str, priority: str = "Normal") -> Int:
+            let newTask = Task(title=title, priorityMarker=priority, dependencies=[])
+            self.tasks.append(newTask)
+            return self.tasks.size - 1
+
+        fn addDependency(self, taskIndex: Int, dependsOnIndex: Int):
+            # Link tasks to indicate dependency
+            self.tasks[taskIndex].dependencies.append(dependsOnIndex)
+
+        fn refinePriorities(self):
+            # Emergent logic: if a task has multiple dependencies, raise its priority
+            for i in range(self.tasks.size):
+                let t = self.tasks[i]
+                if t.dependencies.size > 2 and t.priorityMarker != "High":
+                    self.tasks[i].priorityMarker = "High"
+
+        fn showTasks(self):
+            for i in range(self.tasks.size):
+                let t = self.tasks[i]
+                print(f"Task {i} - Title: {t.title}, Priority: {t.priorityMarker}, Dependencies: {t.dependencies}")
+
+    fn main():
+        var tm = TaskManager(tasks=[])
+
+        let t1 = tm.addTask("Onboarding", "Normal")
+        let t2 = tm.addTask("UI Design", "Normal")
+        let t3 = tm.addTask("Backend Integration", "Normal")
+        let t4 = tm.addTask("Deployment", "Normal")
+
+        tm.addDependency(t2, t1)
+        tm.addDependency(t3, t1)
+        tm.addDependency(t4, t1)
+        tm.addDependency(t4, t3)
+
+        # Emergent refinement
+        tm.refinePriorities()
+        tm.showTasks()
+  low_level_utilization_and_suggestions:
+    low_level_mechanics: |
+      - Similar concept of adjacency lists is utilized here in the form of “dependencies.”
+      - The code is straightforward, but concurrency controls could be added if tasks are updated in real time.
+    performance_enhancements: |
+      - Large numbers of tasks and dependencies might benefit from indexing or partial updates rather than scanning all tasks on each refinement pass.
+      - Priority updates can be batched or triggered by specific events to reduce overhead.
+    security_considerations: |
+      - Prevent unauthorized users from adding or removing dependencies unless they have the correct permissions.
+      - Ensure your data structures cannot overflow by validating indices on each insertion or update.
+
+conclusion: |
+  This comprehensive strategy and the accompanying **Mojo** code examples illustrate how to construct, manage, and refine a fluid, emergent conceptual framework while highlighting best practices for performance and security. By balancing structure (e.g., data nodes and connections) with openness to change, the framework continuously evolves and adapts, mirroring the emergent nature of learning ecosystems. Below is a **sample project plan and execution strategy** that follows the requested stages, along with the structural guidelines. In each stage, we wrap our analysis in `<stage_analysis>` tags and then present the final conceptual framework in `<emergent_framework>` tags. As we do not have an actual `{{yaml_structure}}` or `{{user_input}}` provided, references to them in this sample are placeholders to demonstrate the correct structure and approach.
+
+sample_project_plan:
+  stage_1:
+    title: "Stage 1: Initial Conceptualization"
+    description: |
+      In this stage, we develop our initial understanding of the key concepts presented in the (placeholder) user input. We list each concept we identify, prepend it with a number, and quote the relevant part of the user input that supports it.
+    concepts:
+      - id: 1
+        name: "Concept A"
+        quote_from_user_input: "...Concept A is crucial to the broader learning ecosystem..."
+      - id: 2
+        name: "Concept B"
+        quote_from_user_input: "...Concept B introduces an element of flexible thinking..."
+      - id: 3
+        name: "Concept C"
+        quote_from_user_input: "...Concept C emphasizes the fluid connections between ideas..."
+    summary: "These three concepts appear central to the user input. They reflect the primary ideas around fluid, emergent frameworks and the necessity of flexible thinking."
+  stage_2:
+    title: "Stage 2: Multiple Perspectives"
+    description: |
+      Here, we explore at least three different interpretations or perspectives on the user input, briefly argue for each, and assign a strength rating on a scale of 1–10.
+    perspectives:
+      - name: "Perspective 1: Hierarchical Organization Is Still Necessary"
+        argument: "Even in emergent frameworks, some hierarchical elements (e.g., concept definitions) can help ground the fluidity. A baseline structure can prevent confusion."
+        rating: 7
+        explanation: "While fluid approaches are valuable, there is still a place for light structure to scaffold understanding."
+      - name: "Perspective 2: Complete Fluidity Fosters Greater Creativity"
+        argument: "Emphasizes free-form exploration without predetermined nodes or layers, allowing truly emergent ideas to surface unimpeded."
+        rating: 8
+        explanation: "Encourages novel connections but can risk disorganization if not guided by reflective self-monitoring."
+      - name: "Perspective 3: Balanced Hybrid Approach"
+        argument: "Combines small-scale scaffolding with the freedom to link ideas in an adaptive manner."
+        rating: 9
+        explanation: "Pragmatic blend of organization and creative emergence. Likely to accommodate various learning styles and conceptual complexities."
+  stage_3:
+    title: "Stage 3: Conceptual Linking"
+    description: |
+      We now identify relationships between the previously listed concepts. The goal is to create a web of connections, showing how each concept might influence or relate to the others within the learning ecosystem.
+    links:
+      - concepts: ["Concept A", "Concept B"]
+        relationship: "↔"
+        description: "Concept A provides the foundational perspective on organizational needs, while Concept B adds the layer of flexible thinking and free exploration."
+      - concepts: ["Concept B", "Concept C"]
+        relationship: "↔"
+        description: "Concept B’s encouragement of adaptive thinking intersects directly with Concept C’s emphasis on fluidity; together, they suggest iterative and emergent conceptual building."
+      - concepts: ["Concept A", "Concept C"]
+        relationship: "↔"
+        description: "Concept A can supply the essential anchors or baseline definitions, which Concept C uses to form new, fluid connections across domains."
+  stage_4:
+    title: "Stage 4: Emergent Pattern Recognition"
+    description: "Next, we identify any surprising patterns or novel insights from the conceptual web."
+    patterns:
+      - description: "The interplay between initial structure (Concept A) and total fluidity (Concept B, Concept C) suggests a self-correcting ecosystem where minimal structure seeds highly adaptable growth."
+      - description: "Concepts B and C together produce a multi-layered feedback loop: new linkages (C) trigger flexible approaches (B), which can later re-inform the underlying structure (A)."
+    unexpected_insight: "The framework appears dynamic enough to accommodate iterative reflection, hinting at possible applications in creative or interdisciplinary learning contexts."
+  stage_5:
+    title: "Stage 5: Assumption Challenging"
+    description: "Here, we challenge at least three assumptions made so far."
+    assumptions:
+      - statement: "A small degree of hierarchical structure is beneficial."
+        counter_argument: "Even a small structure can stifle the spontaneity of an emergent framework if participants become fixated on predefined nodes."
+      - statement: "Concepts B and C automatically produce synergy."
+        counter_argument: "If no guiding principles exist, these concepts could lead to chaotic overlap, obscuring productive connections under superficial ones."
+      - statement: "The framework is inherently adaptable to all contexts."
+        counter_argument: "Different learning ecosystems might require robust guardrails, or participants might need defined instructions to begin meaningful exploration."
+  stage_6:
+    title: "Stage 6: Cognitive Marker Exploration"
+    description: "We now experiment with creating cognitive markers—unique symbols or shorthand identifiers—to capture ideas or linkages."
+    markers:
+      - name: "Marker [A-B]"
+        significance: "Encourages thinking about how rigid frameworks can support rather than impede creativity."
+      - name: "Marker [B→C]"
+        significance: "Helps track when new insights surface from unconstrained brainstorming to integrated conceptual webs."
+      - name: "Marker [A⇄C]"
+        significance: "Reinforces continuous feedback loops between stable definitions and adaptive reinterpretations."
+  stage_7:
+    title: "Stage 7: Recursive Conceptual Mapping"
+    description: "We organize a high-level map showing how these concepts and markers interact:"
+    map_structure:
+      core_cluster: ["Concepts A", "B", "C form the heart of the ecosystem."]
+      spoke_like_links: "Marker [A-B] and Marker [B→C] radiate outward, connecting the central triad to emergent sub-ideas."
+      recursive_loops: "Marker [A⇄C] loops back to the center, allowing re-interpretation of the founding ideas."
+    map_details:
+      nucleus: "A (foundation), B (flexibility), C (fluid linking)."
+      inner_circle: "[A-B], [B→C], [A⇄C] as bridging markers."
+      outer_circle: "Potential new emergent concepts or user-specific contexts feed back into the nucleus."
+  stage_8:
+    title: "Stage 8: Ongoing Conceptual Refinement"
+    description: "We refine and adjust the framework based on our emergent understanding:"
+    refinements:
+      - refinement: "Expand Concept A to explicitly include guidelines for “light scaffolding” rather than rigid structure."
+        reasoning: "Aligns more effectively with the emergent, fluid nature."
+      - refinement: "Link Concepts B and C with an explicit feedback loop representing adaptive redefinition."
+        reasoning: "Better demonstrates the cyclical relationship of reflection and growth."
+      - refinement: "Add new Sub-Concept D to represent the user or learner’s influence on the system, integrating personal context or external environmental factors."
+        reasoning: "Recognizes that emergent frameworks often evolve based on user interactions and broader ecosystems."
+  stage_9:
+    title: "Stage 9: Meta-Reflection on Framework"
+    description: "We now reflect on the framework as a whole:"
+    reflection:
+      strengths:
+        - "Adaptability to various learning scenarios."
+        - "Clear interplay between foundational structure and emergent, fluid thinking."
+        - "Emphasis on continuous refinement and pattern recognition."
+      potential_improvements:
+        - "More explicit strategies for managing potential chaos when fluidity is high."
+        - "Additional markers to capture user or contextual variation."
+      alignment_with_principles: "The framework maintains a dynamic balance between structure and exploration, ensuring new insights can continuously reshape the conceptual map."
+
+final_emergent_conceptual_framework:
+  title: "Final Emergent Conceptual Framework"
+  core_concepts:
+    - name: "Concept A (Light Foundational Structure)"
+    - name: "Concept B (Flexible Exploration)"
+    - name: "Concept C (Fluid Linking Mechanism)"
+    - name: "Sub-Concept D (External/User Influence)"
+  cognitive_markers:
+    - name: "[A-B]"
+      description: "Intersection of foundational structure and unconstrained exploration."
+    - name: "[B→C]"
+      description: "Pathway from open-ended brainstorming to forming integrated connections."
+    - name: "[A⇄C]"
+      description: "Recursive process linking stable definitions to emergent reinterpretations."
+    - name: "[User-D]"
+      description: "Represents user/environment interplay and contextual feedback."
+  dynamic_interplay:
+    nucleus: "Interconnection of A, B, C, and newly added D."
+    emergent_loops: "Feedback from B→C and A⇄C ensures ongoing evolution of the framework."
+    contextual_infusion: "D supplies real-world or user-centric influences, ensuring the framework grows in response to external factors."
+  adaptive_protection_evolution:
+    light_guardrails: "A ensures that there’s enough scaffolding to guide the system without dampening creativity."
+    emergent_monitoring: "B and C remain flexible but include reflection points to avoid chaotic drift."
+    user_impact: "D broadens perspective, acknowledging situational demands and unique user journeys."
+  summary: "This final framework is designed to be **both fluid and structured** enough to promote continuous learning, conceptual integration, and emergent innovation."
+
+project_plan_execution_strategy_overview:
+  description: |
+    1. **Gather Inputs**
+       - Collect detailed user input (`{{user_input}}`) and structural guidelines (`{{yaml_structure}}`).
+       - Identify relevant data points or context from the user’s ecosystem.
+
+    2. **Prepare for Analysis**
+       - Establish minimal scaffolding to organize the concepts (Concept A, B, C, etc.).
+       - Define preliminary markers for flexible linking and emergent pattern discovery.
+
+    3. **Iterative Framework Construction**
+       - Conduct Stage 1–5 analyses to extract key themes, explore perspectives, and identify assumptions.
+       - Introduce markers (Stage 6) that serve as navigational aids in the fluid conceptual space.
+
+    4. **Refinement Cycles**
+       - Employ Stages 7–8 to recursively map, reorganize, and evolve the conceptual structure.
+       - Include new sub-concepts or refine existing ones as needed.
+
+    5. **Final Synthesis & Implementation**
+       - Present the cohesive conceptual framework (Stage 9 & `<emergent_framework>`).
+       - Outline how the framework can be deployed or integrated into learning processes.
+       - Provide guidance for ongoing updates and adaptive enhancements based on user interaction (Sub-Concept D).
+
+    6. **Continuous Adaptation**
+       - Encourage periodic re-analysis to capture emergent patterns.
+       - Expand or contract elements of the framework in response to newly identified concepts or user needs.
+  summary: "This plan accommodates **fluid, emergent development** while acknowledging the role of minimal structural anchors to ensure coherence. It is intended to **continuously evolve** alongside changing contexts and user engagements."
+
+revised_system_prompt: |
+  “You are an advanced AI system designed to create and analyze conceptual frameworks. Your task is to develop a fluid, emergent conceptual framework based on given input, emphasizing conceptual exploration and flexible thinking within a learning ecosystem.
+
+  First, review the structural guidelines provided:
+
+  <yaml_structure>
+  {{yaml_structure}}
+  </yaml_structure>
+
+  Now, analyze the following user input:
+
+  <user_input>
+  {{user_input}}
+  </user_input>
+
+  **Core Principles**
+  1. Favor fluidity and ongoing emergence over static, rigid structures.
+  2. Center conceptual exploration and dynamic linking rather than strict hierarchies.
+  3. Devise and combine cognitive markers with freedom to represent and transform complex ideas.
+  4. Seek and highlight emergent patterns, encouraging synergy and novel insights.
+  5. Refine and evolve your framework continuously, responding to new connections.
+  6. Engage in reflective practice on your process and on the framework itself, maintaining adaptability and growth.
+
+  **Stages of Analysis**
+  Surround your work for each stage with `<stage_analysis>` tags:
+
+  1. **Initial Conceptualization**
+     - Identify key concepts in the user input and number them. Quote the relevant part of the input for each concept.
+
+  2. **Multiple Perspectives**
+     - Develop at least three interpretations or perspectives on the user input. Argue for each perspective’s validity, rate it 1–10, and explain the rating.
+
+  3. **Conceptual Linking**
+     - Map relationships between identified concepts, highlighting influence and synergy within the learning ecosystem.
+
+  4. **Emergent Pattern Recognition**
+     - Uncover any new, unexpected connections or patterns resulting from the conceptual links.
+
+  5. **Assumption Challenging**
+     - Identify at least three assumptions in your analysis, and provide counter-arguments or alternative scenarios for each.
+
+  6. **Cognitive Marker Exploration**
+     - Experiment with cognitive markers to illustrate ideas and linkages. List new marker combinations, explaining their interpretive value.
+
+  7. **Recursive Conceptual Mapping**
+     - Organize the framework into a high-level conceptual map, noting any layers, clusters, or feedback loops that surface.
+
+  8. **Ongoing Conceptual Refinement**
+     - Document at least three changes you make to the framework, clarifying how and why you adapted it.
+
+  9. **Meta-reflection on Framework**
+     - Evaluate the framework as a whole, discussing both strengths and possible improvements, and how well it embodies fluid, emergent thinking.
+
+  After completing these stages, present your **final conceptual framework** within `<emergent_framework>` tags, reflecting your adaptive process and demonstrating openness to further evolution.
+
+  Be mindful to maintain equilibrium between minimal, supportive structure and rich, flexible emergence throughout all stages. Where relevant, consider and incorporate any adaptive protection mechanisms. Detailed exploration and adaptive refinement are encouraged at every step.”

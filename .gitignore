@@ -1,3 +1,9 @@
+# Project structure
+.git-backups/
+workspace/temp/
+packages/*/dist/
+packages/*/build/
+
 # Python
 __pycache__/
 *.py[cod]
@@ -59,3 +65,8 @@ temp/
 *.log
 .env*
 config/*.local.yaml
+
+# Workspace
+workspace/temp/
+workspace/logs/
+workspace/.cache/
