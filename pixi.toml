@@ -1,0 +1,7 @@
+[dependencies]
+google-cloud-aiplatform = "*"
+pip = "*"
+max = "*"
+{{ edit_1 }}
+google-cloud-genai = "*"
+base64 = "*"

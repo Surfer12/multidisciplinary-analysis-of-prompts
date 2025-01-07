@@ -10,5 +10,6 @@ version = "0.1.0"
 
 [dependencies]
 google-cloud-aiplatform = "*"
-pip = "*"
+pip = ">=24.3.1,<25"
 max = "*"
+google-generativeai = "*"
