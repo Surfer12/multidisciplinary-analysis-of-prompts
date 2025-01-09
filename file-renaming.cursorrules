@@ -20,10 +20,6 @@ focusing on enhancing cognitive understanding and traceability of research docum
 2. Structural Clarity
    - Provide clear indication of document purpose
    - Use prefixes that describe the primary focus
-     - `prompt-engineering-`
-     - `meta-cognitive-`
-     - `cognitive-monitoring-`
-     - `yaml-`
 
 3. Version and Iteration Tracking
    - Include version numbers (e.g., `-v1`, `-v2`)
