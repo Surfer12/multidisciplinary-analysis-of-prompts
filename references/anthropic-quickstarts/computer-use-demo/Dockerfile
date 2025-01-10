@@ -101,12 +101,31 @@ ENV DISPLAY_NUM=$DISPLAY_NUM
 ENV HEIGHT=$HEIGHT
 ENV WIDTH=$WIDTH
 
+# Install test and monitoring dependencies
+RUN python -m pip install --no-cache-dir \
+    pytest==8.3.4 \
+    pytest-asyncio==0.25.2 \
+    pytest-cov==6.0.0 \
+    prometheus-client==0.19.0 \
+    asyncio==3.4.3
+
+# Install our package in development mode
+COPY --chown=$USERNAME:$USERNAME setup.py $HOME/computer_use_demo/
+RUN cd $HOME/computer_use_demo && python -m pip install -e .
+
+# Create monitoring directories
+RUN mkdir -p $HOME/monitoring/prometheus && \
+    mkdir -p $HOME/monitoring/grafana/provisioning/{datasources,dashboards}
+
+# Copy monitoring configurations
+COPY --chown=$USERNAME:$USERNAME monitoring/prometheus/prometheus.yml $HOME/monitoring/prometheus/
+COPY --chown=$USERNAME:$USERNAME monitoring/grafana/provisioning/datasources/prometheus.yml $HOME/monitoring/grafana/provisioning/datasources/
+COPY --chown=$USERNAME:$USERNAME monitoring/grafana/provisioning/dashboards/computer-use-demo.json $HOME/monitoring/grafana/provisioning/dashboards/
+
 # Add monitoring ports
 EXPOSE 8000
 EXPOSE 3000
-
-# Install monitoring dependencies
-RUN python -m pip install prometheus-client==0.19.0 asyncio==3.4.3
+EXPOSE 9090
 
 # Add environment variables for monitoring
 ENV ENABLE_MONITORING=true

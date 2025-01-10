@@ -16,8 +16,14 @@ services:
       - PROMETHEUS_PORT=8000
     volumes:
       - ./computer_use_demo:/home/computeruse/computer_use_demo
+      - ./monitoring:/home/computeruse/monitoring
     networks:
       - monitoring_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/metrics"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   prometheus:
     image: prom/prometheus:v2.45.0
@@ -33,6 +39,9 @@ services:
       - '--web.console.templates=/usr/share/prometheus/consoles'
     networks:
       - monitoring_network
+    depends_on:
+      computer-use-demo:
+        condition: service_healthy
 
   grafana:
     image: grafana/grafana:10.0.3
