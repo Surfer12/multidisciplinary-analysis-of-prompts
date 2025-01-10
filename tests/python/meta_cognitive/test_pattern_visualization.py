@@ -15,6 +15,14 @@ def visualizer():
     return PatternVisualizer()
 
 
+@pytest.fixture(autouse=True)
+def setup_matplotlib():
+    """Configure matplotlib for testing."""
+    plt.switch_backend('Agg')  # Use non-interactive backend
+    yield
+    plt.close('all')  # Cleanup after each test
+
+
 def test_plot_tool_usage_heatmap(visualizer):
     """Test creation of tool usage heatmap."""
     # Create sample data
@@ -32,6 +40,15 @@ def test_plot_tool_usage_heatmap(visualizer):
     visualizer.plot_tool_usage_heatmap(data, title="Custom Title", figsize=(8, 6))
     plt.close()
 
+    # Test with invalid data
+    with pytest.raises(ValueError, match="Usage data cannot be empty"):
+        visualizer.plot_tool_usage_heatmap(pd.DataFrame())
+
+    # Test with non-numeric data
+    invalid_data = pd.DataFrame({'A': ['a', 'b'], 'B': ['c', 'd']})
+    with pytest.raises(ValueError, match="All data must be numeric"):
+        visualizer.plot_tool_usage_heatmap(invalid_data)
+
 
 def test_create_cognitive_network(visualizer):
     """Test creation of cognitive network visualization."""
@@ -46,6 +63,19 @@ def test_create_cognitive_network(visualizer):
     node_attrs = {"Node A": {"weight": 1}, "Node B": {"weight": 2}}
     fig = visualizer.create_cognitive_network(nodes, edges, node_attrs)
     assert fig is not None
+
+    # Test with empty nodes
+    with pytest.raises(ValueError, match="Node list cannot be empty"):
+        visualizer.create_cognitive_network([], edges)
+
+    # Test with empty edges
+    with pytest.raises(ValueError, match="Edge list cannot be empty"):
+        visualizer.create_cognitive_network(nodes, [])
+
+    # Test with invalid edge
+    invalid_edges = [("Node A", "Node D")]  # Node D doesn't exist
+    with pytest.raises(ValueError, match="references non-existent node"):
+        visualizer.create_cognitive_network(nodes, invalid_edges)
 
 
 def test_plot_tool_performance(visualizer):
@@ -66,6 +96,15 @@ def test_plot_tool_performance(visualizer):
     visualizer.plot_tool_performance(data, metric="execution_time", figsize=(8, 6))
     plt.close()
 
+    # Test with empty data
+    with pytest.raises(ValueError, match="Performance data cannot be empty"):
+        visualizer.plot_tool_performance(pd.DataFrame())
+
+    # Test with missing required columns
+    invalid_data = pd.DataFrame({"wrong_column": [1, 2, 3]})
+    with pytest.raises(ValueError, match="Missing required columns"):
+        visualizer.plot_tool_performance(invalid_data)
+
 
 def test_save_figure(visualizer, tmp_path):
     """Test figure saving functionality."""
@@ -83,19 +122,6 @@ def test_save_figure(visualizer, tmp_path):
     assert output_file.exists()
     plt.close()
 
-
-def test_error_handling(visualizer):
-    """Test error handling in visualization methods."""
-    # Test with invalid data
-    with pytest.raises(Exception):
-        visualizer.plot_tool_usage_heatmap(pd.DataFrame())
-
-    with pytest.raises(Exception):
-        visualizer.create_cognitive_network([], [])
-
-    with pytest.raises(Exception):
-        visualizer.plot_tool_performance(pd.DataFrame())
-
-    # Test save_figure with invalid path
-    with pytest.raises(Exception):
+    # Test with empty filename
+    with pytest.raises(ValueError, match="Filename cannot be empty"):
         visualizer.save_figure("")

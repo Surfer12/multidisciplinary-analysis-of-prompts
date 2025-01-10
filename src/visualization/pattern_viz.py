@@ -7,6 +7,7 @@ from typing import Any, Dict, List, Literal, Optional
 
 import matplotlib.pyplot as plt
 import networkx as nx
+import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 import seaborn as sns
@@ -58,7 +59,16 @@ class PatternVisualizer:
             usage_data: DataFrame with tool usage data
             title: Plot title
             figsize: Figure size tuple (width, height)
+
+        Raises:
+            ValueError: If usage_data is empty or has invalid structure
         """
+        if usage_data.empty:
+            raise ValueError("Usage data cannot be empty")
+
+        if not all(usage_data.dtypes.map(lambda x: issubclass(x.type, np.number))):
+            raise ValueError("All data must be numeric for heatmap visualization")
+
         # Create new figure with specified size
         plt.figure(figsize=figsize)
 
@@ -100,7 +110,25 @@ class PatternVisualizer:
 
         Returns:
             Plotly figure object
+
+        Raises:
+            ValueError: If nodes or edges are empty, or if edges reference
+                non-existent nodes
         """
+        if not nodes:
+            raise ValueError("Node list cannot be empty")
+
+        if not edges:
+            raise ValueError("Edge list cannot be empty")
+
+        # Validate edges reference existing nodes
+        all_nodes = set(nodes)
+        for source, target in edges:
+            if source not in all_nodes or target not in all_nodes:
+                raise ValueError(
+                    f"Edge ({source}, {target}) references non-existent node"
+                )
+
         try:
             # Create network graph
             G = nx.Graph()
@@ -192,13 +220,29 @@ class PatternVisualizer:
             performance_data: DataFrame with tool performance data
             metric: Performance metric to visualize
             figsize: Figure size tuple (width, height)
+
+        Raises:
+            ValueError: If performance_data is empty or missing required columns
         """
+        if performance_data.empty:
+            raise ValueError("Performance data cannot be empty")
+
+        required_columns = {"tool_name", metric}
+        missing_columns = required_columns - set(performance_data.columns)
+        if missing_columns:
+            raise ValueError(f"Missing required columns: {missing_columns}")
+
         try:
             plt.figure(figsize=figsize)
 
-            # Create box plot
+            # Create box plot with updated API usage
             sns.boxplot(
-                data=performance_data, x="tool_name", y=metric, palette="YlOrRd"
+                data=performance_data,
+                x="tool_name",
+                y=metric,
+                hue="tool_name",  # Add hue parameter
+                legend=False,  # Hide legend since it's redundant
+                palette="YlOrRd",
             )
 
             # Customize plot
@@ -223,7 +267,13 @@ class PatternVisualizer:
         Args:
             filename: Output filename
             dpi: Resolution in dots per inch
+
+        Raises:
+            ValueError: If filename is empty or invalid
         """
+        if not filename:
+            raise ValueError("Filename cannot be empty")
+
         try:
             plt.savefig(filename, dpi=dpi, bbox_inches="tight")
         except Exception as e:
