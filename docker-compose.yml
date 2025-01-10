@@ -4,7 +4,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: config/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "8501:8501"  # Streamlit
       - "8888:8888"  # Jupyter
@@ -14,10 +14,19 @@ services:
       - ./tests:/app/tests
       - ./data:/app/data
       - ./docs:/app/docs
+      - ./config:/app/config
+      - ./notebooks:/app/notebooks
+      - ./logs:/app/logs
     environment:
       - PYTHONPATH=/app/src/python
       - MOJO_PATH=/app/src/mojo
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - PYTHONBREAKPOINT=ipdb.set_trace
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      - MPLBACKEND=Agg
+      - JUPYTER_ENABLE_LAB=yes
+      - PYTEST_ADDOPTS="--color=yes"
     networks:
       - app_network
       - monitoring_network
@@ -26,12 +35,58 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    restart: unless-stopped
 
-  # Import monitoring services
-  prometheus:
+  dev:
     extends:
-      file: monitoring/docker-compose.yml
-      service: prometheus
+      service: app
+    command: ./dev.sh watch
+    volumes:
+      - ./src:/app/src
+      - ./tests:/app/tests
+      - ./config:/app/config
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./notebooks:/app/notebooks
+    environment:
+      - PYTEST_ADDOPTS="--color=yes"
+
+  notebook:
+    extends:
+      service: app
+    command: ./dev.sh notebook
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/app/notebooks
+      - ./src:/app/src
+      - ./data:/app/data
+
+  viz:
+    extends:
+      service: app
+    command: ./dev.sh streamlit
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+
+  test:
+    extends:
+      service: app
+    command: ./dev.sh test
+    volumes:
+      - ./src:/app/src
+      - ./tests:/app/tests
+      - ./data:/app/data
+    environment:
+      - PYTEST_ADDOPTS="--color=yes -v --cov=src/python --cov-report=term-missing"
+
+  prometheus:
+    image: prom/prometheus:v2.46.0
+    ports:
+      - "9090:9090"
     networks:
       - monitoring_network
     volumes:
@@ -39,29 +94,32 @@ services:
       - prometheus_data:/prometheus
 
   grafana:
-    extends:
-      file: monitoring/docker-compose.yml
-      service: grafana
+    image: grafana/grafana:10.5.1
+    ports:
+      - "3000:3000"
     networks:
       - monitoring_network
     volumes:
       - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
       - grafana_data:/var/lib/grafana
+    environment:
+      GF_AUTH_ANONYMOUS_USER_ROLE: Admin
+      GF_AUTH_ANONYMOUS_ENABLED: true
 
   alertmanager:
-    extends:
-      file: monitoring/docker-compose.yml
-      service: alertmanager
+    image: prom/alertmanager:v0.27.0
+    ports:
+      - "9093:9093"
     networks:
       - monitoring_network
     volumes:
       - ./monitoring/alertmanager:/etc/alertmanager
 
   node-exporter:
-    extends:
-      file: monitoring/docker-compose.yml
-      service: node-exporter
+    image: prom/node-exporter:v1.7.0
+    ports:
+      - "9100:9100"
     networks:
       - monitoring_network
     volumes:
@@ -70,9 +128,9 @@ services:
       - /:/rootfs:ro
 
   cadvisor:
-    extends:
-      file: monitoring/docker-compose.yml
-      service: cadvisor
+    image: gcr.io/cadvisor/cadvisor:v0.49.0
+    ports:
+      - "8080:8080"
     networks:
       - monitoring_network
     volumes:
@@ -83,18 +141,16 @@ services:
       - /dev/disk/:/dev/disk:ro
 
   loki:
-    extends:
-      file: monitoring/docker-compose.yml
-      service: loki
+    image: grafana/loki:2.9.2
+    ports:
+      - "3100:3100"
     networks:
       - monitoring_network
     volumes:
       - ./monitoring/loki:/etc/loki
 
   promtail:
-    extends:
-      file: monitoring/docker-compose.yml
-      service: promtail
+    image: grafana/promtail:2.9.2
     networks:
       - monitoring_network
     volumes:

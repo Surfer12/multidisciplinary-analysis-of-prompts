@@ -14,7 +14,7 @@ on:
       - computer-use-demo/**
 jobs:
   build-amd64:
-    uses: ./.github/workflows/reusable_build_step.yaml
+    uses: anthropic-quickstarts/.github/workflows/reusable_build_step.yaml@main
     with:
       platform: amd64
       builder: ubuntu-latest-16core
@@ -25,7 +25,7 @@ jobs:
       contents: read
       packages: write
   build-arm64:
-    uses: ./.github/workflows/reusable_build_step.yaml
+    uses: anthropic-quickstarts/.github/workflows/reusable_build_step.yaml@main
     with:
       platform: arm64
       builder: ubuntu-22.04-arm64-16core
