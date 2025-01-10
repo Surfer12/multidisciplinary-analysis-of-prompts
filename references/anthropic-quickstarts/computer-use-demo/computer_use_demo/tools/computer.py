@@ -5,8 +5,9 @@ import shlex
 import shutil
 from enum import StrEnum
 from pathlib import Path
-from typing import Literal, TypedDict
+from typing import Literal, TypedDict, Any, Dict, List, Optional
 from uuid import uuid4
+from datetime import datetime
 
 from anthropic.types.beta import BetaToolComputerUse20241022Param
 
@@ -61,6 +62,82 @@ def chunks(s: str, chunk_size: int) -> list[str]:
     return [s[i : i + chunk_size] for i in range(0, len(s), chunk_size)]
 
 
+class PatternDetector:
+    def __init__(self):
+        self.patterns = []
+        self.pattern_thresholds = {
+            "repetition": 3,
+            "sequence": 2,
+            "timing": 1.0  # seconds
+        }
+
+    def analyze_operation(self, operation_type: str, context: Dict) -> List[Dict]:
+        patterns = []
+
+        # Check for repetitive actions
+        if self._is_repetitive(operation_type):
+            patterns.append({
+                "type": "repetition",
+                "action": operation_type,
+                "count": self._get_repetition_count(operation_type)
+            })
+
+        # Check for sequential patterns
+        if sequence := self._detect_sequence():
+            patterns.append({
+                "type": "sequence",
+                "actions": sequence
+            })
+
+        # Check timing patterns
+        if timing := self._analyze_timing(operation_type):
+            patterns.append({
+                "type": "timing",
+                "pattern": timing
+            })
+
+        return patterns
+
+    def _is_repetitive(self, operation_type: str) -> bool:
+        recent_ops = self.patterns[-self.pattern_thresholds["repetition"]:]
+        return len(recent_ops) >= self.pattern_thresholds["repetition"] and \
+               all(op.get("action") == operation_type for op in recent_ops)
+
+    def _get_repetition_count(self, operation_type: str) -> int:
+        count = 0
+        for pattern in reversed(self.patterns):
+            if pattern.get("action") == operation_type:
+                count += 1
+            else:
+                break
+        return count
+
+    def _detect_sequence(self) -> Optional[List[str]]:
+        if len(self.patterns) < self.pattern_thresholds["sequence"]:
+            return None
+
+        recent_actions = [p.get("action") for p in self.patterns[-self.pattern_thresholds["sequence"]:]]
+        # Add sequence detection logic here
+        return recent_actions if len(set(recent_actions)) > 1 else None
+
+    def _analyze_timing(self, operation_type: str) -> Optional[Dict]:
+        recent_ops = [p for p in self.patterns if p.get("action") == operation_type]
+        if len(recent_ops) < 2:
+            return None
+
+        timestamps = [datetime.fromisoformat(op.get("timestamp")) for op in recent_ops]
+        intervals = [(timestamps[i+1] - timestamps[i]).total_seconds()
+                    for i in range(len(timestamps)-1)]
+
+        avg_interval = sum(intervals) / len(intervals)
+        if avg_interval <= self.pattern_thresholds["timing"]:
+            return {
+                "type": "rapid_succession",
+                "average_interval": avg_interval
+            }
+        return None
+
+
 class ComputerTool(BaseAnthropicTool):
     """
     A tool that allows the agent to interact with the screen, keyboard, and mouse of the current computer.
@@ -92,6 +169,7 @@ class ComputerTool(BaseAnthropicTool):
 
     def __init__(self):
         super().__init__()
+        self.pattern_detector = PatternDetector()
 
         self.width = int(os.getenv("WIDTH") or 0)
         self.height = int(os.getenv("HEIGHT") or 0)
@@ -105,14 +183,52 @@ class ComputerTool(BaseAnthropicTool):
 
         self.xdotool = f"{self._display_prefix}xdotool"
 
-    async def __call__(
-        self,
-        *,
-        action: Action,
-        text: str | None = None,
-        coordinate: tuple[int, int] | None = None,
-        **kwargs,
-    ):
+    async def __call__(self, **kwargs):
+        # Start monitoring
+        start_time = datetime.now()
+
+        try:
+            # Execute original functionality
+            result = await self._execute_action(**kwargs)
+
+            # Record operation
+            operation = {
+                "action": kwargs.get("action"),
+                "timestamp": start_time.isoformat(),
+                "coordinates": kwargs.get("coordinate"),
+                "text": kwargs.get("text")
+            }
+            self.record_operation(operation, result)
+
+            # Analyze patterns
+            patterns = self.pattern_detector.analyze_operation(
+                kwargs.get("action", "unknown"),
+                kwargs
+            )
+
+            # Add monitoring data to result
+            return ToolResult(
+                output=result.output,
+                error=result.error,
+                base64_image=result.base64_image,
+                metrics=self.metrics.get_latest(),
+                patterns=patterns
+            )
+
+        except Exception as e:
+            self.metrics.data["error_rate"].append({
+                "timestamp": datetime.now(),
+                "value": 1,
+                "error": str(e)
+            })
+            raise
+
+    async def _execute_action(self, **kwargs) -> ToolResult:
+        # Original action execution logic
+        action = kwargs.get("action")
+        text = kwargs.get("text")
+        coordinate = kwargs.get("coordinate")
+
         if action in ("mouse_move", "left_click_drag"):
             if coordinate is None:
                 raise ToolError(f"coordinate is required for {action}")
