@@ -7,7 +7,7 @@ export ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Add src/python to PYTHONPATH
-export PYTHONPATH="$PROJECT_ROOT/src/python:$PROJECT_ROOT/computer-use-demo:$PYTHONPATH"
+export PYTHONPATH="$PROJECT_ROOT/src/python:$PROJECT_ROOT/:$PYTHONPATH"
 
 # Load environment variables
 if [ -f "$PROJECT_ROOT/.env" ]; then
