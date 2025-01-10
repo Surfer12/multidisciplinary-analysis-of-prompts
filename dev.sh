@@ -1,13 +1,13 @@
-
 #!/bin/bash
 
 # Set the ANTHROPIC_API_KEY environment variable
-export ANTHROPIC_API_KEY=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
+export ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY
 
-export PROJECT_ROOT=/Users/ryanoates/analysis-of-prompts-v0.2
-
-# Project root directory
+# Set project root to the analysis-of-prompts-v0.2 directory
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Add src/python to PYTHONPATH
+export PYTHONPATH="$PROJECT_ROOT/src/python:$PROJECT_ROOT/computer-use-demo:$PYTHONPATH"
 
 # Load environment variables
 if [ -f "$PROJECT_ROOT/.env" ]; then
@@ -20,124 +20,96 @@ usage() {
     echo "Usage: $0 [mode]"
     echo ""
     echo "Modes:"
-    echo "  notebook   - Launch Jupyter Lab"
-    echo "  streamlit  - Run Streamlit application"
-    echo "  test       - Run pytest in Docker"
-    echo "  local-test - Run pytest locally without Docker"
-    echo "  build      - Build Docker image"
-    echo "  dev        - Start development environment"
+    echo "  setup      - Set up development environment"
+    echo "  test       - Run all tests"
+    echo "  test-tools - Run tool-specific tests"
+    echo "  docker     - Build and run Docker environment"
     echo "  help       - Show this help message"
 }
 
-# Activate virtual environment
-export ANTHROPIC_API_KEY=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
-export PROJECT_ROOT=/Users/ryanoates/analysis-of-prompts-v0.2
-activate_venv() {
-    if [ -d "$PROJECT_ROOT/venv" ]; then
-        source "$PROJECT_ROOT/venv/bin/activate"
-    elif [ -d "$PROJECT_ROOT/.venv" ]; then
-        source "$PROJECT_ROOT/.venv/bin/activate"
-    else
-        echo "No virtual environment found. Please create one using 'python3 -m venv venv'"
-        exit 1
+# Function to set up Python virtual environment
+setup_venv() {
+    echo "Setting up Python virtual environment..."
+    if [ ! -d "$PROJECT_ROOT/.venv" ]; then
+        python3 -m venv "$PROJECT_ROOT/.venv"
     fi
-}
-
-# Build Docker image
-build_image() {
-    echo "Building Docker image..."
-    docker build -t analysis-of-prompts:dev "$PROJECT_ROOT"
-}
-
-# Local test without Docker
-local_test() {
-    # Activate virtual environment
-    activate_venv
-
-    # Install dependencies
-    pip install -r "$PROJECT_ROOT/requirements.txt"
+    source "$PROJECT_ROOT/.venv/bin/activate"
+    # Run setup.sh if it exists
+    if [ -f "$PROJECT_ROOT/setup.sh" ]; then
+        echo "Running setup.sh..."
+        bash "$PROJECT_ROOT/setup.sh"
+    fi
+    pip install -r "$PROJECT_ROOT/utils/pre-commit"
     pip install -r "$PROJECT_ROOT/requirements-dev.txt"
-
-    # Run tests
-    cd "$PROJECT_ROOT"
-    PYTHONPATH=. pytest tests -v
-
-    # Deactivate virtual environment
-    deactivate
+    pip install -r "$PROJECT_ROOT/requirements.txt"
 }
 
-# Launch Jupyter Notebook
-launch_notebook() {
-    build_image
-    docker run \
-        -e ANTHROPIC_API_KEY="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" \
-        -v "$PROJECT_ROOT":/home/appuser/app \
-        -v "$HOME/.anthropic":/home/appuser/.anthropic \
-        -p 8888:8888 \
-        -p 8501:8501 \
-        -p 5678:5678 \
-        -it analysis-of-prompts:dev \
-        jupyter lab --allow-root --no-browser --port=8888
+# Function to set up Mojo environment
+setup_mojo() {
+    echo "Setting up Mojo environment..."
+    cd "$PROJECT_ROOT/src/mojo"
+    # Add Mojo-specific setup here
 }
 
-# Launch Streamlit
-launch_streamlit() {
-    build_image
-    docker run \
-        -e ANTHROPIC_API_KEY="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" \
-        -v "$PROJECT_ROOT":/home/appuser/app \
-        -v "$HOME/.anthropic":/home/appuser/.anthropic \
-        -p 8501:8501 \
-        -p 8888:8888 \
-        -p 5678:5678 \
-        -it analysis-of-prompts:dev \
-        streamlit run src/app.py
-}
-
-# Run Tests in Docker
+# Function to run tests
 run_tests() {
-    build_image
-    docker run \
-        -e ANTHROPIC_API_KEY="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" \
-        -v "$PROJECT_ROOT":/home/appuser/app \
-        -v "$HOME/.anthropic":/home/appuser/.anthropic \
-        -it analysis-of-prompts:dev \
-        pytest tests -v
+    local test_path="$1"
+    echo "Running tests in $test_path..."
+
+    # Activate virtual environment
+    source "$PROJECT_ROOT/.venv/bin/activate"
+
+    # Run pytest with the specified path
+    PYTHONPATH="$PROJECT_ROOT/src/python:$PYTHONPATH" pytest "$test_path" -v
 }
 
-# Development environment
-dev_environment() {
-    build_image
-    docker run \
-        -e ANTHROPIC_API_KEY="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" \
-        -v "$PROJECT_ROOT":/home/appuser/app \
-        -v "$HOME/.anthropic":/home/appuser/.anthropic \
-        -p 8501:8501 \
+# Function to build and run Docker
+setup_docker() {
+    echo "Setting up Docker environment..."
+    docker build -t analysis-of-prompts:dev -f "$PROJECT_ROOT/Dockerfile" "$PROJECT_ROOT"
+
+    docker run -it \
+        -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" \
+        -v "$PROJECT_ROOT":/app \
+        -v "$HOME/.anthropic":/root/.anthropic \
         -p 8888:8888 \
-        -p 5678:5678 \
-        -it analysis-of-prompts:dev \
-        /bin/bash
+        analysis-of-prompts:dev
+}
+
+# Function to run Streamlit interface
+run_streamlit() {
+    echo "Starting Streamlit interface..."
+    source "$PROJECT_ROOT/.venv/bin/activate"
+    streamlit run "$PROJECT_ROOT/computer-use-demo/streamlit.py"
+}
+
+# Main setup function
+setup() {
+    setup_venv
+    setup_mojo
+    echo "Environment setup complete"
 }
 
 # Main script logic
 case "$1" in
-    notebook)
-        launch_notebook
-        ;;
-    streamlit)
-        launch_streamlit
+    setup)
+        setup
         ;;
     test)
-        run_tests
+        # Run all tests
+        run_tests "$PROJECT_ROOT/tests"
+        run_tests "$PROJECT_ROOT/computer-use-demo/tests"
         ;;
-    local-test)
-        local_test
+    test-tools)
+        # Run tool-specific tests
+        run_tests "$PROJECT_ROOT/tests/test_tools"
+        run_tests "$PROJECT_ROOT/computer-use-demo/tests/tools"
         ;;
-    build)
-        build_image
+    docker)
+        setup_docker
         ;;
-    dev)
-        dev_environment
+    streamlit)
+        run_streamlit
         ;;
     help|*)
         usage
