@@ -1,24 +1,81 @@
 version: '3.8'
 
 services:
-  computer-use-demo:
+  meta-cognitive-framework:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: config/Dockerfile
     ports:
-      - "8501:8501"  # Streamlit web interface
-      - "5900:5900"  # VNC server (for debugging)
+      - "8501:8501"  # Streamlit visualization interface
+      - "8888:8888"  # Jupyter notebook interface
     environment:
+      - PYTHONPATH=/app/src/python
+      - MOJO_PATH=/app/src/mojo
+      - MPLBACKEND=Agg
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
-      - CLOUD_ML_REGION=${CLOUD_ML_REGION}
-      - PYTHONPATH=/app
-      - DISPLAY=:1
+      - PYTHONBREAKPOINT=ipdb.set_trace
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
     volumes:
-      - ./.anthropic:/app/.anthropic  # For API key storage
-      - ./logs:/app/logs              # For application logs
+      - ../data:/app/data                  # Data directory
+      - ../logs:/app/logs                  # Application logs
+      - ../notebooks:/app/notebooks        # Jupyter notebooks
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8501"]
       interval: 30s
       timeout: 10s
       retries: 3
     restart: unless-stopped
+
+  # Development service with hot reloading and additional tools
+  dev:
+    extends: meta-cognitive-framework
+    command: ./dev.sh watch
+    volumes:
+      - ../src:/app/src                    # Source code
+      - ../tests:/app/tests                # Test files
+      - ../config:/app/config              # Configuration files
+      - ../data:/app/data                  # Data directory
+      - ../logs:/app/logs                  # Application logs
+      - ../notebooks:/app/notebooks        # Jupyter notebooks
+    environment:
+      - PYTHONPATH=/app/src/python
+      - MOJO_PATH=/app/src/mojo
+      - MPLBACKEND=Agg
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - PYTHONBREAKPOINT=ipdb.set_trace
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTEST_ADDOPTS="--color=yes"
+
+  # Jupyter notebook service
+  notebook:
+    extends: meta-cognitive-framework
+    command: ./dev.sh notebook
+    ports:
+      - "8888:8888"
+    volumes:
+      - ../notebooks:/app/notebooks
+      - ../src:/app/src
+      - ../data:/app/data
+
+  # Streamlit visualization service
+  viz:
+    extends: meta-cognitive-framework
+    command: ./dev.sh streamlit
+    ports:
+      - "8501:8501"
+    volumes:
+      - ../src:/app/src
+      - ../data:/app/data
+
+  # Testing service
+  test:
+    extends: meta-cognitive-framework
+    command: ./dev.sh test
+    volumes:
+      - ../src:/app/src
+      - ../tests:/app/tests
+      - ../data:/app/data
+    environment:
+      - PYTEST_ADDOPTS="--color=yes -v --cov=src/python --cov-report=term-missing"

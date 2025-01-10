@@ -2,51 +2,123 @@ FROM python:3.11-slim
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    xvfb \
-    x11vnc \
-    xterm \
-    firefox-esr \
-    tint2 \
-    curl \
     git \
+    curl \
+    build-essential \
+    python3-dev \
+    vim \
+    wget \
+    htop \
+    tmux \
     && rm -rf /var/lib/apt/lists/*
 
 # Set up working directory
 WORKDIR /app
 
-# Copy requirements and install Python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy configuration files
+COPY config/requirements.txt .
+COPY config/pixi.toml .
 
-# Copy the cognitive framework and computer use demo
-COPY packages/core/cognitive_framework /app/cognitive_framework
-COPY references/anthropic-quickstarts/computer-use-demo/computer_use_demo /app/computer_use_demo
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt \
+    && pip install --no-cache-dir \
+    anthropic \
+    pytest \
+    pytest-watch \
+    black \
+    flake8 \
+    mypy \
+    jupyter \
+    notebook \
+    ipykernel \
+    matplotlib \
+    seaborn \
+    numpy \
+    pandas \
+    scikit-learn \
+    streamlit \
+    watchdog \
+    psutil
 
-# Copy example workflows and documentation
-COPY examples /app/examples
+# Install development tools
+RUN pip install --no-cache-dir \
+    pytest-cov \
+    pytest-xdist \
+    pytest-timeout \
+    pytest-randomly \
+    pytest-repeat \
+    pytest-benchmark \
+    ipdb \
+    rich \
+    tqdm
+
+# Copy source code
+COPY src/python/prompt_analysis_engine /app/src/python/prompt_analysis_engine
+COPY src/python/meta_cognitive_tools /app/src/python/meta_cognitive_tools
+COPY src/python/pattern_recognition /app/src/python/pattern_recognition
+COPY src/python/framework_validation /app/src/python/framework_validation
+COPY src/mojo/performance_optimization /app/src/mojo/performance_optimization
+COPY src/mojo/pattern_matching /app/src/mojo/pattern_matching
+
+# Copy documentation and examples
 COPY docs /app/docs
+COPY examples /app/examples
 
-# Set up virtual display
-ENV DISPLAY=:1
-
-# Copy startup scripts
-COPY scripts/start_all.sh /app/
-COPY scripts/start_xvfb.sh /app/
-RUN chmod +x /app/start_all.sh /app/start_xvfb.sh
-
-# Create necessary directories
-RUN mkdir -p /app/.config/tint2
-
-# Copy tint2 configuration
-COPY config/tint2rc /app/.config/tint2/tint2rc
+# Copy test files
+COPY tests /app/tests
 
 # Set up environment variables
-ENV PYTHONPATH=/app
+ENV PYTHONPATH=/app/src/python
+ENV MOJO_PATH=/app/src/mojo
 ENV ANTHROPIC_API_KEY=""
-ENV CLOUD_ML_REGION=""
+ENV PYTHONBREAKPOINT=ipdb.set_trace
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
 
-# Expose Streamlit port
+# Create data directories
+RUN mkdir -p /app/data/raw /app/data/processed
+
+# Set up matplotlib backend for non-interactive environments
+ENV MPLBACKEND=Agg
+
+# Set up Jupyter configuration
+RUN jupyter notebook --generate-config
+RUN echo "c.NotebookApp.token = ''" >> ~/.jupyter/jupyter_notebook_config.py
+RUN echo "c.NotebookApp.password = ''" >> ~/.jupyter/jupyter_notebook_config.py
+RUN echo "c.NotebookApp.ip = '0.0.0.0'" >> ~/.jupyter/jupyter_notebook_config.py
+
+# Create a script to run development tools
+COPY <<EOF /app/dev.sh
+#!/bin/bash
+case "\$1" in
+  "test")
+    pytest tests/python/meta_cognitive -v \$2
+    ;;
+  "watch")
+    ptw tests/python/meta_cognitive --now
+    ;;
+  "lint")
+    black src/python tests/python
+    flake8 src/python tests/python
+    mypy src/python tests/python
+    ;;
+  "notebook")
+    jupyter notebook --allow-root --no-browser --port=8888
+    ;;
+  "streamlit")
+    streamlit run src/python/meta_cognitive_tools/visualization/app.py
+    ;;
+  *)
+    echo "Usage: ./dev.sh [test|watch|lint|notebook|streamlit] [additional args]"
+    ;;
+esac
+EOF
+
+RUN chmod +x /app/dev.sh
+
+# Expose ports (8501 for Streamlit, 8888 for Jupyter)
 EXPOSE 8501
+EXPOSE 8888
 
-# Start the application
-CMD ["./start_all.sh"]
+# Default command
+CMD ["python", "-m", "pytest", "tests/python/meta_cognitive/test_pattern_recognition.py", "tests/python/meta_cognitive/test_pattern_visualization.py", "-v"]
