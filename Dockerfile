@@ -1,125 +1,55 @@
-FROM python:3.11-slim
+# Use Ubuntu as base for more flexibility
+FROM ubuntu:22.04
 
-# Install system build dependencies with retries
-RUN apt-get update && apt-get install -y --retries 5 --retry-delay 5 \
-    git \
-    build-essential \
-    python3-dev \
-    curl \
-    vim \
-    wget \
-    htop \
-    tmux \
-    graphviz \
-    postgresql-client \
-    redis-tools \
-    && rm -rf /var/lib/apt/lists/*
+# Avoid prompts from apt
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Set up working directory
-WORKDIR /app
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+  build-essential \
+  curl \
+  git \
+  python3 \
+  python3-pip \
+  python3-venv \
+  && rm -rf /var/lib/apt/lists/*
 
-# Copy only dependency files first to leverage caching
-COPY config/requirements.txt .
-COPY config/pixi.toml .
-COPY .pre-commit-config.yaml .
+# Create a non-root user
+RUN useradd -m -s /bin/bash appuser
+USER appuser
+WORKDIR /home/appuser
 
-# Install dependencies into a virtual environment
-RUN python -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
+# Set up Python environment
+ENV PYTHONPATH=/home/appuser/app/src/python \
+  MOJO_PATH=/home/appuser/app/src/mojo \
+  PATH="/home/appuser/.local/bin:${PATH}"
 
-# Install Python dependencies all at once to reduce layers
-RUN pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir \
-    anthropic pytest pytest-watch black flake8 mypy jupyter notebook ipykernel \
-    matplotlib seaborn numpy pandas scikit-learn streamlit watchdog psutil \
-    dask[complete] apache-airflow slackclient plotly dash bokeh altair networkx \
-    graphviz pydot pre-commit hypothesis pytest-asyncio pytest-mock pytest-profiling \
-    memory_profiler line_profiler snakeviz py-spy debugpy pytest-cov pytest-xdist \
-    pytest-timeout pytest-randomly pytest-repeat pytest-benchmark ipdb rich tqdm \
-    jupyterlab jupyter-dash jupyter-server-proxy nbconvert nbformat nbdime jupytext \
-    papermill
+# Copy project files
+COPY --chown=appuser:appuser . /home/appuser/app
 
-# Set up pre-commit hooks
-RUN git init && pre-commit install
-
-# Copy source code and other necessary files
-COPY src /app/src
-COPY docs /app/docs
-COPY examples /app/examples
-COPY tests /app/tests
-COPY config /app/config  # Copy the config directory
-
-# Set up environment variables
-ENV PYTHONPATH=/app/src/python \
-    MOJO_PATH=/app/src/mojo \
-    ANTHROPIC_API_KEY="x-api-key" \
-    PYTHONBREAKPOINT=ipdb.set_trace \
-    PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    JUPYTER_ENABLE_LAB=yes \
-    MPLBACKEND=Agg
-
-# Create data directories
-RUN mkdir -p /app/data/raw /app/data/processed
-
-# Set up Jupyter configuration
-RUN jupyter notebook --generate-config && \
-    echo "c.NotebookApp.token = ''" >> ~/.jupyter/jupyter_notebook_config.py && \
-    echo "c.NotebookApp.password = ''" >> ~/.jupyter/jupyter_notebook_config.py && \
-    echo "c.NotebookApp.ip = '0.0.0.0'" >> ~/.jupyter/jupyter_notebook_config.py
-
-# Create development tools script
-COPY <<EOF /app/dev.sh
-#!/bin/bash
-case "\$1" in
-  "test")
-    pytest tests/python/meta_cognitive -v \$2
-    ;;
-  "watch")
-    ptw tests/python/meta_cognitive --now
-    ;;
-  "lint")
-    pre-commit run --all-files
-    ;;
-  "profile")
-    case "\$2" in
-      "memory")
-        mprof run \$3
-        mprof plot
-        ;;
-      "cpu")
-        py-spy record -o profile.svg -- python \$3
-        ;;
-      "line")
-        kernprof -l -v \$3
-        ;;
-      *)
-        echo "Usage: ./dev.sh profile [memory|cpu|line] <script>"
-        ;;
-    esac
-    ;;
-  "notebook")
-    jupyter lab --allow-root --no-browser --port=8888
-    ;;
-  "streamlit")
-    streamlit run src/python/meta_cognitive_tools/visualization/app.py
-    ;;
-  "dash")
-    python src/python/meta_cognitive_tools/visualization/dashboard.py
-    ;;
-  "debug")
-    python -m debugpy --listen 0.0.0.0:5678 --wait-for-client \$2
-    ;;
-  *)
-    echo "Usage: ./dev.sh [test|watch|lint|profile|notebook|streamlit|dash|debug] [additional args]"
-    ;;
-esac
-EOF
-
-RUN chmod +x /app/dev.sh
+# Install dependencies
+RUN python3 -m venv /home/appuser/venv && \
+  . /home/appuser/venv/bin/activate && \
+  pip install --no-cache-dir -r /home/appuser/app/config/requirements.txt && \
+  pip install --no-cache-dir \
+  anthropic pytest streamlit jupyter notebook
 
 # Expose ports
 EXPOSE 8501 8888 5678
 
-# Default command
-CMD ["python", "-m", "pytest", "tests/python/meta_cognitive/test_pattern_recognition.py", "tests/python/meta_cognitive/test_pattern_visualization.py", "-v"]
+# Create entrypoint script
+RUN echo '#!/bin/bash\n\
+  if [ "$1" = "test" ]; then\n\
+  pytest tests/python/meta_cognitive\n\
+  elif [ "$1" = "notebook" ]; then\n\
+  jupyter lab --ip 0.0.0.0 --no-browser --allow-root\n\
+  elif [ "$1" = "streamlit" ]; then\n\
+  streamlit run src/python/meta_cognitive_tools/visualization/app.py\n\
+  else\n\
+  "$@"\n\
+  fi' > /home/appuser/entrypoint.sh && \
+  chmod +x /home/appuser/entrypoint.sh
+
+# Set entrypoint
+ENTRYPOINT ["/home/appuser/entrypoint.sh"]
+CMD ["python3"]

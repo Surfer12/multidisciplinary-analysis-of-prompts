@@ -9,6 +9,8 @@ services:
       - "8501:8501"  # Streamlit
       - "8888:8888"  # Jupyter
       - "5678:5678"  # debugpy
+      - "6080:6080"  # noVNC
+      - "5900:5900"  # VNC
     volumes:
       - ./src:/app/src
       - ./tests:/app/tests
@@ -27,15 +29,35 @@ services:
       - MPLBACKEND=Agg
       - JUPYTER_ENABLE_LAB=yes
       - PYTEST_ADDOPTS="--color=yes"
+      - DISPLAY_NUM=1
+      - HEIGHT=768
+      - WIDTH=1024
     networks:
       - app_network
       - monitoring_network
+    shm_size: 2gb
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8501"]
       interval: 30s
       timeout: 10s
       retries: 3
     restart: unless-stopped
+
+  computer-use-demo:
+    build:
+      context: ./references/anthropic-quickstarts/computer-use-demo
+      dockerfile: Dockerfile
+    ports:
+      - "6080:6080"  # noVNC
+      - "5900:5900"  # VNC
+    volumes:
+      - ./references/anthropic-quickstarts/computer-use-demo:/home/computeruse/computer_use_demo
+    environment:
+      - DISPLAY_NUM=1
+      - HEIGHT=768
+      - WIDTH=1024
+    networks:
+      - app_network
 
   dev:
     extends:
