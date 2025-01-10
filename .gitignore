@@ -57,3 +57,8 @@ htmlcov/
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Anthropic SDKs
+anthropic-sdk-python/**
+anthropic-sdk-java/**
+anthropic-sdk-go/**
