@@ -1,4 +1,10 @@
+
 #!/bin/bash
+
+# Set the ANTHROPIC_API_KEY environment variable
+export ANTHROPIC_API_KEY=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
+
+export PROJECT_ROOT=/Users/ryanoates/analysis-of-prompts-v0.2
 
 # Project root directory
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -24,6 +30,8 @@ usage() {
 }
 
 # Activate virtual environment
+export ANTHROPIC_API_KEY=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
+export PROJECT_ROOT=/Users/ryanoates/analysis-of-prompts-v0.2
 activate_venv() {
     if [ -d "$PROJECT_ROOT/venv" ]; then
         source "$PROJECT_ROOT/venv/bin/activate"
@@ -62,7 +70,7 @@ local_test() {
 launch_notebook() {
     build_image
     docker run \
-        -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" \
+        -e ANTHROPIC_API_KEY="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" \
         -v "$PROJECT_ROOT":/home/appuser/app \
         -v "$HOME/.anthropic":/home/appuser/.anthropic \
         -p 8888:8888 \
@@ -76,7 +84,7 @@ launch_notebook() {
 launch_streamlit() {
     build_image
     docker run \
-        -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" \
+        -e ANTHROPIC_API_KEY="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" \
         -v "$PROJECT_ROOT":/home/appuser/app \
         -v "$HOME/.anthropic":/home/appuser/.anthropic \
         -p 8501:8501 \
@@ -90,7 +98,7 @@ launch_streamlit() {
 run_tests() {
     build_image
     docker run \
-        -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" \
+        -e ANTHROPIC_API_KEY="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" \
         -v "$PROJECT_ROOT":/home/appuser/app \
         -v "$HOME/.anthropic":/home/appuser/.anthropic \
         -it analysis-of-prompts:dev \
@@ -101,7 +109,7 @@ run_tests() {
 dev_environment() {
     build_image
     docker run \
-        -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" \
+        -e ANTHROPIC_API_KEY="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" \
         -v "$PROJECT_ROOT":/home/appuser/app \
         -v "$HOME/.anthropic":/home/appuser/.anthropic \
         -p 8501:8501 \
