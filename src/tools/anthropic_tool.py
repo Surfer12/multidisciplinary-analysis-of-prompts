@@ -3,13 +3,25 @@ Anthropic API integration module for enhanced AI capabilities.
 """
 import os
 from typing import Any, Dict, List, Optional
+from unittest.mock import patch
 
 import anthropic
 from dotenv import load_dotenv
 
 
 class AnthropicTool:
-    """Tool for interacting with Anthropic's API."""
+    def test_error_handling(self):
+        """Test error handling in the tool."""
+        # Simulate API error
+        with patch('anthropic.Client') as mock_anthropic_client:
+            mock_anthropic_client.return_value.messages.create.side_effect = Exception(
+                "API Error"
+            )
+
+            # Test error handling in analyze_code
+            result = self.analyze_code("Test code")
+            assert result["success"] is False
+            assert "error" in result
 
     def __init__(self):
         """Initialize the Anthropic tool with API configuration."""
