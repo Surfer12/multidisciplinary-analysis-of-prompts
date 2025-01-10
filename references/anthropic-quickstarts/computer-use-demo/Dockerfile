@@ -101,4 +101,16 @@ ENV DISPLAY_NUM=$DISPLAY_NUM
 ENV HEIGHT=$HEIGHT
 ENV WIDTH=$WIDTH
 
+# Add monitoring ports
+EXPOSE 8000
+EXPOSE 3000
+
+# Install monitoring dependencies
+RUN python -m pip install prometheus-client==0.19.0 asyncio==3.4.3
+
+# Add environment variables for monitoring
+ENV ENABLE_MONITORING=true
+ENV PROMETHEUS_PORT=8000
+
+# Update entrypoint to include monitoring
 ENTRYPOINT [ "./entrypoint.sh" ]
