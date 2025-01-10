@@ -1,5 +1,5 @@
 # Use Ubuntu as base for more flexibility
-FROM ubuntu:22.04
+FROM ubuntu:22.04 AS base
 
 # Avoid prompts from apt
 ENV DEBIAN_FRONTEND=noninteractive
@@ -27,12 +27,21 @@ ENV PYTHONPATH=/home/appuser/app/src/python \
 # Copy project files
 COPY --chown=appuser:appuser . /home/appuser/app
 
+# --- Builder Stage ---
+FROM base AS builder
+
 # Install dependencies
 RUN python3 -m venv /home/appuser/venv && \
   . /home/appuser/venv/bin/activate && \
   pip install --no-cache-dir -r /home/appuser/app/config/requirements.txt && \
   pip install --no-cache-dir \
   anthropic pytest streamlit jupyter notebook
+
+# --- Development Stage ---
+FROM base AS dev
+
+# Copy the virtual environment from the builder stage
+COPY --from=builder /home/appuser/venv /home/appuser/venv
 
 # Expose ports
 EXPOSE 8501 8888 5678
@@ -53,3 +62,7 @@ RUN echo '#!/bin/bash\n\
 # Set entrypoint
 ENTRYPOINT ["/home/appuser/entrypoint.sh"]
 CMD ["python3"]
+
+# --- Production Stage (Optional) ---
+# FROM base AS prod
+# ... (Add steps to copy only necessary files and configure for production)

@@ -5,21 +5,22 @@ services:
     build:
       context: ..
       dockerfile: config/Dockerfile
+      target: dev # Build the "dev" stage by default
     ports:
-      - "8501:8501"  # Streamlit visualization interface
-      - "8888:8888"  # Jupyter notebook interface
+      - "8501:8501"  # Streamlit
+      - "8888:8888"  # Jupyter
     environment:
-      - PYTHONPATH=/app/src/python
-      - MOJO_PATH=/app/src/mojo
+      - PYTHONPATH=/home/appuser/app/src/python # Adjusted paths for non-root user
+      - MOJO_PATH=/home/appuser/app/src/mojo # Adjusted paths for non-root user
       - MPLBACKEND=Agg
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - PYTHONBREAKPOINT=ipdb.set_trace
       - PYTHONUNBUFFERED=1
       - PYTHONDONTWRITEBYTECODE=1
     volumes:
-      - ../data:/app/data                  # Data directory
-      - ../logs:/app/logs                  # Application logs
-      - ../notebooks:/app/notebooks        # Jupyter notebooks
+      - ../data:/home/appuser/app/data # Adjusted paths for non-root user
+      - ../logs:/home/appuser/app/logs # Adjusted paths for non-root user
+      - ../notebooks:/home/appuser/app/notebooks # Adjusted paths for non-root user
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8501"]
       interval: 30s
@@ -27,20 +28,20 @@ services:
       retries: 3
     restart: unless-stopped
 
-  # Development service with hot reloading and additional tools
+  # Development service
   dev:
     extends: meta-cognitive-framework
-    command: ./dev.sh watch
+    command: ./dev.sh watch # Use the new dev.sh script
     volumes:
-      - ../src:/app/src                    # Source code
-      - ../tests:/app/tests                # Test files
-      - ../config:/app/config              # Configuration files
-      - ../data:/app/data                  # Data directory
-      - ../logs:/app/logs                  # Application logs
-      - ../notebooks:/app/notebooks        # Jupyter notebooks
+      - ../src:/home/appuser/app/src # Adjusted paths for non-root user
+      - ../tests:/home/appuser/app/tests # Adjusted paths for non-root user
+      - ../config:/home/appuser/app/config # Adjusted paths for non-root user
+      - ../data:/home/appuser/app/data # Adjusted paths for non-root user
+      - ../logs:/home/appuser/app/logs # Adjusted paths for non-root user
+      - ../notebooks:/home/appuser/app/notebooks # Adjusted paths for non-root user
     environment:
-      - PYTHONPATH=/app/src/python
-      - MOJO_PATH=/app/src/mojo
+      - PYTHONPATH=/home/appuser/app/src/python # Adjusted paths for non-root user
+      - MOJO_PATH=/home/appuser/app/src/mojo # Adjusted paths for non-root user
       - MPLBACKEND=Agg
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - PYTHONBREAKPOINT=ipdb.set_trace
@@ -51,31 +52,31 @@ services:
   # Jupyter notebook service
   notebook:
     extends: meta-cognitive-framework
-    command: ./dev.sh notebook
+    command: ./dev.sh notebook # Use the new dev.sh script
     ports:
       - "8888:8888"
     volumes:
-      - ../notebooks:/app/notebooks
-      - ../src:/app/src
-      - ../data:/app/data
+      - ../notebooks:/home/appuser/app/notebooks # Adjusted paths for non-root user
+      - ../src:/home/appuser/app/src # Adjusted paths for non-root user
+      - ../data:/home/appuser/app/data # Adjusted paths for non-root user
 
   # Streamlit visualization service
   viz:
     extends: meta-cognitive-framework
-    command: ./dev.sh streamlit
+    command: ./dev.sh streamlit # Use the new dev.sh script
     ports:
       - "8501:8501"
     volumes:
-      - ../src:/app/src
-      - ../data:/app/data
+      - ../src:/home/appuser/app/src # Adjusted paths for non-root user
+      - ../data:/home/appuser/app/data # Adjusted paths for non-root user
 
   # Testing service
   test:
     extends: meta-cognitive-framework
-    command: ./dev.sh test
+    command: ./dev.sh test # Use the new dev.sh script
     volumes:
-      - ../src:/app/src
-      - ../tests:/app/tests
-      - ../data:/app/data
+      - ../src:/home/appuser/app/src # Adjusted paths for non-root user
+      - ../tests:/home/appuser/app/tests # Adjusted paths for non-root user
+      - ../data:/home/appuser/app/data # Adjusted paths for non-root user
     environment:
       - PYTEST_ADDOPTS="--color=yes -v --cov=src/python --cov-report=term-missing"
