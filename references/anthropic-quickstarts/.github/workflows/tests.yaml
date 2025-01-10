@@ -1,55 +1,57 @@
-name: tests
+name: Tests
+
 on:
-  pull_request:
-    paths:
-      - .github/**
-      - computer-use-demo/**
   push:
-    branches:
-      - main
+    branches: [ main ]
     paths:
-      - .github/**
-      - computer-use-demo/**
+      - 'computer-use-demo/**'
+      - '.github/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'computer-use-demo/**'
+      - '.github/**'
+
 jobs:
-  ruff:
+  test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: computer-use-demo
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/ruff-action@v1
-  pyright:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: computer-use-demo
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          cache: "pip"
-          python-version: "3.11.6"
-      - run: |
-          python -m venv .venv
-          source .venv/bin/activate
-          pip install -r dev-requirements.txt
-      - run: echo "$PWD/.venv/bin" >> $GITHUB_PATH
-      - uses: jakebailey/pyright-action@v1
-  pytest:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: computer-use-demo
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          cache: "pip"
-          python-version: "3.11.6"
-      - run: |
-          python -m venv .venv
-          source .venv/bin/activate
-          pip install -r dev-requirements.txt
-      - run: echo "$PWD/.venv/bin" >> $GITHUB_PATH
-      - run: pytest tests --junitxml=junit/test-results.xml
+    - uses: actions/checkout@v3
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r computer-use-demo/computer_use_demo/requirements.txt
+        pip install pytest pytest-asyncio pytest-cov ruff mypy types-prometheus-client
+
+    - name: Run linters
+      run: |
+        # Run ruff for Python linting
+        ruff check computer-use-demo/computer_use_demo/
+        # Run mypy for type checking
+        mypy --ignore-missing-imports computer-use-demo/computer_use_demo/
+
+    - name: Run tests with coverage
+      run: |
+        pytest computer-use-demo/tests/ \
+          --cov=computer-use-demo/computer_use_demo/ \
+          --cov-report=xml \
+          --cov-report=term-missing \
+          --asyncio-mode=auto
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true
