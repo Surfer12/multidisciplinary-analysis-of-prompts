@@ -1,0 +1,112 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: config/Dockerfile
+    ports:
+      - "8501:8501"  # Streamlit
+      - "8888:8888"  # Jupyter
+      - "5678:5678"  # debugpy
+    volumes:
+      - ./src:/app/src
+      - ./tests:/app/tests
+      - ./data:/app/data
+      - ./docs:/app/docs
+    environment:
+      - PYTHONPATH=/app/src/python
+      - MOJO_PATH=/app/src/mojo
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    networks:
+      - app_network
+      - monitoring_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Import monitoring services
+  prometheus:
+    extends:
+      file: monitoring/docker-compose.yml
+      service: prometheus
+    networks:
+      - monitoring_network
+    volumes:
+      - ./monitoring/prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+
+  grafana:
+    extends:
+      file: monitoring/docker-compose.yml
+      service: grafana
+    networks:
+      - monitoring_network
+    volumes:
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - grafana_data:/var/lib/grafana
+
+  alertmanager:
+    extends:
+      file: monitoring/docker-compose.yml
+      service: alertmanager
+    networks:
+      - monitoring_network
+    volumes:
+      - ./monitoring/alertmanager:/etc/alertmanager
+
+  node-exporter:
+    extends:
+      file: monitoring/docker-compose.yml
+      service: node-exporter
+    networks:
+      - monitoring_network
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+
+  cadvisor:
+    extends:
+      file: monitoring/docker-compose.yml
+      service: cadvisor
+    networks:
+      - monitoring_network
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+
+  loki:
+    extends:
+      file: monitoring/docker-compose.yml
+      service: loki
+    networks:
+      - monitoring_network
+    volumes:
+      - ./monitoring/loki:/etc/loki
+
+  promtail:
+    extends:
+      file: monitoring/docker-compose.yml
+      service: promtail
+    networks:
+      - monitoring_network
+    volumes:
+      - /var/log:/var/log
+      - ./monitoring/promtail:/etc/promtail
+
+networks:
+  app_network:
+    driver: bridge
+  monitoring_network:
+    driver: bridge
+
+volumes:
+  prometheus_data:
+  grafana_data:

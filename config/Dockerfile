@@ -1,129 +1,93 @@
-FROM python:3.11-slim
+FROM python:3.11-slim as builder
 
-# Install system dependencies
+# Install system build dependencies
 RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    build-essential \
-    python3-dev \
-    vim \
-    wget \
-    htop \
-    tmux \
-    graphviz \
-    postgresql-client \
-    redis-tools \
-    && rm -rf /var/lib/apt/lists/*
+  git \
+  build-essential \
+  python3-dev \
+  && rm -rf /var/lib/apt/lists/*
 
 # Set up working directory
 WORKDIR /app
 
-# Copy configuration files
+# Copy only dependency files first to leverage caching
 COPY config/requirements.txt .
 COPY config/pixi.toml .
 COPY .pre-commit-config.yaml .
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt \
-    && pip install --no-cache-dir \
-    anthropic \
-    pytest \
-    pytest-watch \
-    black \
-    flake8 \
-    mypy \
-    jupyter \
-    notebook \
-    ipykernel \
-    matplotlib \
-    seaborn \
-    numpy \
-    pandas \
-    scikit-learn \
-    streamlit \
-    watchdog \
-    psutil \
-    dask[complete] \
-    apache-airflow \
-    slackclient \
-    plotly \
-    dash \
-    bokeh \
-    altair \
-    networkx \
-    graphviz \
-    pydot \
-    pre-commit \
-    hypothesis \
-    pytest-asyncio \
-    pytest-mock \
-    pytest-profiling \
-    memory_profiler \
-    line_profiler \
-    snakeviz \
-    py-spy \
-    debugpy
+# Install dependencies into a virtual environment
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 
-# Install development tools
-RUN pip install --no-cache-dir \
-    pytest-cov \
-    pytest-xdist \
-    pytest-timeout \
-    pytest-randomly \
-    pytest-repeat \
-    pytest-benchmark \
-    ipdb \
-    rich \
-    tqdm \
-    jupyterlab \
-    jupyter-dash \
-    jupyter-server-proxy \
-    nbconvert \
-    nbformat \
-    nbdime \
-    jupytext \
-    papermill
+# Install Python dependencies all at once to reduce layers
+RUN pip install --no-cache-dir -r requirements.txt && \
+  pip install --no-cache-dir \
+  anthropic pytest pytest-watch black flake8 mypy jupyter notebook ipykernel \
+  matplotlib seaborn numpy pandas scikit-learn streamlit watchdog psutil \
+  dask[complete] apache-airflow slackclient plotly dash bokeh altair networkx \
+  graphviz pydot pre-commit hypothesis pytest-asyncio pytest-mock pytest-profiling \
+  memory_profiler line_profiler snakeviz py-spy debugpy pytest-cov pytest-xdist \
+  pytest-timeout pytest-randomly pytest-repeat pytest-benchmark ipdb rich tqdm \
+  jupyterlab jupyter-dash jupyter-server-proxy nbconvert nbformat nbdime jupytext \
+  papermill
+
+# Start fresh with a new slim image
+FROM python:3.11-slim
+
+# Install only runtime system dependencies
+RUN apt-get update && apt-get install -y \
+  curl \
+  vim \
+  wget \
+  htop \
+  tmux \
+  graphviz \
+  postgresql-client \
+  redis-tools \
+  git \
+  && rm -rf /var/lib/apt/lists/*
+
+# Copy virtual environment from builder
+COPY --from=builder /opt/venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Set up working directory
+WORKDIR /app
 
 # Set up pre-commit hooks
 RUN git init && pre-commit install
 
-# Copy source code
+# Copy source code and other necessary files
 COPY src/python/prompt_analysis_engine /app/src/python/prompt_analysis_engine
 COPY src/python/meta_cognitive_tools /app/src/python/meta_cognitive_tools
 COPY src/python/pattern_recognition /app/src/python/pattern_recognition
 COPY src/python/framework_validation /app/src/python/framework_validation
 COPY src/mojo/performance_optimization /app/src/mojo/performance_optimization
 COPY src/mojo/pattern_matching /app/src/mojo/pattern_matching
-
-# Copy documentation and examples
 COPY docs /app/docs
 COPY examples /app/examples
-
-# Copy test files
 COPY tests /app/tests
 
 # Set up environment variables
-ENV PYTHONPATH=/app/src/python
-ENV MOJO_PATH=/app/src/mojo
-ENV ANTHROPIC_API_KEY=""
-ENV PYTHONBREAKPOINT=ipdb.set_trace
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV JUPYTER_ENABLE_LAB=yes
+ENV PYTHONPATH=/app/src/python \
+  MOJO_PATH=/app/src/mojo \
+  ANTHROPIC_API_KEY="x-api-key" \
+  PYTHONBREAKPOINT=ipdb.set_trace \
+  PYTHONUNBUFFERED=1 \
+  PYTHONDONTWRITEBYTECODE=1 \
+  JUPYTER_ENABLE_LAB=yes \
+  MPLBACKEND=Agg
 
 # Create data directories
 RUN mkdir -p /app/data/raw /app/data/processed
 
-# Set up matplotlib backend for non-interactive environments
-ENV MPLBACKEND=Agg
-
 # Set up Jupyter configuration
-RUN jupyter notebook --generate-config
-RUN echo "c.NotebookApp.token = ''" >> ~/.jupyter/jupyter_notebook_config.py
-RUN echo "c.NotebookApp.password = ''" >> ~/.jupyter/jupyter_notebook_config.py
-RUN echo "c.NotebookApp.ip = '0.0.0.0'" >> ~/.jupyter/jupyter_notebook_config.py
+RUN jupyter notebook --generate-config && \
+  echo "c.NotebookApp.token = ''" >> ~/.jupyter/jupyter_notebook_config.py && \
+  echo "c.NotebookApp.password = ''" >> ~/.jupyter/jupyter_notebook_config.py && \
+  echo "c.NotebookApp.ip = '0.0.0.0'" >> ~/.jupyter/jupyter_notebook_config.py
 
-# Create a script to run development tools
+# Create development tools script
 COPY <<EOF /app/dev.sh
 #!/bin/bash
 case "\$1" in
@@ -173,10 +137,8 @@ EOF
 
 RUN chmod +x /app/dev.sh
 
-# Expose ports (8501 for Streamlit, 8888 for Jupyter, 5678 for debugpy)
-EXPOSE 8501
-EXPOSE 8888
-EXPOSE 5678
+# Expose ports
+EXPOSE 8501 8888 5678
 
 # Default command
 CMD ["python", "-m", "pytest", "tests/python/meta_cognitive/test_pattern_recognition.py", "tests/python/meta_cognitive/test_pattern_visualization.py", "-v"]
