@@ -1,18 +1,6 @@
-# Use Ubuntu as base for more flexibility and consistency with the root Dockerfile
-FROM ubuntu:22.04 AS base
-
-# Avoid prompts from apt
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Install system dependencies (keep only essential ones for the builder stage)
-RUN apt-get update && apt-get install -y \
-  build-essential \
-  curl \
-  git \
-  python3 \
-  python3-pip \
-  python3-venv \
-  && rm -rf /var/lib/apt/lists/*
+# Use the template and override specific values
+ARG BASE_IMAGE=ubuntu:22.04
+FROM ${BASE_IMAGE} AS base
 
 # --- Builder Stage ---
 FROM base AS builder
@@ -20,7 +8,7 @@ FROM base AS builder
 # Set up working directory
 WORKDIR /app
 
-# Copy only dependency files first to leverage caching
+# Copy dependency files
 COPY config/requirements.txt .
 COPY config/pixi.toml .
 COPY .pre-commit-config.yaml .
@@ -29,7 +17,7 @@ COPY .pre-commit-config.yaml .
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Install Python dependencies all at once to reduce layers
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt && \
   pip install --no-cache-dir \
   anthropic pytest pytest-watch black flake8 mypy jupyter notebook ipykernel \
@@ -42,23 +30,22 @@ RUN pip install --no-cache-dir -r requirements.txt && \
   papermill
 
 # --- Development Stage ---
-# (This stage inherits from builder and adds development-specific configurations)
 FROM builder AS dev
 
-# Create a non-root user (like in the root Dockerfile)
+# Create a non-root user
 RUN useradd -m -s /bin/bash appuser
 USER appuser
 WORKDIR /home/appuser
 
-# Set up Python environment (similar to root Dockerfile)
+# Set up Python environment
 ENV PYTHONPATH=/home/appuser/app/src/python \
   MOJO_PATH=/home/appuser/app/src/mojo \
   PATH="/home/appuser/.local/bin:${PATH}"
 
-# Copy project files (use the non-root user)
+# Copy project files
 COPY --chown=appuser:appuser . /home/appuser/app
 
-# Copy virtual environment from builder (for development)
+# Copy virtual environment from builder
 COPY --from=builder /opt/venv /home/appuser/venv
 
 # Set up pre-commit hooks
@@ -67,7 +54,7 @@ RUN git init && pre-commit install
 # Expose ports
 EXPOSE 8501 8888 5678
 
-# Create development tools script (similar to root Dockerfile)
+# Create development tools script
 COPY <<EOF /home/appuser/dev.sh
 #!/bin/bash
 case "\$1" in
@@ -124,7 +111,6 @@ RUN jupyter notebook --generate-config && \
   echo "c.NotebookApp.ip = '0.0.0.0'" >> /home/appuser/.jupyter/jupyter_notebook_config.py
 
 # --- Production Stage ---
-# (This stage inherits from base and focuses on a minimal runtime environment)
 FROM python:3.11-slim AS prod
 
 # Install only runtime system dependencies
@@ -140,20 +126,15 @@ RUN apt-get update && apt-get install -y \
   git \
   && rm -rf /var/lib/apt/lists/*
 
-# Copy virtual environment from builder (for production)
+# Copy virtual environment from builder
 COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 # Set up working directory
 WORKDIR /app
 
-# Copy source code and other necessary files
-COPY src/python/prompt_analysis_engine /app/src/python/prompt_analysis_engine
-COPY src/python/meta_cognitive_tools /app/src/python/meta_cognitive_tools
-COPY src/python/pattern_recognition /app/src/python/pattern_recognition
-COPY src/python/framework_validation /app/src/python/framework_validation
-COPY src/mojo/performance_optimization /app/src/mojo/performance_optimization
-COPY src/mojo/pattern_matching /app/src/mojo/pattern_matching
+# Copy necessary files
+COPY src /app/src
 COPY docs /app/docs
 COPY examples /app/examples
 COPY tests /app/tests
@@ -171,5 +152,5 @@ ENV PYTHONPATH=/app/src/python \
 # Create data directories
 RUN mkdir -p /app/data/raw /app/data/processed
 
-# Default command (you can customize this for your production environment)
+# Default command
 CMD ["python", "-m", "pytest", "tests/python/meta_cognitive/test_pattern_recognition.py", "tests/python/meta_cognitive/test_pattern_visualization.py", "-v"]

@@ -4,7 +4,11 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile # Or config/Dockerfile
+      target: dev
+      args:
+        - REQUIREMENTS_FILE=config/requirements.txt
+        - ADDITIONAL_DEPENDENCIES="some_other_package"
     ports:
       - "8501:8501"  # Streamlit
       - "8888:8888"  # Jupyter
@@ -61,7 +65,7 @@ services:
 
   dev:
     extends:
-      service: app
+      service: meta-cognitive-framework
     command: ./dev.sh watch
     volumes:
       - ./src:/app/src
@@ -75,7 +79,7 @@ services:
 
   notebook:
     extends:
-      service: app
+      service: meta-cognitive-framework
     command: ./dev.sh notebook
     ports:
       - "8888:8888"
@@ -86,7 +90,7 @@ services:
 
   viz:
     extends:
-      service: app
+      service: meta-cognitive-framework
     command: ./dev.sh streamlit
     ports:
       - "8501:8501"
@@ -96,7 +100,7 @@ services:
 
   test:
     extends:
-      service: app
+      service: meta-cognitive-framework
     command: ./dev.sh test
     volumes:
       - ./src:/app/src
