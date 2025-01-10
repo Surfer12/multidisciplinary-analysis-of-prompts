@@ -1,0 +1,7 @@
+README.md
+setup.py
+analysis_of_prompts.egg-info/PKG-INFO
+analysis_of_prompts.egg-info/SOURCES.txt
+analysis_of_prompts.egg-info/dependency_links.txt
+analysis_of_prompts.egg-info/requires.txt
+analysis_of_prompts.egg-info/top_level.txt

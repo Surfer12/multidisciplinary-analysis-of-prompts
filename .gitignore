@@ -1,66 +1,30 @@
-# Project structure
-.git-backups/
-workspace/temp/
-packages/*/dist/
-packages/*/build/
+# Environment files
+.env
+*.env
+!.env.example
 
 # Python
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
 
-# Virtual Environment
+# Virtual environments
 venv/
-ENV/
+.venv/
 env/
-.env
 
-# IDE
-.idea/
+# IDE and editor files
 .vscode/
+.idea/
 *.swp
 *.swo
 
 # Jupyter Notebook
 .ipynb_checkpoints
-*.ipynb
-
-# Testing
-.coverage
-htmlcov/
-.pytest_cache/
-.mypy_cache/
 
 # Logs
 *.log
 
-# Local development
+# OS generated files
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Anthropic SDKs
-anthropic-sdk-python/**
-anthropic-sdk-java/**
-anthropic-sdk-go/**
-
-Dockerfile
+Thumbs.db
