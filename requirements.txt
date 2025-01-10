@@ -1,0 +1,5 @@
+anthropic
+pytest
+streamlit
+jupyter
+# Add other dependencies here

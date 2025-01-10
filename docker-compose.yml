@@ -4,7 +4,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile # Or config/Dockerfile
+      dockerfile: Dockerfile
       target: dev
       args:
         - REQUIREMENTS_FILE=config/requirements.txt
@@ -46,22 +46,6 @@ services:
       timeout: 10s
       retries: 3
     restart: unless-stopped
-
-  computer-use-demo:
-    build:
-      context: ./references/anthropic-quickstarts/computer-use-demo
-      dockerfile: Dockerfile
-    ports:
-      - "6080:6080"  # noVNC
-      - "5900:5900"  # VNC
-    volumes:
-      - ./references/anthropic-quickstarts/computer-use-demo:/home/computeruse/computer_use_demo
-    environment:
-      - DISPLAY_NUM=1
-      - HEIGHT=768
-      - WIDTH=1024
-    networks:
-      - app_network
 
   dev:
     extends:
