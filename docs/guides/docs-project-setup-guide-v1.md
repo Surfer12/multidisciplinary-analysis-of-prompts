@@ -30,7 +30,7 @@ This guide will walk you through setting up the Analysis of Prompts project envi
 3. **Docker Setup**
    ```bash
    # Build and start containers
-   docker-compose -f config/docker-compose.yml up -d
+   docker-compose up -d
    ```
 
 4. **Configure Development Environment**
