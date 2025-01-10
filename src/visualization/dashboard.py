@@ -4,7 +4,7 @@ Interactive dashboard for visualizing cognitive patterns and tool usage.
 import streamlit as st
 import pandas as pd
 import numpy as np
-from pattern_viz import PatternVisualizer
+from src.visualization.pattern_viz import PatternVisualizer
 
 def load_sample_data():
     """Load sample data for demonstration."""
