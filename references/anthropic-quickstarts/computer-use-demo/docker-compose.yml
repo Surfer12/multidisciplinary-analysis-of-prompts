@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  computer-use-demo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "6080:6080"  # noVNC
+      - "8000:8000"  # Prometheus metrics
+    environment:
+      - DISPLAY_NUM=1
+      - HEIGHT=768
+      - WIDTH=1024
+      - ENABLE_MONITORING=true
+      - PROMETHEUS_PORT=8000
+    volumes:
+      - ./computer_use_demo:/home/computeruse/computer_use_demo
+    networks:
+      - monitoring_network
+
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    networks:
+      - monitoring_network
+
+  grafana:
+    image: grafana/grafana:10.0.3
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    depends_on:
+      - prometheus
+    networks:
+      - monitoring_network
+
+volumes:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  monitoring_network:
+    driver: bridge
