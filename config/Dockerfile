@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y \
     wget \
     htop \
     tmux \
+    graphviz \
+    postgresql-client \
+    redis-tools \
     && rm -rf /var/lib/apt/lists/*
 
 # Set up working directory
@@ -18,6 +21,7 @@ WORKDIR /app
 # Copy configuration files
 COPY config/requirements.txt .
 COPY config/pixi.toml .
+COPY .pre-commit-config.yaml .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt \
@@ -38,7 +42,27 @@ RUN pip install --no-cache-dir -r requirements.txt \
     scikit-learn \
     streamlit \
     watchdog \
-    psutil
+    psutil \
+    dask[complete] \
+    apache-airflow \
+    slackclient \
+    plotly \
+    dash \
+    bokeh \
+    altair \
+    networkx \
+    graphviz \
+    pydot \
+    pre-commit \
+    hypothesis \
+    pytest-asyncio \
+    pytest-mock \
+    pytest-profiling \
+    memory_profiler \
+    line_profiler \
+    snakeviz \
+    py-spy \
+    debugpy
 
 # Install development tools
 RUN pip install --no-cache-dir \
@@ -50,7 +74,18 @@ RUN pip install --no-cache-dir \
     pytest-benchmark \
     ipdb \
     rich \
-    tqdm
+    tqdm \
+    jupyterlab \
+    jupyter-dash \
+    jupyter-server-proxy \
+    nbconvert \
+    nbformat \
+    nbdime \
+    jupytext \
+    papermill
+
+# Set up pre-commit hooks
+RUN git init && pre-commit install
 
 # Copy source code
 COPY src/python/prompt_analysis_engine /app/src/python/prompt_analysis_engine
@@ -74,6 +109,7 @@ ENV ANTHROPIC_API_KEY=""
 ENV PYTHONBREAKPOINT=ipdb.set_trace
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
+ENV JUPYTER_ENABLE_LAB=yes
 
 # Create data directories
 RUN mkdir -p /app/data/raw /app/data/processed
@@ -98,27 +134,49 @@ case "\$1" in
     ptw tests/python/meta_cognitive --now
     ;;
   "lint")
-    black src/python tests/python
-    flake8 src/python tests/python
-    mypy src/python tests/python
+    pre-commit run --all-files
+    ;;
+  "profile")
+    case "\$2" in
+      "memory")
+        mprof run \$3
+        mprof plot
+        ;;
+      "cpu")
+        py-spy record -o profile.svg -- python \$3
+        ;;
+      "line")
+        kernprof -l -v \$3
+        ;;
+      *)
+        echo "Usage: ./dev.sh profile [memory|cpu|line] <script>"
+        ;;
+    esac
     ;;
   "notebook")
-    jupyter notebook --allow-root --no-browser --port=8888
+    jupyter lab --allow-root --no-browser --port=8888
     ;;
   "streamlit")
     streamlit run src/python/meta_cognitive_tools/visualization/app.py
     ;;
+  "dash")
+    python src/python/meta_cognitive_tools/visualization/dashboard.py
+    ;;
+  "debug")
+    python -m debugpy --listen 0.0.0.0:5678 --wait-for-client \$2
+    ;;
   *)
-    echo "Usage: ./dev.sh [test|watch|lint|notebook|streamlit] [additional args]"
+    echo "Usage: ./dev.sh [test|watch|lint|profile|notebook|streamlit|dash|debug] [additional args]"
     ;;
 esac
 EOF
 
 RUN chmod +x /app/dev.sh
 
-# Expose ports (8501 for Streamlit, 8888 for Jupyter)
+# Expose ports (8501 for Streamlit, 8888 for Jupyter, 5678 for debugpy)
 EXPOSE 8501
 EXPOSE 8888
+EXPOSE 5678
 
 # Default command
 CMD ["python", "-m", "pytest", "tests/python/meta_cognitive/test_pattern_recognition.py", "tests/python/meta_cognitive/test_pattern_visualization.py", "-v"]
