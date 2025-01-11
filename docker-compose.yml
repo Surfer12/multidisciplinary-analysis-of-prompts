@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  app:
+  computer-use-analysis:
     build:
       context: .
       dockerfile: Dockerfile
@@ -10,8 +10,8 @@ services:
         - REQUIREMENTS_FILE=config/requirements.txt
         - ADDITIONAL_DEPENDENCIES="some_other_package"
     ports:
-      - "8501:8501"  # Streamlit
-      - "8888:8888"  # Jupyter
+      - "8501:8501"  # Streamlit UI for analysis
+      - "8888:8888"  # Jupyter for interactive analysis
       - "5678:5678"  # debugpy
       - "6080:6080"  # noVNC
       - "5900:5900"  # VNC
@@ -37,7 +37,7 @@ services:
       - HEIGHT=768
       - WIDTH=1024
     networks:
-      - app_network
+      - analysis_network
       - monitoring_network
     shm_size: 2gb
     healthcheck:
@@ -47,9 +47,9 @@ services:
       retries: 3
     restart: unless-stopped
 
-  dev:
+  analysis-dev:
     extends:
-      service: meta-cognitive-framework
+      service: computer-use-analysis
     command: ./dev.sh watch
     volumes:
       - ./src:/app/src
@@ -61,9 +61,9 @@ services:
     environment:
       - PYTEST_ADDOPTS="--color=yes"
 
-  notebook:
+  analysis-notebook:
     extends:
-      service: meta-cognitive-framework
+      service: computer-use-analysis
     command: ./dev.sh notebook
     ports:
       - "8888:8888"
@@ -72,9 +72,9 @@ services:
       - ./src:/app/src
       - ./data:/app/data
 
-  viz:
+  analysis-viz:
     extends:
-      service: meta-cognitive-framework
+      service: computer-use-analysis
     command: ./dev.sh streamlit
     ports:
       - "8501:8501"
@@ -82,9 +82,9 @@ services:
       - ./src:/app/src
       - ./data:/app/data
 
-  test:
+  analysis-test:
     extends:
-      service: meta-cognitive-framework
+      service: computer-use-analysis
     command: ./dev.sh test
     volumes:
       - ./src:/app/src
