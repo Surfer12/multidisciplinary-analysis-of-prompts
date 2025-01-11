@@ -6,7 +6,7 @@
  * @precision high
  * @id python/claude-computer-interactions
  * @tags security
-
+ */
 
 import python
 import semmle.python.ApiGraphs
