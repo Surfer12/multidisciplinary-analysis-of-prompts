@@ -105,9 +105,7 @@ class VisionModel(Layer):
         # broadcast this into the right shapes.
         class_embedding = TensorValue(self.class_embedding)
 
-        class_embedding = class_embedding.broadcast_to(
-            (batch_size, 1, hidden_size)
-        )
+        class_embedding = class_embedding.broadcast_to((batch_size, 1, hidden_size))
         return ops.concat((class_embedding, hidden_state), axis=1)
 
     def _prepare_aspect_ratio_attention_mask(
@@ -121,7 +119,9 @@ class VisionModel(Layer):
         batch_size, max_num_tiles = aspect_ratio_mask.shape
         attention_mask = aspect_ratio_mask.reshape(
             (batch_size, max_num_tiles, 1, 1)
-        ).cast(dtype)  # (1, 4, 1, 1)
+        ).cast(
+            dtype
+        )  # (1, 4, 1, 1)
         # attention_shape (1, 4, 1, 1) -> (1, 4, 1032, 1)
         attention_mask = ops.tile(attention_mask, (1, 1, target_length, 1))
 
@@ -150,9 +150,7 @@ class VisionModel(Layer):
         # Perform outer product by broadcasting elementwise multiplication.
         attention_mask = (
             attention_mask
-            * attention_mask.reshape(
-                (batch_size, 1, max_num_tiles * target_length)
-            )
+            * attention_mask.reshape((batch_size, 1, max_num_tiles * target_length))
         ) * bfloat_dtype_min_val
 
         # before unsqueeze: attention_mask shape: (1, 4128, 4128)
@@ -278,9 +276,7 @@ class VisionModel(Layer):
         hidden_state = hidden_state.reshape(
             (batch_size * num_concurrent_media, num_tiles, num_patches, dim)
         )
-        hidden_state = self.gated_positional_embedding(
-            hidden_state, aspect_ratio_ids
-        )
+        hidden_state = self.gated_positional_embedding(hidden_state, aspect_ratio_ids)
 
         hidden_state = self.layernorm_pre(hidden_state)
 
@@ -377,9 +373,7 @@ class VisionModel(Layer):
         )
 
         # Collect intermediate layer outputs from encoder output.
-        intermediate_hidden_states = ops.stack(
-            all_intermediate_hidden_states, axis=-1
-        )
+        intermediate_hidden_states = ops.stack(all_intermediate_hidden_states, axis=-1)
 
         # These two operations are similar to:
         # `intermediate_hidden_states
@@ -390,9 +384,7 @@ class VisionModel(Layer):
             intermediate_hidden_states[:, :, :, idx]
             for idx in self.intermediate_layers_indices
         ]
-        intermediate_hidden_states = ops.stack(
-            selected_hidden_states_list, axis=-1
-        )
+        intermediate_hidden_states = ops.stack(selected_hidden_states_list, axis=-1)
 
         # Remove padding from intermediate hidden states.
         # ('batch_size' * 'num_concurrent_media', 4128, 1280, 5)
@@ -406,9 +398,7 @@ class VisionModel(Layer):
         )
 
         # (1, 4, 1032, 6400) -> (1, 4, 1025, 6400)
-        intermediate_hidden_states = intermediate_hidden_states[
-            :, :, :slice_index
-        ]
+        intermediate_hidden_states = intermediate_hidden_states[:, :, :slice_index]
 
         intermediate_hidden_states = intermediate_hidden_states.reshape(
             (
@@ -421,9 +411,7 @@ class VisionModel(Layer):
         )
 
         # Concatenate final hidden state and intermediate hidden states.
-        hidden_state = ops.concat(
-            (hidden_state, intermediate_hidden_states), axis=-1
-        )
+        hidden_state = ops.concat((hidden_state, intermediate_hidden_states), axis=-1)
 
         # output_attentions: False, output_hidden_states: False in reference
         # implementation, so these are just returned as `None`s.
@@ -459,9 +447,7 @@ def instantiate_vision_model(
         patch_size=patch_size,
         hidden_size=hidden_size,
         max_num_tiles=max_num_tiles,
-        gate=weights.vision_model.gated_positional_embedding.gate.allocate(
-            dtype, [1]
-        ),
+        gate=weights.vision_model.gated_positional_embedding.gate.allocate(dtype, [1]),
         embedding=weights.vision_model.gated_positional_embedding.embedding.allocate(
             dtype,
             [
@@ -530,16 +516,12 @@ def instantiate_vision_model(
     )
 
     layernorm_pre = LPLayerNorm(
-        weights.vision_model.layernorm_pre.weight.allocate(
-            dtype, [hidden_size]
-        ),
+        weights.vision_model.layernorm_pre.weight.allocate(dtype, [hidden_size]),
         eps=norm_eps,
     )
 
     layernorm_post = LPLayerNorm(
-        weights.vision_model.layernorm_post.weight.allocate(
-            dtype, [hidden_size]
-        ),
+        weights.vision_model.layernorm_post.weight.allocate(dtype, [hidden_size]),
         eps=norm_eps,
     )
 
@@ -621,9 +603,7 @@ def instantiate_vision_model(
     global_transformer_layers: list[VisionEncoderLayer] = []
 
     for index in range(num_global_layers):
-        curr_layer_weight = weights.vision_model.global_transformer.layers[
-            index
-        ]
+        curr_layer_weight = weights.vision_model.global_transformer.layers[index]
 
         global_transformer_layers.append(
             VisionEncoderLayer(

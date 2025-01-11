@@ -24,7 +24,7 @@ Create a struct and use that as the type for the pointer
 
 ```mojo
 struct Coord:
-    var x: UInt8 
+    var x: UInt8
     var y: UInt8
 ```
 
@@ -71,20 +71,20 @@ print(coord.x)
     error: Expression [6]:17:19: invalid call to '__getitem__': result cannot bind generic !mlirtype to memory-only type 'Coord'
         let coord = p1[0]
                     ~~^~~
-    
+
     /.modular/Kernels/mojo/Stdlib/Pointer.mojo:118:5: function declared here
         fn __getitem__(self, offset: Int) -> type:
         ^
-    
 
 
-Take note of the above error, a `memory-only` type means it can't be passed through registers, we need that behavior to use the `[x]` syntax on a Pointer. Lets redefine it with `@register_passable` annotated: 
+
+Take note of the above error, a `memory-only` type means it can't be passed through registers, we need that behavior to use the `[x]` syntax on a Pointer. Lets redefine it with `@register_passable` annotated:
 
 
 ```mojo
 @register_passable
 struct Coord:
-    var x: UInt8 
+    var x: UInt8
     var y: UInt8
 ```
 

@@ -1,21 +1,24 @@
 """Tests for monitoring and pattern detection capabilities."""
 
-import pytest
 from datetime import datetime, timedelta
 from unittest.mock import Mock, patch
 
-from computer_use_demo.monitoring import PrometheusMonitoring, MonitoringIntegration
-from computer_use_demo.tools.computer import PatternDetector
+import pytest
+from computer_use_demo.monitoring import MonitoringIntegration, PrometheusMonitoring
 from computer_use_demo.tools.base import MetaCognitiveState, TimeSeriesMetrics
+from computer_use_demo.tools.computer import PatternDetector
+
 
 @pytest.fixture
 def pattern_detector():
     return PatternDetector()
 
+
 @pytest.fixture
 def monitoring():
     with patch('prometheus_client.start_http_server'):
         return PrometheusMonitoring(port=8000)
+
 
 @pytest.mark.asyncio
 async def test_pattern_detection(pattern_detector):
@@ -25,14 +28,14 @@ async def test_pattern_detection(pattern_detector):
 
     # Add multiple similar operations
     for _ in range(4):
-        pattern_detector.patterns.append({
-            "action": operation_type,
-            "timestamp": datetime.now().isoformat()
-        })
+        pattern_detector.patterns.append(
+            {"action": operation_type, "timestamp": datetime.now().isoformat()}
+        )
 
     patterns = pattern_detector.analyze_operation(operation_type, context)
     assert any(p["type"] == "repetition" for p in patterns)
     assert any(p["action"] == operation_type for p in patterns)
+
 
 @pytest.mark.asyncio
 async def test_timing_pattern_detection(pattern_detector):
@@ -41,10 +44,12 @@ async def test_timing_pattern_detection(pattern_detector):
     # Add operations with specific timing
     base_time = datetime.now()
     for i in range(3):
-        pattern_detector.patterns.append({
-            "action": operation_type,
-            "timestamp": (base_time + timedelta(seconds=i*0.5)).isoformat()
-        })
+        pattern_detector.patterns.append(
+            {
+                "action": operation_type,
+                "timestamp": (base_time + timedelta(seconds=i * 0.5)).isoformat(),
+            }
+        )
 
     patterns = pattern_detector.analyze_operation(operation_type, {})
     timing_patterns = [p for p in patterns if p["type"] == "timing"]
@@ -52,20 +57,21 @@ async def test_timing_pattern_detection(pattern_detector):
     assert timing_patterns[0]["pattern"]["type"] == "rapid_succession"
     assert timing_patterns[0]["pattern"]["average_interval"] < 1.0
 
+
 @pytest.mark.asyncio
 async def test_sequence_detection(pattern_detector):
     # Add a sequence of different operations
     operations = ["click", "type", "screenshot"]
     for op in operations:
-        pattern_detector.patterns.append({
-            "action": op,
-            "timestamp": datetime.now().isoformat()
-        })
+        pattern_detector.patterns.append(
+            {"action": op, "timestamp": datetime.now().isoformat()}
+        )
 
     patterns = pattern_detector.analyze_operation(operations[-1], {})
     sequence_patterns = [p for p in patterns if p["type"] == "sequence"]
     assert sequence_patterns
     assert len(sequence_patterns[0]["actions"]) >= 2
+
 
 def test_prometheus_metrics(monitoring):
     # Test tool execution metrics
@@ -84,6 +90,7 @@ def test_prometheus_metrics(monitoring):
     assert "pattern_detection_total" in monitoring._metrics
     assert "error_total" in monitoring._metrics
 
+
 def test_time_series_metrics():
     metrics = TimeSeriesMetrics()
 
@@ -95,12 +102,13 @@ def test_time_series_metrics():
         operation_type="click",
         start_time=start_time,
         end_time=end_time,
-        metadata={"x": 100, "y": 100}
+        metadata={"x": 100, "y": 100},
     )
 
     latest = metrics.get_latest()
     assert "operation_duration" in latest
     assert latest["operation_duration"]["value"] == pytest.approx(1.0)
+
 
 def test_meta_cognitive_state():
     state = MetaCognitiveState()
@@ -117,6 +125,7 @@ def test_meta_cognitive_state():
     assert state.current["action"] == "type"
     assert len(state.history) == 2
 
+
 @pytest.mark.asyncio
 async def test_monitoring_integration():
     with patch('prometheus_client.start_http_server'):
@@ -124,14 +133,8 @@ async def test_monitoring_integration():
 
         # Test tool metrics recording
         metrics_data = {
-            "operation_duration": {
-                "value": 1.0,
-                "operation": "click"
-            },
-            "resource_usage": {
-                "cpu": 50.0,
-                "memory": 1024.0
-            }
+            "operation_duration": {"value": 1.0, "operation": "click"},
+            "resource_usage": {"cpu": 50.0, "memory": 1024.0},
         }
 
         integration.record_tool_metrics("computer", metrics_data)
@@ -139,7 +142,7 @@ async def test_monitoring_integration():
         # Test pattern metrics recording
         patterns = [
             {"type": "repetition", "count": 3},
-            {"type": "sequence", "actions": ["click", "type"]}
+            {"type": "sequence", "actions": ["click", "type"]},
         ]
 
         integration.record_pattern_metrics(patterns)

@@ -194,7 +194,7 @@ Solved: True
 
 ```mojo
 from benchmark import run
-alias board_size = 9 
+alias board_size = 9
 def bench(python_secs: Float64):
     @parameter
     def init_board() -> Board[board_size]:

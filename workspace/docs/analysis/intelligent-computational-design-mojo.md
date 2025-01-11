@@ -26,8 +26,8 @@ struct CognitiveAdaptationSystem:
         self.meta_awareness = True
 
     fn dynamically_adjust_complexity[T: AnyType](
-        self, 
-        input: T, 
+        self,
+        input: T,
         current_complexity: Float64
     ) -> T:
         """
@@ -40,7 +40,7 @@ struct CognitiveAdaptationSystem:
         elif self.meta_awareness:
             # Learn and optimize based on input patterns
             return self.optimize_input_representation(input)
-        
+
         return input
 
     fn simplify_complex_input[T: AnyType](self, input: T) -> T:
@@ -65,8 +65,8 @@ struct PerformanceOptimizationSystem:
         self.computational_efficiency = 0.0
 
     fn optimize_computational_strategy[T: AnyType](
-        self, 
-        computation: T, 
+        self,
+        computation: T,
         complexity: Float64
     ) -> T:
         """
@@ -77,7 +77,7 @@ struct PerformanceOptimizationSystem:
             return self.vectorize_computation(computation)
         elif complexity > 0.5:
             return self.parallelize_computation(computation)
-        
+
         return computation
 
     fn vectorize_computation[T: AnyType](self, computation: T) -> T:
@@ -119,7 +119,7 @@ struct MemorySafetySystem(CognitiveValidationProtocol):
         @parameter
         if not self.validate_input(input):
             return self.transform_high_risk_input(input)
-        
+
         return input
 
     fn transform_high_risk_input[T: AnyType](self, input: T) -> T:
@@ -140,10 +140,10 @@ struct InterfaceBridgingSystem:
         self.cognitive_translation_capability = True
 
     fn bridge_cognitive_interfaces[
-        SourceLang: AnyType, 
+        SourceLang: AnyType,
         TargetLang: AnyType
     ](
-        self, 
+        self,
         source_interface: SourceLang
     ) -> TargetLang:
         """
@@ -152,14 +152,14 @@ struct InterfaceBridgingSystem:
         @parameter
         if self.cognitive_translation_capability:
             return self.translate_with_semantic_preservation(source_interface)
-        
+
         return source_interface
 
     fn translate_with_semantic_preservation[
-        SourceLang: AnyType, 
+        SourceLang: AnyType,
         TargetLang: AnyType
     ](
-        self, 
+        self,
         source_interface: SourceLang
     ) -> TargetLang:
         # Implement semantic-aware translation
@@ -183,8 +183,8 @@ struct IntelligentCognitiveFramework:
         self.interface_bridging = InterfaceBridgingSystem()
 
     fn process_cognitive_task[T: AnyType](
-        self, 
-        input: T, 
+        self,
+        input: T,
         complexity: Float64
     ) -> T:
         """
@@ -198,7 +198,7 @@ struct IntelligentCognitiveFramework:
         let optimized_input = self.performance_optimization.optimize_computational_strategy(
             adapted_input, complexity
         )
-        
+
         return optimized_input
 ```
 
@@ -230,4 +230,4 @@ Cognitive Framework Architecture
 3. **Safety-First Approach:** Proactive risk assessment and mitigation through compile-time and runtime validation.
 4. **Seamless Interoperability:** Cognitive interfaces that can translate across different languages and paradigms.
 
-**Transformative Potential:** Mojo enables the creation of cognitive systems that are not just computational tools, but adaptive, self-optimizing intelligent frameworks. 
+**Transformative Potential:** Mojo enables the creation of cognitive systems that are not just computational tools, but adaptive, self-optimizing intelligent frameworks.

@@ -7,10 +7,11 @@ from datetime import datetime
 from typing import Dict, List
 
 from cognitive_framework.tools.meta_cognitive import (
+    MetaCognitiveState,
     MetaCognitiveToolCollection,
     MetaComputerTool,
-    MetaCognitiveState
 )
+
 
 async def pattern_recognition_workflow():
     """Demonstrate pattern recognition capabilities."""
@@ -18,14 +19,9 @@ async def pattern_recognition_workflow():
     tool_collection = MetaCognitiveToolCollection(
         MetaComputerTool(),
         config={
-            "observation": {
-                "state_tracking": True,
-                "pattern_analysis": True
-            },
-            "adaptation": {
-                "enabled": False
-            }
-        }
+            "observation": {"state_tracking": True, "pattern_analysis": True},
+            "adaptation": {"enabled": False},
+        },
     )
 
     # Execute a series of related actions
@@ -33,7 +29,7 @@ async def pattern_recognition_workflow():
         {"action": "take_screenshot", "x": 100, "y": 100, "width": 500, "height": 500},
         {"action": "take_screenshot", "x": 100, "y": 100, "width": 500, "height": 500},
         {"action": "click", "x": 250, "y": 250},
-        {"action": "take_screenshot", "x": 100, "y": 100, "width": 500, "height": 500}
+        {"action": "take_screenshot", "x": 100, "y": 100, "width": 500, "height": 500},
     ]
 
     patterns = []
@@ -52,33 +48,26 @@ async def pattern_recognition_workflow():
 
     return patterns
 
+
 async def adaptive_execution_workflow():
     """Demonstrate adaptive execution capabilities."""
     # Initialize tools with adaptation enabled
     tool_collection = MetaCognitiveToolCollection(
         MetaComputerTool(),
         config={
-            "observation": {
-                "state_tracking": True,
-                "pattern_analysis": True
-            },
-            "adaptation": {
-                "enabled": True,
-                "threshold": 0.7
-            }
-        }
+            "observation": {"state_tracking": True, "pattern_analysis": True},
+            "adaptation": {"enabled": True, "threshold": 0.7},
+        },
     )
 
     # Execute actions that might trigger adaptations
     actions = [
         # Initial action
         {"action": "take_screenshot", "x": 0, "y": 0, "width": 1000, "height": 1000},
-
         # Action that might be resource intensive
         {"action": "take_screenshot", "x": 0, "y": 0, "width": 2000, "height": 2000},
-
         # Action after potential adaptation
-        {"action": "take_screenshot", "x": 0, "y": 0, "width": 1500, "height": 1500}
+        {"action": "take_screenshot", "x": 0, "y": 0, "width": 1500, "height": 1500},
     ]
 
     adaptations = []
@@ -95,6 +84,7 @@ async def adaptive_execution_workflow():
 
     return adaptations
 
+
 async def performance_monitoring_workflow():
     """Demonstrate performance monitoring capabilities."""
     # Initialize tools with comprehensive monitoring
@@ -104,13 +94,10 @@ async def performance_monitoring_workflow():
             "observation": {
                 "state_tracking": True,
                 "pattern_analysis": True,
-                "performance_monitoring": True
+                "performance_monitoring": True,
             },
-            "adaptation": {
-                "enabled": True,
-                "threshold": 0.7
-            }
-        }
+            "adaptation": {"enabled": True, "threshold": 0.7},
+        },
     )
 
     # Execute actions while monitoring performance
@@ -118,18 +105,20 @@ async def performance_monitoring_workflow():
         {"action": "click", "x": 100, "y": 100},
         {"action": "take_screenshot", "x": 0, "y": 0, "width": 800, "height": 600},
         {"action": "click", "x": 200, "y": 200},
-        {"action": "take_screenshot", "x": 0, "y": 0, "width": 800, "height": 600}
+        {"action": "take_screenshot", "x": 0, "y": 0, "width": 800, "height": 600},
     ]
 
     metrics_history = []
     for action in actions:
         result = await tool_collection.run("computer", action)
         if hasattr(result, "metrics"):
-            metrics_history.append({
-                "timestamp": datetime.now().isoformat(),
-                "action": action["action"],
-                "metrics": result.metrics
-            })
+            metrics_history.append(
+                {
+                    "timestamp": datetime.now().isoformat(),
+                    "action": action["action"],
+                    "metrics": result.metrics,
+                }
+            )
 
     print("\nPerformance Metrics:")
     for entry in metrics_history:
@@ -140,6 +129,7 @@ async def performance_monitoring_workflow():
 
     return metrics_history
 
+
 async def integrated_workflow():
     """Demonstrate all meta-cognitive capabilities working together."""
     # Initialize tools with all features enabled
@@ -149,13 +139,10 @@ async def integrated_workflow():
             "observation": {
                 "state_tracking": True,
                 "pattern_analysis": True,
-                "performance_monitoring": True
+                "performance_monitoring": True,
             },
-            "adaptation": {
-                "enabled": True,
-                "threshold": 0.7
-            }
-        }
+            "adaptation": {"enabled": True, "threshold": 0.7},
+        },
     )
 
     # Complex sequence of actions
@@ -163,22 +150,16 @@ async def integrated_workflow():
         # Initial exploration
         {"action": "click", "x": 100, "y": 100},
         {"action": "take_screenshot", "x": 0, "y": 0, "width": 800, "height": 600},
-
         # Repeated pattern
         {"action": "click", "x": 200, "y": 200},
         {"action": "take_screenshot", "x": 0, "y": 0, "width": 800, "height": 600},
         {"action": "click", "x": 300, "y": 300},
         {"action": "take_screenshot", "x": 0, "y": 0, "width": 800, "height": 600},
-
         # Resource-intensive action
-        {"action": "take_screenshot", "x": 0, "y": 0, "width": 2000, "height": 2000}
+        {"action": "take_screenshot", "x": 0, "y": 0, "width": 2000, "height": 2000},
     ]
 
-    workflow_results = {
-        "patterns": [],
-        "adaptations": [],
-        "metrics": []
-    }
+    workflow_results = {"patterns": [], "adaptations": [], "metrics": []}
 
     for action in actions:
         result = await tool_collection.run("computer", action)
@@ -193,11 +174,13 @@ async def integrated_workflow():
 
         # Collect metrics
         if hasattr(result, "metrics"):
-            workflow_results["metrics"].append({
-                "timestamp": datetime.now().isoformat(),
-                "action": action["action"],
-                "metrics": result.metrics
-            })
+            workflow_results["metrics"].append(
+                {
+                    "timestamp": datetime.now().isoformat(),
+                    "action": action["action"],
+                    "metrics": result.metrics,
+                }
+            )
 
     print("\nIntegrated Workflow Results:")
     print(f"\nPatterns Detected: {len(workflow_results['patterns'])}")
@@ -205,6 +188,7 @@ async def integrated_workflow():
     print(f"Metrics Collected: {len(workflow_results['metrics'])}")
 
     return workflow_results
+
 
 async def main():
     """Run all example workflows."""
@@ -219,6 +203,7 @@ async def main():
 
     print("\nRunning Integrated Workflow...")
     integrated_results = await integrated_workflow()
+
 
 if __name__ == "__main__":
     asyncio.run(main())

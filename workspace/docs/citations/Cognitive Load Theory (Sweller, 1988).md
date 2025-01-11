@@ -13,4 +13,4 @@ CLT suggests that effective instructional design should minimize extraneous load
 
 ## Sources
 [1] Cognitive Load Theory and its application in the classroom https://my.chartered.college/impact_article/cognitive-load-theory-and-its-application-in-the-classroom/
-[9] Cognitive Load Theory https://www.mcw.edu/-/media/MCW/Education/Academic-Affairs/OEI/Faculty-Quick-Guides/Cognitive-Load-Theory.pdf 
+[9] Cognitive Load Theory https://www.mcw.edu/-/media/MCW/Education/Academic-Affairs/OEI/Faculty-Quick-Guides/Cognitive-Load-Theory.pdf

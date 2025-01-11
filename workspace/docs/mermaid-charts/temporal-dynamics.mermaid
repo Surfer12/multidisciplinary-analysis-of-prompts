@@ -1,6 +1,6 @@
 stateDiagram-v2
     [*] --> BaselineState
-    
+
     state "Network Dynamics" as ND {
         BaselineState --> SalienceActivation: Stimulus Detection
         SalienceActivation --> TaskEngagement: Resource Allocation

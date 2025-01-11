@@ -21,11 +21,7 @@ from argparse import ArgumentParser
 from pathlib import Path
 
 import torch
-from transformers import (
-    AutoModelForSequenceClassification,
-    BertForMaskedLM,
-    logging,
-)
+from transformers import AutoModelForSequenceClassification, BertForMaskedLM, logging
 
 HF_MODEL_NAME = "bert-base-uncased"
 DEFAULT_MODEL_PATH = "../../models/bert-mlm.torchscript"
@@ -57,9 +53,7 @@ def main():
     if args.mlm:
         model = BertForMaskedLM.from_pretrained(HF_MODEL_NAME)
     else:
-        model = AutoModelForSequenceClassification.from_pretrained(
-            HF_MODEL_NAME
-        )
+        model = AutoModelForSequenceClassification.from_pretrained(HF_MODEL_NAME)
 
     model.eval()
     # We set return_dict to False to return Tensors directly

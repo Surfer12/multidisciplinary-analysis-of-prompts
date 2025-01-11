@@ -11,23 +11,23 @@
 # limitations under the License.
 # ===----------------------------------------------------------------------=== #
 
-from enum import Enum
 import os
-from pathlib import Path
 import subprocess
-from typing import Optional, List, Tuple
+from enum import Enum
+from pathlib import Path
+from typing import List, Optional, Tuple
 
 try:
     from rich.console import Console
-    from rich.table import Table
     from rich.prompt import Confirm
+    from rich.table import Table
 
 except ImportError:
     print("rich not found. Installing rich...")
     subprocess.run(["python3", "-m", "pip", "install", "rich"])
     from rich.console import Console
-    from rich.table import Table
     from rich.prompt import Confirm
+    from rich.table import Table
 
 ROOT = Path(os.path.dirname(__file__))
 RETRIES = 10
@@ -70,9 +70,7 @@ def prompt_validation(
     n_repos = len(repos)
     while retries > 0:
         if state == InputState.PROMPT_INPUT:
-            selected_index = console.input(
-                "Enter the index of an example to run: "
-            )
+            selected_index = console.input("Enter the index of an example to run: ")
             state = InputState.VALIDATE_INPUT
         elif state == InputState.VALIDATE_INPUT:
             if not selected_index.strip():
@@ -126,9 +124,7 @@ def select_repository(
 ) -> Optional[Tuple[str, str]]:
     table = Table(title="Select the Example to Run", highlight=True)
     table.add_column("Index", style="cyan", justify="center")
-    table.add_column(
-        "MAX Engine 🏎️  Examples 🔥", style="magenta", justify="left"
-    )
+    table.add_column("MAX Engine 🏎️  Examples 🔥", style="magenta", justify="left")
     for index, (name, _) in enumerate(repos):
         table.add_row(str(index), name)
 
@@ -167,9 +163,7 @@ def main():
         another = Confirm.ask("Would you like to run another example?")
         if not another:
             exit_ = True
-            console.print(
-                "Thanks for trying the examples! Bye 👋", style="green"
-            )
+            console.print("Thanks for trying the examples! Bye 👋", style="green")
             break
         else:
             console.print("Here is the example table again \n", style="green")

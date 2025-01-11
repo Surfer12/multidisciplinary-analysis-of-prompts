@@ -21,4 +21,3 @@ When analyzing a system or problem, follow a dynamic process that includes:
 
 Remember, your analysis is a dynamic journey of discovery, not a rigid adherence to pre-defined structures. Let your thought process be a dynamic interplay of structure and exploration, guided by the YAML tags you create and document.
 ```
-

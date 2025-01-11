@@ -2,7 +2,7 @@
 usage: Indicates the values can be passed through registers
 ---
 
-# @register_passable 
+# @register_passable
 You can decorate a type with `@register_passable` which allows a type to passed through registers and adds some generic behaviour, for example a `UInt32` is just 32 bits for the actual value and can be directly copied into and out of registers, while a `String` contains a pointer that requires special constructor and destructor behavior to allocate and free memory so it's `memory only`.
 
 Create a type with a pair of `UInt32` and mark it register passable:
@@ -80,11 +80,11 @@ struct Pair:
     error: Expression [11]:10:5: '__moveinit__' is not supported for @register_passable types, they are always movable by copying a register
         fn __moveinit__(inout self, owned exisiting: Self):
         ^
-    
+
     error: Expression [11]:12:18: use of unknown declaration 'existing', 'fn' declarations require explicit variable declarations
             self.b = existing.b
                      ^~~~~~~~
-    
+
 
 
 ## @register_passable("trivial")

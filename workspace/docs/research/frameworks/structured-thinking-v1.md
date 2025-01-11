@@ -115,5 +115,3 @@ Emphasize the nested structure that mirrors the recursive nature of meta-analysi
 </meta>
 </thinking>
 </cognitive_process>
-
-

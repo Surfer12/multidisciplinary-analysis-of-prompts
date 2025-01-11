@@ -191,7 +191,7 @@ print(x.get[1, 1, 2]())
     Expression [12]:17:56:                             constraint failed: param assertion failed
                 assert_param[idx[i] < shape.value[i].get()]()
                                                            ^
-    
+
     expression failed to parse (no further compiler diagnostics)
 
 ## simd_load

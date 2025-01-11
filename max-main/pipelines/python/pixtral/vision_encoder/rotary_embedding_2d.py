@@ -50,9 +50,7 @@ def meshgrid(height: DimLike, width: DimLike, indexing="ij") -> TensorValue:
     return h_grid, v_grid  # type: ignore
 
 
-def patch_position_ids(
-    patch_embeds: List[TensorValue], max_width: int
-) -> TensorValue:
+def patch_position_ids(patch_embeds: List[TensorValue], max_width: int) -> TensorValue:
     """
     Takes a list of patches, calculates the positional indices for each patch by
     flattening the array, and returns these indices in the positions tensor.
@@ -61,9 +59,7 @@ def patch_position_ids(
     """
     positions = []
     for patch in patch_embeds:
-        height, width = patch.shape[
-            1:3
-        ]  # img_height/patch_size, img_width/patch_size
+        height, width = patch.shape[1:3]  # img_height/patch_size, img_width/patch_size
         # TODO(MSDK-1194): replace with ops.meshgrid()
         # mesh = ops.meshgrid([ops.range(height), ops.range(width)], indexing="ij")
         mesh = meshgrid(height, width, indexing="ij")

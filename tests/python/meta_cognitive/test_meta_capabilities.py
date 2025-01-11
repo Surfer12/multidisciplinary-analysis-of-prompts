@@ -1,11 +1,13 @@
 """Test module for meta-cognitive capabilities."""
 
-import os
 import json
+import os
 import time
-import pytest
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any, Dict, List
+
+import pytest
+
 
 class MetaPattern:
     """Class for tracking and analyzing patterns in operations."""
@@ -16,11 +18,9 @@ class MetaPattern:
 
     def record_operation(self, operation_type: str, details: Dict[str, Any]):
         """Record an operation with timestamp."""
-        self.operations.append({
-            'type': operation_type,
-            'details': details,
-            'timestamp': time.time()
-        })
+        self.operations.append(
+            {'type': operation_type, 'details': details, 'timestamp': time.time()}
+        )
 
     def analyze_patterns(self) -> Dict[str, Any]:
         """Analyze recorded operations for patterns."""
@@ -34,19 +34,24 @@ class MetaPattern:
         timing_patterns = []
         if len(self.operations) > 1:
             for i in range(1, len(self.operations)):
-                time_diff = self.operations[i]['timestamp'] - self.operations[i-1]['timestamp']
+                time_diff = (
+                    self.operations[i]['timestamp']
+                    - self.operations[i - 1]['timestamp']
+                )
                 timing_patterns.append(time_diff)
 
         return {
             'operation_counts': operation_counts,
             'timing_patterns': timing_patterns,
-            'total_operations': len(self.operations)
+            'total_operations': len(self.operations),
         }
+
 
 @pytest.fixture
 def meta_pattern():
     """Fixture providing a MetaPattern instance."""
     return MetaPattern()
+
 
 def test_pattern_recognition(temp_workspace, meta_pattern):
     """Test pattern recognition in file operations."""
@@ -63,7 +68,9 @@ def test_pattern_recognition(temp_workspace, meta_pattern):
 
         # Read file
         content = file_path.read_text()
-        meta_pattern.record_operation('read', {'path': str(file_path), 'content': content})
+        meta_pattern.record_operation(
+            'read', {'path': str(file_path), 'content': content}
+        )
 
     # Analyze patterns
     analysis = meta_pattern.analyze_patterns()
@@ -73,6 +80,7 @@ def test_pattern_recognition(temp_workspace, meta_pattern):
     assert analysis['operation_counts']['modify'] == 3
     assert analysis['operation_counts']['read'] == 3
     assert analysis['total_operations'] == 9
+
 
 def test_adaptive_behavior(temp_workspace, meta_pattern):
     """Test adaptive behavior based on recognized patterns."""
@@ -87,17 +95,18 @@ def test_adaptive_behavior(temp_workspace, meta_pattern):
         file_path.write_text(f"Content {i}")
         operation_time = time.time() - start_time
 
-        operations_data.append({
-            'operation': 'write',
-            'size': len(f"Content {i}"),
-            'time': operation_time
-        })
+        operations_data.append(
+            {'operation': 'write', 'size': len(f"Content {i}"), 'time': operation_time}
+        )
 
-        meta_pattern.record_operation('write', {
-            'path': str(file_path),
-            'size': len(f"Content {i}"),
-            'time': operation_time
-        })
+        meta_pattern.record_operation(
+            'write',
+            {
+                'path': str(file_path),
+                'size': len(f"Content {i}"),
+                'time': operation_time,
+            },
+        )
 
     # Analyze performance patterns
     total_time = sum(op['time'] for op in operations_data)
@@ -105,13 +114,13 @@ def test_adaptive_behavior(temp_workspace, meta_pattern):
 
     # Adaptive phase: adjust operation size based on performance
     optimal_size = max(
-        operations_data,
-        key=lambda x: x['size'] / x['time'] if x['time'] > 0 else 0
+        operations_data, key=lambda x: x['size'] / x['time'] if x['time'] > 0 else 0
     )['size']
 
     # Verify adaptive behavior
     assert optimal_size > 0
     assert avg_time > 0
+
 
 def test_meta_analysis(temp_workspace, meta_pattern):
     """Test meta-analysis of operations and their effects."""
@@ -119,7 +128,7 @@ def test_meta_analysis(temp_workspace, meta_pattern):
     operations = [
         ('small_write', 'Small content'),
         ('medium_write', 'Medium content ' * 10),
-        ('large_write', 'Large content ' * 100)
+        ('large_write', 'Large content ' * 100),
     ]
 
     results = []
@@ -131,17 +140,12 @@ def test_meta_analysis(temp_workspace, meta_pattern):
         file_path.write_text(content)
         operation_time = time.time() - start_time
 
-        results.append({
-            'type': op_type,
-            'size': len(content),
-            'time': operation_time
-        })
+        results.append({'type': op_type, 'size': len(content), 'time': operation_time})
 
-        meta_pattern.record_operation(op_type, {
-            'path': str(file_path),
-            'size': len(content),
-            'time': operation_time
-        })
+        meta_pattern.record_operation(
+            op_type,
+            {'path': str(file_path), 'size': len(content), 'time': operation_time},
+        )
 
     # Analyze results
     analysis = meta_pattern.analyze_patterns()
@@ -157,6 +161,7 @@ def test_meta_analysis(temp_workspace, meta_pattern):
     assert all(metric > 0 for metric in efficiency_metrics.values())
     assert efficiency_metrics['small_write'] != efficiency_metrics['large_write']
 
+
 class TestMetaCognitive:
     """Test class for meta-cognitive capabilities."""
 
@@ -166,11 +171,9 @@ class TestMetaCognitive:
 
     def record_operation(self, operation_type: str, details: Dict[str, Any]):
         """Record an operation with timestamp."""
-        self.operation_history.append({
-            'type': operation_type,
-            'details': details,
-            'timestamp': time.time()
-        })
+        self.operation_history.append(
+            {'type': operation_type, 'details': details, 'timestamp': time.time()}
+        )
 
     def test_learning_behavior(self, temp_workspace, meta_pattern):
         """Test learning behavior from operation patterns."""
@@ -183,11 +186,10 @@ class TestMetaCognitive:
             file_path.write_text(content)
             operation_time = time.time() - start_time
 
-            self.record_operation('write', {
-                'path': str(file_path),
-                'size': len(content),
-                'time': operation_time
-            })
+            self.record_operation(
+                'write',
+                {'path': str(file_path), 'size': len(content), 'time': operation_time},
+            )
 
         # Phase 2: Analyze and adapt
         operation_times = [op['details']['time'] for op in self.operation_history]

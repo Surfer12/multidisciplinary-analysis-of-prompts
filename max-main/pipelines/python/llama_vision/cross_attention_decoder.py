@@ -19,15 +19,9 @@ from dataclasses import dataclass
 
 from max.dtype import DType
 from max.graph import TensorValue, Weight, ops
-from max.pipelines.kv_cache import (
-    ContinuousBatchingKVCacheCollection,
-    KVCacheParams,
-)
+from max.pipelines.kv_cache import ContinuousBatchingKVCacheCollection, KVCacheParams
 from nn import MLP, RMSNorm
-from nn.kernels import (
-    flash_attention_ragged_with_causal_mask,
-    matmul_kv_cache_ragged,
-)
+from nn.kernels import flash_attention_ragged_with_causal_mask, matmul_kv_cache_ragged
 from nn.layer import Layer
 from nn.linear import Linear
 
@@ -145,9 +139,7 @@ class CrossAttentionDecoderLayer(Layer):
             cross_input_row_offsets,
             kv_collection,
         )
-        hidden_states = (
-            residual + ops.tanh(self.cross_attn_attn_gate) * hidden_states
-        )
+        hidden_states = residual + ops.tanh(self.cross_attn_attn_gate) * hidden_states
 
         residual = hidden_states
         hidden_states = self.post_attention_layernorm(hidden_states)

@@ -2,7 +2,6 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
-
 from computer_use_demo.tools.base import CLIResult, ToolError, ToolResult
 from computer_use_demo.tools.edit import EditTool
 

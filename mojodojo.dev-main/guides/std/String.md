@@ -57,7 +57,7 @@ Slice from 2 up to 4 non-inclusive:
 
 
 ```mojo
-print(s[2:4]) 
+print(s[2:4])
 ```
 
     cd
@@ -67,7 +67,7 @@ Slice all characters starting from 1:
 
 
 ```mojo
-print(s[1:]) 
+print(s[1:])
 ```
 
     bcde
@@ -77,7 +77,7 @@ Slice all characters up to the second last:
 
 
 ```mojo
-print(s[:-1]) 
+print(s[:-1])
 ```
 
     abcd
@@ -87,7 +87,7 @@ Only get every second item after the start position:
 
 
 ```mojo
-print(s[::2]) 
+print(s[::2])
 ```
 
     ace
@@ -244,7 +244,7 @@ buffer = ""
     error: Expression [19]:25:14: cannot implicitly convert 'StringLiteral' value to 'DynamicVector[SIMD[si8, 1]]' in assignment
         buffer = ""
                  ^~
-    
+
 
 
 ### From `DynamicVector[Int8]`

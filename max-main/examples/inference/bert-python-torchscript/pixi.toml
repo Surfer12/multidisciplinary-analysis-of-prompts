@@ -16,7 +16,7 @@ transformers = ">=4.44.0"
 networkx = "3.1.*"
 
 # For performance, prefer pytorch over anything else.
-# The linux ARM package doesn't exist there, so prefer PyPi instead. 
+# The linux ARM package doesn't exist there, so prefer PyPi instead.
 [target.linux-64.dependencies]
 pytorch = {version = "==2.4.1", channel = "pytorch"}
 [target.osx-arm64.dependencies]

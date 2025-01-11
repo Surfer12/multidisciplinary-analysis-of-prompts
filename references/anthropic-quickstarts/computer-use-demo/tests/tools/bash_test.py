@@ -1,5 +1,4 @@
 import pytest
-
 from computer_use_demo.tools.bash import BashTool, ToolError
 
 

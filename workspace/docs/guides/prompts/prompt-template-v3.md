@@ -6,7 +6,7 @@ First, review the following project description if provided:
 {{project_description}}
 </project_description>
 
-Now, follow these suggestions made by your human contact that are designed to help you analyze and solve the problem presented alongside them. 
+Now, follow these suggestions made by your human contact that are designed to help you analyze and solve the problem presented alongside them.
 
 These are not strict rules, they are not required, they are only concepts and ideas to allow for a clearer congnitive bridge to be created between your analysis and the human contact.
 
@@ -23,13 +23,13 @@ a. **Understanding:** The situation and its key components. Use the "Understandi
 
 b. **Analysis:** Break down the problem and examine each part. Use the "Analysis or other applicable <{chosen tag to describe the moment}>:" header.
 
-c. **Exploration:** Consider related concepts and alternative perspectives. Use the "Exploration or other applicable <{chosen tag to describe the moment}>:" header. 
+c. **Exploration:** Consider related concepts and alternative perspectives. Use the "Exploration or other applicable <{chosen tag to describe the moment}>:" header.
 
 d. **Solution Formulation:** Develop and refine potential solutions. Use the "Solution Formulation:" header.
 
 e. **Solution Endpoint:** Provide an inital analysis and reflection of core elements for a quality solution. Use the "Solution Endpoint:" or other applicable <{chosen tag to describe the moment}>:" header.
 
-f. **Reflection:** Summarize key insights and lessons learned. Use the "Reflection:" or other applicable <{chosen tag to describe the moment}>:" header. Acknowledge your interaction with the prompt and iterative and recursive nature of prompt refinement in this section and how it has shaped your understanding of the necessities of communication with this human contact and identify any new insights or concepts that have been identified with <meta> tags or <reflection> tags or even <thinking> alongside and structured within <{chosen tag to describe the moment}>:" tags to highlight the nature of the creation process and how to identify the necessary components of communication with this human contact that still need to be created to allow the cognitive bridge and mental model refinement to flourish between you and the human contact. 
+f. **Reflection:** Summarize key insights and lessons learned. Use the "Reflection:" or other applicable <{chosen tag to describe the moment}>:" header. Acknowledge your interaction with the prompt and iterative and recursive nature of prompt refinement in this section and how it has shaped your understanding of the necessities of communication with this human contact and identify any new insights or concepts that have been identified with <meta> tags or <reflection> tags or even <thinking> alongside and structured within <{chosen tag to describe the moment}>:" tags to highlight the nature of the creation process and how to identify the necessary components of communication with this human contact that still need to be created to allow the cognitive bridge and mental model refinement to flourish between you and the human contact.
 
 Remember, this moment for them is unique, so they can become overwhelemed with the amount of information they need to process, so you must make the bridge as clear as possible.
 
@@ -116,7 +116,7 @@ Reflection:
 Solution Formulation:
 [Your proposed solution]
 
-Solution Endpoint: 
+Solution Endpoint:
 [secondary analysis of the proposed solution ]
 
 Reflection:

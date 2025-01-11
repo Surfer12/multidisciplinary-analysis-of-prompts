@@ -22,12 +22,7 @@ from dataprocessing import causal_attention_mask_with_alibi, collate_batch
 from max.driver import CPU, Tensor
 from max.engine import InferenceSession, Model
 from max.graph.weights import GGUFWeights
-from max.pipelines import (
-    LogProbabilities,
-    ModelOutputs,
-    PipelineModel,
-    TextContext,
-)
+from max.pipelines import LogProbabilities, ModelOutputs, PipelineModel, TextContext
 from max.pipelines.kv_cache import (
     KVCacheManager,
     KVCacheParams,
@@ -41,9 +36,7 @@ from .graph import _build_graph
 
 class ReplitModel(PipelineModel):
     def execute(self, *model_inputs: Tensor) -> ModelOutputs:  # type: ignore
-        model_outputs = self.model.execute(
-            *model_inputs, copy_inputs_to_device=False
-        )
+        model_outputs = self.model.execute(*model_inputs, copy_inputs_to_device=False)
         if self.pipeline_config.enable_echo:
             assert len(model_outputs) == 2
             assert isinstance(model_outputs[0], Tensor)
@@ -85,9 +78,7 @@ class ReplitModel(PipelineModel):
         )
 
         return (
-            Tensor.from_numpy(next_tokens_batch).to(
-                self.pipeline_config.device
-            ),
+            Tensor.from_numpy(next_tokens_batch).to(self.pipeline_config.device),
             Tensor.from_numpy(attention_mask).to(self.pipeline_config.device),
             Tensor.from_numpy(np.array(unpadded_lengths, np.uint32)).to(
                 self.pipeline_config.device
@@ -184,9 +175,7 @@ class ReplitModel(PipelineModel):
 
             logging.info("Loading serialized model from ", serialized_path)
 
-            return session.load(
-                serialized_path, weights_registry=weights_registry
-            )
+            return session.load(serialized_path, weights_registry=weights_registry)
 
         else:
             logging.info("Building model...")
@@ -200,10 +189,7 @@ class ReplitModel(PipelineModel):
             model = session.load(
                 graph, weights_registry=self._weights.allocated_weights
             )
-            if (
-                export_path
-                := self.pipeline_config.save_to_serialized_model_path
-            ):
+            if export_path := self.pipeline_config.save_to_serialized_model_path:
                 logging.info("Exporting serialized model to %s", export_path)
                 model._export_mef(export_path)
             return model

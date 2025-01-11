@@ -40,9 +40,7 @@ class Transformer(Layer):
     def __call__(
         self,
         embeds,
-        kv_cache_inputs: tuple[
-            TensorValue, TensorValue, TensorValue, TensorValue
-        ],
+        kv_cache_inputs: tuple[TensorValue, TensorValue, TensorValue, TensorValue],
         **kwargs,
     ) -> TensorValue:
         """Takes as input:

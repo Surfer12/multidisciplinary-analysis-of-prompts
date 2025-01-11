@@ -67,9 +67,7 @@ def linear(
     out_features: int,
     weights: SafetensorWeights,
 ) -> Linear:
-    return Linear(
-        weights.weight.allocate(dtype, [in_features, out_features], None)
-    )
+    return Linear(weights.weight.allocate(dtype, [in_features, out_features], None))
 
 
 def rms_norm(dims: int, eps: float, weights: SafetensorWeights) -> RMSNorm:
@@ -182,9 +180,7 @@ def _transformer(
                 attention_norm=rms_norm(
                     params.huggingface_config.text_config.hidden_size,
                     params.huggingface_config.text_config.rms_norm_eps,
-                    weights.language_model.model.layers[
-                        i
-                    ].post_attention_layernorm,
+                    weights.language_model.model.layers[i].post_attention_layernorm,
                 ),
                 mlp_norm=rms_norm(
                     params.huggingface_config.text_config.hidden_size,
@@ -192,9 +188,7 @@ def _transformer(
                     weights.language_model.model.layers[i].input_layernorm,
                 ),
             )
-            for i in range(
-                params.huggingface_config.text_config.num_hidden_layers
-            )
+            for i in range(params.huggingface_config.text_config.num_hidden_layers)
         ]
 
         embedding_layer = embedding(

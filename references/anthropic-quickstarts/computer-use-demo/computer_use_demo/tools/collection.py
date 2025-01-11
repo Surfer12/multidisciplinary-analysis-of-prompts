@@ -1,19 +1,20 @@
 """Collection classes for managing multiple tools."""
 
 
-from typing import Any, Dict, List
 from datetime import datetime
+from typing import Any, Dict, List
 
 from anthropic.types.beta import BetaToolUnionParam
 
 from .base import (
     BaseAnthropicTool,
+    MetaCognitiveState,
+    TimeSeriesMetrics,
     ToolError,
     ToolFailure,
     ToolResult,
-    MetaCognitiveState,
-    TimeSeriesMetrics
 )
+
 
 class MetaCognitiveWorkflowManager:
     def __init__(self):
@@ -30,14 +31,14 @@ class MetaCognitiveWorkflowManager:
                 operation_type=workflow_data.get("tool"),
                 start_time=workflow_data["start_time"],
                 end_time=workflow_data["end_time"],
-                metadata=workflow_data
+                metadata=workflow_data,
             )
 
     def analyze_workflow(self) -> Dict:
         return {
             "state": self.meta_state.current,
             "metrics": self.metrics.get_latest(),
-            "patterns": self._analyze_patterns()
+            "patterns": self._analyze_patterns(),
         }
 
     def _analyze_patterns(self) -> List[Dict]:
@@ -54,10 +55,7 @@ class MetaCognitiveWorkflowManager:
                 tool_usage[tool] = tool_usage.get(tool, 0) + 1
 
         if tool_usage:
-            patterns.append({
-                "type": "tool_usage_frequency",
-                "data": tool_usage
-            })
+            patterns.append({"type": "tool_usage_frequency", "data": tool_usage})
 
         # Analyze timing patterns
         if len(self.workflow_history) >= 2:
@@ -68,12 +66,12 @@ class MetaCognitiveWorkflowManager:
                 intervals.append((end - start).total_seconds())
 
             avg_interval = sum(intervals) / len(intervals)
-            patterns.append({
-                "type": "workflow_timing",
-                "average_interval": avg_interval
-            })
+            patterns.append(
+                {"type": "workflow_timing", "average_interval": avg_interval}
+            )
 
         return patterns
+
 
 class ToolCollection:
     """A collection of anthropic-defined tools with monitoring capabilities."""
@@ -105,7 +103,7 @@ class ToolCollection:
                 "start_time": workflow_start,
                 "end_time": datetime.now(),
                 "result": result,
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
             }
             self.workflow_manager.record_workflow(workflow_data)
 
@@ -116,7 +114,7 @@ class ToolCollection:
                 error=result.error if result else None,
                 base64_image=result.base64_image if result else None,
                 metrics=workflow_analysis["metrics"],
-                patterns=workflow_analysis["patterns"]
+                patterns=workflow_analysis["patterns"],
             )
 
         except ToolError as e:
@@ -124,7 +122,7 @@ class ToolCollection:
                 "tool": name,
                 "input": tool_input,
                 "error": e.message,
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
             }
             self.workflow_manager.record_workflow(error_data)
             return ToolFailure(error=e.message)

@@ -1,4 +1,4 @@
-# Definitions 
+# Definitions
 ## inout
 Any mutations `in` the function will persist `out` of the function, also known as a mutable reference
 
@@ -35,7 +35,7 @@ else:
     this will be included in the binary
 
 
-# register_passable 
+# register_passable
 You can decorate a type with `@register_passable` to indicate it's not `memory only`, for example a `UInt3232` is just 32 bits for the actual value and can be directly copied into and out of registers, while a `String` contains an address that requires indirection to access the data so it's `memory only`.
 
 Create a type with a pair of `UInt3232` and mark it register passable:
@@ -110,15 +110,15 @@ struct Pair:
     error: Expression [7]:10:5: '__moveinit__' is not supported for @register_passable types, they are always movable by copying a register
         fn __moveinit__(inout self, owned exisiting: Self):
         ^
-    
+
     error: Expression [7]:10:5: '__moveinit__' result type must be 'Pair'
         fn __moveinit__(inout self, owned exisiting: Self):
         ^
-    
+
     error: Expression [7]:12:18: use of unknown declaration 'existing', 'fn' declarations require explicit variable declarations
             self.b = existing.b
                      ^~~~~~~~
-    
+
 
 
 ## trivial

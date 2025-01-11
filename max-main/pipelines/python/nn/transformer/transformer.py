@@ -46,9 +46,7 @@ class TransformerBlock(Layer):
         kv_collection: ContinuousBatchingKVCacheCollection,
         **kwargs,
     ) -> TensorValue:
-        attn_out = self.attention(
-            self.attention_norm(x), kv_collection, **kwargs
-        )
+        attn_out = self.attention(self.attention_norm(x), kv_collection, **kwargs)
 
         h = x + attn_out
         h = h + self.mlp(self.mlp_norm(h))
@@ -73,9 +71,7 @@ class Transformer(Layer):
     def __call__(
         self,
         tokens: TensorValueLike,
-        kv_cache_inputs: tuple[
-            TensorValue, TensorValue, TensorValue, TensorValue
-        ],
+        kv_cache_inputs: tuple[TensorValue, TensorValue, TensorValue, TensorValue],
         **kwargs,
     ) -> tuple[TensorValue, ...]:
         h = self.embedding(tokens)
@@ -93,9 +89,7 @@ class Transformer(Layer):
                 # For ragged tensors gather the last tokens from packed dim 0.
                 input_row_offsets: TensorValueLike = kwargs["input_row_offsets"]
                 last_token_indices = input_row_offsets[1:] - 1  # type: ignore
-                last_token_logits = ops.gather(
-                    logits, last_token_indices, axis=0
-                )
+                last_token_logits = ops.gather(logits, last_token_indices, axis=0)
             else:
                 # For padded tensors, use `gather_nd`.
                 # Unsqueeze since `gather_nd` expects a static last dim.
@@ -126,6 +120,4 @@ class Transformer(Layer):
                 )
 
             # Always return float32 logits, no matter the activation type
-            return (
-                ops.cast(self.output(self.norm(last_token)), DType.float32),
-            )
+            return (ops.cast(self.output(self.norm(last_token)), DType.float32),)

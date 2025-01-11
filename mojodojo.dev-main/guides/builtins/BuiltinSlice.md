@@ -32,4 +32,3 @@ print(x[c])
     slice
      it!
     lc
-

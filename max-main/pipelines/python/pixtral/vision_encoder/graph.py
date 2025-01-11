@@ -59,9 +59,7 @@ def _linear(
     out_features: int,
     weights: SafetensorWeights,
 ) -> Linear:
-    return Linear(
-        weights.weight.allocate(dtype, [in_features, out_features], None)
-    )
+    return Linear(weights.weight.allocate(dtype, [in_features, out_features], None))
 
 
 def _feed_forward(
@@ -165,9 +163,7 @@ def _transformer(
                     weights.layers[i].ffn_norm,
                 ),
             )
-            for i in range(
-                params.huggingface_config.vision_config.num_hidden_layers
-            )
+            for i in range(params.huggingface_config.vision_config.num_hidden_layers)
         ]
 
         return Transformer(
@@ -200,9 +196,7 @@ def _vision_encoder(
         max_patches_per_side=params.huggingface_config.vision_config.image_size
         // params.huggingface_config.vision_config.patch_size,
     )
-    encoder_transformer = _transformer(
-        graph, params, weights.vision_tower.transformer
-    )
+    encoder_transformer = _transformer(graph, params, weights.vision_tower.transformer)
 
     return VisionEncoder(
         patch_conv=patch_conv,

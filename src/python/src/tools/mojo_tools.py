@@ -1,11 +1,15 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
+
 from .base import BaseCognitiveTool, CognitiveToolResult
+
 
 class MojoStructureTool(BaseCognitiveTool):
     """Tool for working with Mojo data structures."""
 
     name = "mojo_structure"
-    description = "Manages and manipulates Mojo data structures for cognitive processing."
+    description = (
+        "Manages and manipulates Mojo data structures for cognitive processing."
+    )
 
     def __init__(self, type_registry: Dict[str, Any]):
         self.type_registry = type_registry
@@ -16,18 +20,14 @@ class MojoStructureTool(BaseCognitiveTool):
         operation: str,
         structure_type: str,
         data: Optional[Dict[str, Any]] = None,
-        **kwargs
+        **kwargs,
     ) -> CognitiveToolResult:
         try:
             if not self.validate_args(
-                operation=operation,
-                structure_type=structure_type,
-                data=data,
-                **kwargs
+                operation=operation, structure_type=structure_type, data=data, **kwargs
             ):
                 return CognitiveToolResult(
-                    success=False,
-                    error="Invalid arguments provided"
+                    success=False, error="Invalid arguments provided"
                 )
 
             result = self._process_operation(operation, structure_type, data, **kwargs)
@@ -35,16 +35,10 @@ class MojoStructureTool(BaseCognitiveTool):
             return CognitiveToolResult(
                 success=True,
                 data=result,
-                metadata={
-                    "operation": operation,
-                    "structure_type": structure_type
-                }
+                metadata={"operation": operation, "structure_type": structure_type},
             )
         except Exception as e:
-            return CognitiveToolResult(
-                success=False,
-                error=str(e)
-            )
+            return CognitiveToolResult(success=False, error=str(e))
 
     def to_anthropic_param(self) -> Dict[str, Any]:
         return {
@@ -58,21 +52,21 @@ class MojoStructureTool(BaseCognitiveTool):
                         "operation": {
                             "type": "string",
                             "description": "The operation to perform",
-                            "enum": ["create", "validate", "transform", "analyze"]
+                            "enum": ["create", "validate", "transform", "analyze"],
                         },
                         "structure_type": {
                             "type": "string",
                             "description": "The type of Mojo structure to work with",
-                            "enum": list(self.type_registry.keys())
+                            "enum": list(self.type_registry.keys()),
                         },
                         "data": {
                             "type": "object",
-                            "description": "The data to process (optional for some operations)"
-                        }
+                            "description": "The data to process (optional for some operations)",
+                        },
                     },
-                    "required": ["operation", "structure_type"]
-                }
-            }
+                    "required": ["operation", "structure_type"],
+                },
+            },
         }
 
     def validate_args(self, **kwargs) -> bool:
@@ -102,23 +96,20 @@ class MojoStructureTool(BaseCognitiveTool):
         operation: str,
         structure_type: str,
         data: Optional[Dict[str, Any]] = None,
-        **kwargs
+        **kwargs,
     ) -> Any:
         """Process the requested operation on Mojo structures."""
         operations = {
             "create": self._create_structure,
             "validate": self._validate_structure,
             "transform": self._transform_structure,
-            "analyze": self._analyze_structure
+            "analyze": self._analyze_structure,
         }
 
         return operations[operation](structure_type, data, **kwargs)
 
     def _create_structure(
-        self,
-        structure_type: str,
-        data: Optional[Dict[str, Any]] = None,
-        **kwargs
+        self, structure_type: str, data: Optional[Dict[str, Any]] = None, **kwargs
     ) -> Dict[str, Any]:
         """Create a new Mojo structure instance."""
         structure_class = self.type_registry[structure_type]
@@ -129,14 +120,11 @@ class MojoStructureTool(BaseCognitiveTool):
         # Validate and create structure with data
         return {
             "type": structure_type,
-            "data": structure_class.validate_and_create(data)
+            "data": structure_class.validate_and_create(data),
         }
 
     def _validate_structure(
-        self,
-        structure_type: str,
-        data: Optional[Dict[str, Any]] = None,
-        **kwargs
+        self, structure_type: str, data: Optional[Dict[str, Any]] = None, **kwargs
     ) -> Dict[str, Any]:
         """Validate a Mojo structure."""
         if data is None:
@@ -148,7 +136,7 @@ class MojoStructureTool(BaseCognitiveTool):
         return {
             "type": structure_type,
             "is_valid": validation_result.is_valid,
-            "errors": validation_result.errors
+            "errors": validation_result.errors,
         }
 
     def _transform_structure(
@@ -156,7 +144,7 @@ class MojoStructureTool(BaseCognitiveTool):
         structure_type: str,
         data: Optional[Dict[str, Any]] = None,
         target_type: Optional[str] = None,
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """Transform a Mojo structure to another type or format."""
         if data is None:
@@ -173,7 +161,7 @@ class MojoStructureTool(BaseCognitiveTool):
         return {
             "source_type": structure_type,
             "target_type": target_type,
-            "data": transformed_data
+            "data": transformed_data,
         }
 
     def _analyze_structure(
@@ -181,7 +169,7 @@ class MojoStructureTool(BaseCognitiveTool):
         structure_type: str,
         data: Optional[Dict[str, Any]] = None,
         analysis_type: Optional[str] = None,
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """Analyze a Mojo structure."""
         if data is None:
@@ -192,7 +180,7 @@ class MojoStructureTool(BaseCognitiveTool):
         analysis_types = {
             "complexity": structure_class.analyze_complexity,
             "relationships": structure_class.analyze_relationships,
-            "patterns": structure_class.analyze_patterns
+            "patterns": structure_class.analyze_patterns,
         }
 
         if analysis_type is None or analysis_type not in analysis_types:
@@ -200,13 +188,12 @@ class MojoStructureTool(BaseCognitiveTool):
             return {
                 "type": structure_type,
                 "analyses": {
-                    name: analyzer(data)
-                    for name, analyzer in analysis_types.items()
-                }
+                    name: analyzer(data) for name, analyzer in analysis_types.items()
+                },
             }
 
         return {
             "type": structure_type,
             "analysis_type": analysis_type,
-            "result": analysis_types[analysis_type](data)
+            "result": analysis_types[analysis_type](data),
         }

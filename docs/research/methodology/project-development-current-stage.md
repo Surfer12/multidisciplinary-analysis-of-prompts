@@ -100,4 +100,3 @@ This meta-observation highlights the recursive nature of the analytical process.
 </meta_observation_reflection>
 </meta>
 </cognitive_process>
-

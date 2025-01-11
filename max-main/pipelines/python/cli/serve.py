@@ -18,7 +18,6 @@ import os
 from typing import Union
 
 import uvloop
-
 from max.pipelines import PIPELINE_REGISTRY, PipelineConfig
 from max.pipelines.kv_cache import KVCacheStrategy
 from max.serve.api_server import (
@@ -85,22 +84,16 @@ def serve_pipeline(
     # case where this is a generalized model unsupported by MAX
     if pipeline_config.architecture in PIPELINE_REGISTRY.architectures:
         # Retrieve tokenizer and pipeline.
-        pipeline_config = PIPELINE_REGISTRY.validate_pipeline_config(
-            pipeline_config
-        )
+        pipeline_config = PIPELINE_REGISTRY.validate_pipeline_config(pipeline_config)
 
     if performance_fake == "none":
-        logger.info(
-            f"Starting server using {pipeline_config.huggingface_repo_id}"
-        )
+        logger.info(f"Starting server using {pipeline_config.huggingface_repo_id}")
         # Load tokenizer and pipeline from PIPELINE_REGISTRY.
         tokenizer, pipeline_factory = PIPELINE_REGISTRY.retrieve_factory(
             pipeline_config,
         )
     else:
-        logger.info(
-            f"Starting server using performance fake {performance_fake}."
-        )
+        logger.info(f"Starting server using performance fake {performance_fake}.")
         tokenizer = PerformanceFakingPipelineTokenizer(
             AutoTokenizer.from_pretrained(pipeline_config.huggingface_repo_id)
         )

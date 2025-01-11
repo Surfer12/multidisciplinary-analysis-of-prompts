@@ -24,10 +24,10 @@ raise err
     warning: Expression [3]:22:5: unreachable code after raise statement
         return
         ^
-    
 
 
-    Error: 
+
+    Error:
 
 
 
@@ -39,7 +39,7 @@ raise custom_err
     warning: Expression [4]:22:5: unreachable code after raise statement
         return
         ^
-    
+
 
 
     Error: my custom error
@@ -56,7 +56,7 @@ raise err
     warning: Expression [7]:24:5: unreachable code after raise statement
         return
         ^
-    
+
 
 
     Error: hello
@@ -90,8 +90,7 @@ raise other
     warning: Expression [8]:25:5: unreachable code after raise statement
         return
         ^
-    
+
 
 
     Error: hey
-

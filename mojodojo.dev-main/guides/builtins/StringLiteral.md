@@ -40,7 +40,7 @@ y.value = 0
     error: Expression [3]:19:15: cannot implicitly convert 'Int' value to 'string' in assignment
         y.value = 0
                   ^
-    
+
     expression failed to parse (no further compiler diagnostics)
 
 You can also print it directly:

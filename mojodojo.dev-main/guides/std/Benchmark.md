@@ -17,7 +17,7 @@ Loop through each number up to `n` and calculate the total in the fibonacci sequ
 
 
 ```mojo
-alias n = 35 
+alias n = 35
 ```
 
 Define the recursive version first:
@@ -26,7 +26,7 @@ Define the recursive version first:
 ```mojo
 fn fib(n: Int) -> Int:
     if n <= 1:
-       return n 
+       return n
     else:
        return fib(n-1) + fib(n-2)
 ```
@@ -96,7 +96,7 @@ fn bench_args():
     fn sleeper():
         print("sleeping 300,000ns")
         sleep(3e-4)
-    
+
     print("0 warmup iters, 4 max iters, 0ns min time, 1_000_000_000ns max time")
     let nanoseconds = Benchmark(0, 5, 0, 1_000_000_000).run[sleeper]()
     print("average time", nanoseconds)
@@ -125,7 +125,7 @@ fn bench_args_2():
     fn sleeper():
         print("sleeping 300,000ns")
         sleep(3e-4)
-    
+
     print("\n0 warmup iters, 5 max iters, 0 min time, 1_000_000ns max time")
     let nanoseconds = Benchmark(0, 5, 0, 1_000_000).run[sleeper]()
     print("average time", nanoseconds)
@@ -133,7 +133,7 @@ fn bench_args_2():
 bench_args_2()
 ```
 
-    
+
     0 warmup iters, 5 max iters, 0 min time, 1_000_000ns max time
     sleeping 300,000ns
     sleeping 300,000ns

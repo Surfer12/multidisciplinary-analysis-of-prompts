@@ -69,11 +69,11 @@ print(y.data[0].x)
     error: Expression [2]:23:28: invalid call to 'get': result cannot bind generic !mlirtype to memory-only type 'Coord'
         let y = x.get[0, Coord]()
                 ~~~~~~~~~~~~~~~^~
-    
+
     /.modular/Kernels/mojo/Builtin/Tuple.mojo:58:5: function declared here
         fn get[i: Int, T: AnyType](self) -> T:
         ^
-    
+
 
 
 To remedy this you can mark it as [@register_passable](/guides/decorators/register_passable.md), but it must contain all register passable types:

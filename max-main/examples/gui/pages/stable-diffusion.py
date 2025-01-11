@@ -36,12 +36,8 @@ def load_tokenizer(path):
 
 num_steps = st.sidebar.number_input("Number of steps", 1, 100, 15)
 seed = st.sidebar.number_input("Seed", 0, 255)
-guidance_scale_factor = st.sidebar.number_input(
-    "Guidance Scale Factor", 0.0, 10.0, 7.5
-)
-latent_scale_factor = st.sidebar.number_input(
-    "Latent Scale Factor", 0.0, 1.0, 0.18215
-)
+guidance_scale_factor = st.sidebar.number_input("Guidance Scale Factor", 0.0, 10.0, 7.5)
+latent_scale_factor = st.sidebar.number_input("Latent Scale Factor", 0.0, 1.0, 0.18215)
 output_height = st.sidebar.number_input("Output Height", 0, 2048, 512)
 output_width = st.sidebar.number_input("Output Width", 0, 2048, 512)
 latent_width = output_width // 8
@@ -81,9 +77,7 @@ if st.button("Generate Image"):
             padding="max_length",
             max_length=tokenizer.model_max_length,
         )
-        input_ids = np.stack((prompt_p.input_ids, prompt_n.input_ids)).astype(
-            np.int32
-        )
+        input_ids = np.stack((prompt_p.input_ids, prompt_n.input_ids)).astype(np.int32)
         encoder_hidden_states = txt_encoder.execute_legacy(input_ids=input_ids)[
             "last_hidden_state"
         ]

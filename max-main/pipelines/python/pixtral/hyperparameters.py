@@ -128,9 +128,7 @@ class Hyperparameters:
         So in that case we need to pass a float32 attention mask to match the
         activations dtype expected by the quantized CPU flash attention kernel.
         """
-        return (
-            self.dtype if self.quantization_encoding is None else DType.float32
-        )
+        return self.dtype if self.quantization_encoding is None else DType.float32
 
 
 @dataclass

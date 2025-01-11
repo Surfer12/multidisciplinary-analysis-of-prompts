@@ -34,9 +34,7 @@ def tokenizer_from_gguf(
 
     architecture = gguf_utils.read_string(reader, gguf.KEY_GENERAL_ARCHITECTURE)
     if architecture != "llama":
-        raise NotImplementedError(
-            f"Unsupported GGUF architecture: {architecture}"
-        )
+        raise NotImplementedError(f"Unsupported GGUF architecture: {architecture}")
 
     model = gguf_utils.read_string(reader, Keys.Tokenizer.MODEL)
     if model != "gpt2":
@@ -102,9 +100,7 @@ def tokenizer_from_gguf(
     pattern = r"""(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+"""
     tokenizer.pre_tokenizer = pre_tokenizers.Sequence(  # type: ignore
         [
-            pre_tokenizers.Split(
-                Regex(pattern), behavior="isolated", invert=False
-            ),
+            pre_tokenizers.Split(Regex(pattern), behavior="isolated", invert=False),
             pre_tokenizers.ByteLevel(  # type: ignore
                 add_prefix_space=False, trim_offsets=True, use_regex=False
             ),

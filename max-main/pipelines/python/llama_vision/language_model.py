@@ -35,10 +35,7 @@ from nn import (
 )
 from nn.layer import Layer
 
-from .cross_attention_decoder import (
-    CrossAttentionDecoderLayer,
-    CrossSdpaAttention,
-)
+from .cross_attention_decoder import CrossAttentionDecoderLayer, CrossSdpaAttention
 
 
 @dataclass
@@ -88,14 +85,11 @@ class TextModel(Layer):
             # For text-only path we should skip cross attention layers.
             # Let's check if the layer is cross attention layer and if we have
             # cross attention states.
-            if (
-                idx in self.cross_attention_layers
-                and cross_attention_states is None
-            ):
+            if idx in self.cross_attention_layers and cross_attention_states is None:
                 continue
 
-            kv_collection_constructor = (
-                FetchContinuousBatchingKVCacheCollection(self.kv_params)
+            kv_collection_constructor = FetchContinuousBatchingKVCacheCollection(
+                self.kv_params
             )
             kv_collection = kv_collection_constructor(*kv_cache_inputs)
 
@@ -160,9 +154,7 @@ class CausalLanguageModel(Layer):
 
         # For ragged tensors gather the last tokens from packed dim 0.
         last_token_indices = hidden_input_row_offsets[1:] - 1
-        last_token_logits = ops.gather(
-            last_hidden_state, last_token_indices, axis=0
-        )
+        last_token_logits = ops.gather(last_hidden_state, last_token_indices, axis=0)
         return ops.cast(self.lm_head(last_token_logits), self.dtype)  # logits
 
 

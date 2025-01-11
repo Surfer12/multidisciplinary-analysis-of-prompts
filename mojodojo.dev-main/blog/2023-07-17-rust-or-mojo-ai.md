@@ -113,9 +113,9 @@ blurred = box_blur(img, 8)
 write_img("blurred.jpg", blurred)
 ```
 
-<img src="./blurred.jpg" width=200> 
+<img src="./blurred.jpg" width=200>
 
-    
+
 
 
 This is obviously going to be a very slow operation in Python compared to what you can do in a language like C, let's time how long it takes:
@@ -177,13 +177,13 @@ There is a lot more going on underneath the hood, for example `ffmpeg` decoding 
 You're going to have to know about:
 - The C/C++ programming languages
 - The Python [C API](https://docs.python.org/3/c-api/index.html)
-- The [NumPy C API](https://numpy.org/doc/stable/reference/c-api/index.html), 
+- The [NumPy C API](https://numpy.org/doc/stable/reference/c-api/index.html),
 - How NumPy does [CPU/SIMD optimizations](https://numpy.org/doc/stable/reference/simd/index.html)
 - How to [Interop with NumPy](https://numpy.org/doc/stable/user/basics.interoperability.html)
 
 And if you're doing anything with linear algebra:
 - The Fortran programming language
-- [BLAS](https://www.netlib.org/blas/) 
+- [BLAS](https://www.netlib.org/blas/)
 - [LAPACK](https://www.netlib.org/lapack/)
 
 Making your way down the stack to the actual Fortran routines requires many layers of indirection and is a daunting task. With Mojo we can learn one simple programming model that applies to CPU's, GPU's and even TPU's to replace all that complexity.
@@ -332,10 +332,10 @@ box_blur_mojo[8](image)
 py.write_img("mojo-blur.png", image)
 ```
 
-<img src="./mojo-blur.png" width=200> 
+<img src="./mojo-blur.png" width=200>
 
 
-    
+
 
 
 ## Vectorize
@@ -355,7 +355,7 @@ fn box_blur_vectorize_mojo[diameter: Int](image: PythonObject) raises:
     var tmp = DTypePointer[DType.uint32].alloc(el)
 
     for y in range(0, height):
-        # This inner loop is vectorized by stepping over simd_width pixels (16 32bit pixels on a 512bit SIMD register) 
+        # This inner loop is vectorized by stepping over simd_width pixels (16 32bit pixels on a 512bit SIMD register)
         # on the x axis, as we're loading that amount of pixels and operating on them at the same time
         @parameter
         fn inner[simd_width: Int](x: Int):

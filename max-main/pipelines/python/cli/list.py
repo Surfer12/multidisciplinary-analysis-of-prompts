@@ -28,9 +28,7 @@ def list_pipelines_to_console():
                 elif isinstance(encoding, list):
                     first_encoding = encoding
                     if isinstance(first_encoding, HuggingFaceFile):
-                        print(
-                            f"            {encoding_name}: {first_encoding.repo_id}"
-                        )
+                        print(f"            {encoding_name}: {first_encoding.repo_id}")
                     elif isinstance(first_encoding, list):
                         print(
                             f"            {encoding_name}: {first_encoding[0].repo_id}"

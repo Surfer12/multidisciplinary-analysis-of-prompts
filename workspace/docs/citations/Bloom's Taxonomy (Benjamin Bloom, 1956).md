@@ -22,4 +22,4 @@ This taxonomy helps educators design effective learning objectives and assess st
 
 ## Sources
 [2] Bloom's Taxonomy of Learning | Domain Levels Explained https://www.simplypsychology.org/blooms-taxonomy.html
-[10] Bloom's Taxonomy | Centre for Teaching Excellence https://uwaterloo.ca/centre-for-teaching-excellence/catalogs/tip-sheets/blooms-taxonomy 
+[10] Bloom's Taxonomy | Centre for Teaching Excellence https://uwaterloo.ca/centre-for-teaching-excellence/catalogs/tip-sheets/blooms-taxonomy

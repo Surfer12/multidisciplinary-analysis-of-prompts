@@ -26,5 +26,4 @@ A project focused on exploring and developing advanced thinking and analysis cap
 
 - Use descriptive, lowercase names with hyphens for separation
 - Include version numbers where applicable
-- Use appropriate file extensions (.md for markdown, .lua for Lua code, etc.) 
-
+- Use appropriate file extensions (.md for markdown, .lua for Lua code, etc.)

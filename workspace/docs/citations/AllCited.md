@@ -6,4 +6,3 @@ Mental Models (Kenneth Craik, 1943)
 Mirror Neuron System (Rizzolatti, 1996)
 Mixed Methods Research (Tashakkori & Teddlie, 2003)
 Systems Thinking (Peter Senge, 1990)
-

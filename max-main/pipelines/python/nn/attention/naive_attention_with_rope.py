@@ -16,8 +16,8 @@ import math
 from dataclasses import dataclass
 
 from max.graph import BufferValue, TensorValue, TensorValueLike, ops
-
 from max.pipelines.kv_cache import KVCacheParams, KVCacheStrategy
+
 from ..layer import Layer
 from ..linear import Linear
 from ..rotary_embedding import RotaryEmbedding
@@ -51,12 +51,8 @@ class NaiveAttentionWithRope(Layer):
             [batch, -1, self.kv_params.n_kv_heads, 1, self.kv_params.head_dim],
         )
 
-        kv = ops.tile(
-            kv, [1, 1, 1, self.n_heads // self.kv_params.n_kv_heads, 1]
-        )
-        return ops.reshape(
-            kv, [batch, -1, self.n_heads, self.kv_params.head_dim]
-        )
+        kv = ops.tile(kv, [1, 1, 1, self.n_heads // self.kv_params.n_kv_heads, 1])
+        return ops.reshape(kv, [batch, -1, self.n_heads, self.kv_params.head_dim])
 
     def attention(
         self,
@@ -118,9 +114,7 @@ class NaiveAttentionWithRope(Layer):
         xk = self.wk(x)  # type: ignore
         xv = self.wv(x)  # type: ignore
 
-        xq = ops.reshape(
-            xq, [batch, seq_len, self.n_heads, self.kv_params.head_dim]
-        )
+        xq = ops.reshape(xq, [batch, seq_len, self.n_heads, self.kv_params.head_dim])
 
         xk = ops.reshape(
             xk,
@@ -152,24 +146,20 @@ class NaiveAttentionWithRope(Layer):
         slice_seq_len = (slice(start_pos, start_pos + seq_len_val), seq_len)
         batch_val = TensorValue(batch)
         slice_batch = (slice(0, batch_val), batch)
-        k_cache[slice_seq_len, layer_index, slice_batch] = xk.transpose(
-            0, 1
-        ).cast(k_cache.dtype)
-        v_cache[slice_seq_len, layer_index, slice_batch] = xv.transpose(
-            0, 1
-        ).cast(k_cache.dtype)
+        k_cache[slice_seq_len, layer_index, slice_batch] = xk.transpose(0, 1).cast(
+            k_cache.dtype
+        )
+        v_cache[slice_seq_len, layer_index, slice_batch] = xv.transpose(0, 1).cast(
+            k_cache.dtype
+        )
 
         # Then slice the correct keys and values for attention.
         # The cache can have a larger max batch size than the current input.
         # We slice down to the active batch size.
         # ... = cache[0:start_pos+seq_len, layer_index, :batch]
         slice_post_seq_len = (slice(0, start_pos + seq_len_val), "post_seq_len")
-        keys = k_cache[slice_post_seq_len, layer_index, slice_batch].cast(
-            xq.dtype
-        )
-        values = v_cache[slice_post_seq_len, layer_index, slice_batch].cast(
-            xq.dtype
-        )
+        keys = k_cache[slice_post_seq_len, layer_index, slice_batch].cast(xq.dtype)
+        values = v_cache[slice_post_seq_len, layer_index, slice_batch].cast(xq.dtype)
 
         output = (
             self.attention(xq, xk, xv, attention_mask, keys, values)

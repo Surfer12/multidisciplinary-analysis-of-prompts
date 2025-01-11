@@ -389,9 +389,7 @@ def _build_opaque_graph(
 ) -> Graph:
     tokens_type = TensorType(DType.int64, shape=["total_seq_len"])
     # NOTE: input_row_offsets_len should be batch_size + 1.
-    input_row_offsets_type = TensorType(
-        DType.uint32, shape=["input_row_offsets_len"]
-    )
+    input_row_offsets_type = TensorType(DType.uint32, shape=["input_row_offsets_len"])
 
     kv_cache_args = kv_manager.input_symbols()[0]
 
@@ -418,9 +416,7 @@ def _build_graph(
     kv_manager: KVCacheManager,
 ) -> Graph:
     if pipeline_config.cache_strategy == KVCacheStrategy.CONTINUOUS:
-        return _build_opaque_graph(
-            pipeline_config, weights, kv_params, kv_manager
-        )
+        return _build_opaque_graph(pipeline_config, weights, kv_params, kv_manager)
 
     tokens_type = TensorType(DType.int64, shape=["batch_size", "seq_len"])
     attn_mask_type = TensorType(

@@ -139,9 +139,7 @@ class CoderModel(PipelineModel):
                 next_tokens, prev_model_inputs
             )
         else:
-            return self._prepare_naive_next_token_inputs(
-                next_tokens, prev_model_inputs
-            )
+            return self._prepare_naive_next_token_inputs(next_tokens, prev_model_inputs)
 
     def _get_kv_params(self) -> KVCacheParams:
         cache_dtype = (
@@ -184,9 +182,7 @@ class CoderModel(PipelineModel):
         # Pre-allocate a buffer for input_row_offsets in multistep execution.
         # We do this to avoid materializing and copying a buffer with each multistep step
         self._input_row_offsets_prealloc = Tensor.from_numpy(
-            np.arange(
-                self.pipeline_config.max_cache_batch_size + 1, dtype=np.uint32
-            )
+            np.arange(self.pipeline_config.max_cache_batch_size + 1, dtype=np.uint32)
         ).to(self.pipeline_config.device)
 
         # Read in weights.
@@ -200,9 +196,7 @@ class CoderModel(PipelineModel):
 
             logging.info("Loading serialized model from ", serialized_path)
 
-            return session.load(
-                serialized_path, weights_registry=weights_registry
-            )
+            return session.load(serialized_path, weights_registry=weights_registry)
 
         else:
             logging.info("Building model...")
@@ -217,10 +211,7 @@ class CoderModel(PipelineModel):
                 graph,
                 weights_registry=self._weights.allocated_weights,  # type: ignore
             )
-            if (
-                export_path
-                := self.pipeline_config.save_to_serialized_model_path
-            ):
+            if export_path := self.pipeline_config.save_to_serialized_model_path:
                 logging.info("Exporting serialized model to %s", export_path)
                 model._export_mef(export_path)
             return model

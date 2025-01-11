@@ -62,9 +62,7 @@ def compute_log_probabilities(
         log_probs = log_softmax(logits, axis=-1)
 
         # Get top n tokens.
-        top_n_indices = np.argpartition(log_probs, -top_n, axis=-1)[
-            ..., -top_n:
-        ]
+        top_n_indices = np.argpartition(log_probs, -top_n, axis=-1)[..., -top_n:]
 
         # Get the log probabilities of each sampled token.
         sampled_log_probs = np.take_along_axis(

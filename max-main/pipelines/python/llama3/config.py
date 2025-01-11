@@ -12,7 +12,7 @@
 # ===----------------------------------------------------------------------=== #
 """All configurable parameters for Llama3."""
 
-from max.pipelines import SupportedEncoding, HuggingFaceFile
+from max.pipelines import HuggingFaceFile, SupportedEncoding
 
 
 def get_llama_huggingface_file(
@@ -45,9 +45,7 @@ def get_llama_huggingface_file(
                 "llama-3-8b-instruct-q6_k.gguf",
             )
         else:
-            raise ValueError(
-                f"encoding does not have default hf file: {encoding}"
-            )
+            raise ValueError(f"encoding does not have default hf file: {encoding}")
 
     elif version == "3.1":
         if encoding == SupportedEncoding.bfloat16:

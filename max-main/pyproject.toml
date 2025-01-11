@@ -11,4 +11,3 @@ reportMissingImports = false
 [project]
 requires-python = ">=3.8"
 name = "max-repo"
-

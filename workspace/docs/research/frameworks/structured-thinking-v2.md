@@ -123,4 +123,3 @@ Emphasize the nested structure that mirrors the recursive nature of meta-analysi
 </thinking>
 </cognitive_process>
 ```
-

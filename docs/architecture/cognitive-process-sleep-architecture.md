@@ -16,9 +16,9 @@ The interplay between sleep architecture and cognitive performance is a critical
 Individuals with high somatic symptom scores often experience significant physical discomfort accompanied by heightened attention to bodily sensations. The bidirectional relationship between sleep and cognition can exacerbate their condition in several ways:
 
 - **Sleep Disturbances:** Chronic pain or discomfort can disrupt sleep architecture, leading to insufficient restorative sleep. This disruption can impair cognitive functions such as concentration, memory, and decision-making, which are already challenged by the focus on somatic symptoms.
-  
+
 - **Cognitive Load:** Managing persistent physical symptoms requires considerable cognitive resources, potentially leading to mental fatigue. This increased cognitive load can make it more difficult to achieve high-quality sleep, creating a vicious cycle of impaired sleep and reduced cognitive performance.
-  
+
 - **Emotional Stress:** The frustration and stress associated with chronic somatic symptoms can negatively impact sleep quality. Poor sleep, in turn, can heighten the perception of pain and discomfort, further increasing somatic symptom scores.
 
 ### Implications for Intervention
@@ -26,9 +26,9 @@ Individuals with high somatic symptom scores often experience significant physic
 Understanding this bidirectional relationship suggests several avenues for intervention:
 
 - **Cognitive Behavioral Therapy for Insomnia (CBT-I):** This therapy can help individuals develop healthier sleep habits and address maladaptive thoughts that interfere with sleep, potentially improving both sleep quality and cognitive function.
-  
+
 - **Stress Management Techniques:** Incorporating stress reduction strategies such as mindfulness, meditation, or relaxation exercises can alleviate cognitive load and improve sleep quality.
-  
+
 - **Pain Management:** Effective management of physical symptoms through medical or therapeutic means can reduce sleep disturbances and, consequently, support better cognitive performance.
 
 ### Conclusion

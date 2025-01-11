@@ -330,9 +330,7 @@ def transformer(
 
         layers = [
             NaiveTransformerBlock(
-                attention=attention(
-                    kv_params, pipeline_config, rope, weights.blk[i]
-                ),
+                attention=attention(kv_params, pipeline_config, rope, weights.blk[i]),
                 mlp=feed_forward(
                     pipeline_config.dtype,
                     pipeline_config.quantization_encoding.quantization_encoding,

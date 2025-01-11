@@ -16,19 +16,19 @@ fn call_it():
     fn inner():
         print("inner")
 
-    outer(inner) 
+    outer(inner)
 
 call_it()
 ```
 
     error: Expression [5]:12:10: invalid call to 'outer': argument #0 cannot be converted from 'fn() capturing -> None' to 'fn() -> None'
-        outer(inner) 
+        outer(inner)
         ~~~~~^~~~~~~
-    
+
     Expression [5]:5:1: function declared here
     fn outer(f: fn() -> None):
     ^
-    
+
     expression failed to parse (no further compiler diagnostics)
 
 You can fix it by adding the `capturing` keyword:
@@ -42,7 +42,7 @@ fn call_it():
     fn inner():
         print("inner")
 
-    outer(inner) 
+    outer(inner)
 
 call_it()
 ```
@@ -62,7 +62,7 @@ fn call_it():
     fn inner():
         print("inner")
 
-    outer(inner) 
+    outer(inner)
 
 call_it()
 ```
@@ -78,11 +78,11 @@ fn outer(f: fn() capturing -> Int):
     print(f())
 
 fn call_it():
-    let a = 5 
+    let a = 5
     fn inner() -> Int:
         return a
 
-    outer(inner) 
+    outer(inner)
 
 call_it()
 ```

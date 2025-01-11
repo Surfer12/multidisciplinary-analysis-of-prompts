@@ -42,8 +42,7 @@ class ModelGroup(click.Group):
             return rv
         supported = ", ".join(self.list_commands(ctx))
         ctx.fail(
-            f"Command not supported: {cmd_name}\nSupported commands:"
-            f" {supported}"
+            f"Command not supported: {cmd_name}\nSupported commands:" f" {supported}"
         )
 
 
@@ -58,9 +57,7 @@ def common_server_options(func):
         is_flag=True,
         show_default=True,
         default=False,
-        help=(
-            "Whether to enable pyinstrument profiling on the serving endpoint."
-        ),
+        help=("Whether to enable pyinstrument profiling on the serving endpoint."),
     )
     @click.option(
         "--performance-fake",
@@ -125,9 +122,7 @@ def cli_serve(
 def cli_pipeline(prompt, num_warmups, **config_kwargs):
     # Load tokenizer & pipeline.
     pipeline_config = PipelineConfig(**config_kwargs)
-    generate_text_for_pipeline(
-        pipeline_config, prompt=prompt, num_warmups=num_warmups
-    )
+    generate_text_for_pipeline(pipeline_config, prompt=prompt, num_warmups=num_warmups)
 
 
 @main.command(name="list")

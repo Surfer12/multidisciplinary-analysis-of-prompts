@@ -1,19 +1,22 @@
 """Test module for advanced computer operations and meta-cognitive capabilities."""
 
 import os
-import sys
-import time
 import signal
+import subprocess
+import sys
+import threading
+import time
+from pathlib import Path
+
 import psutil
 import pytest
-import threading
-import subprocess
-from pathlib import Path
-from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
+
 
 class FileChangeHandler(FileSystemEventHandler):
     """Handler for file system changes."""
+
     def __init__(self):
         self.changes = []
 
@@ -25,6 +28,7 @@ class FileChangeHandler(FileSystemEventHandler):
         if not event.is_directory:
             self.changes.append(('created', event.src_path))
 
+
 @pytest.fixture
 def file_watcher():
     """Fixture providing a file system watcher."""
@@ -32,20 +36,25 @@ def file_watcher():
     observer = Observer()
     return handler, observer
 
+
 def test_process_management(temp_workspace):
     """Test process creation, monitoring, and termination."""
     # Create a long-running script
     script_path = temp_workspace / "long_running.py"
-    script_path.write_text("""
+    script_path.write_text(
+        """
 import time
 while True:
     time.sleep(1)
-""")
+"""
+    )
 
     # Start process
-    process = subprocess.Popen([sys.executable, str(script_path)],
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
+    process = subprocess.Popen(
+        [sys.executable, str(script_path)],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
 
     # Get process info
     proc = psutil.Process(process.pid)
@@ -67,6 +76,7 @@ while True:
 
     # Verify process has ended
     assert not proc.is_running()
+
 
 def test_file_system_monitoring(temp_workspace, file_watcher):
     """Test real-time file system monitoring."""
@@ -100,6 +110,7 @@ def test_file_system_monitoring(temp_workspace, file_watcher):
         observer.stop()
         observer.join()
 
+
 def test_resource_monitoring():
     """Test system resource monitoring capabilities."""
     # CPU usage
@@ -122,6 +133,7 @@ def test_resource_monitoring():
     # Network interfaces
     network_interfaces = psutil.net_if_addrs()
     assert len(network_interfaces) > 0
+
 
 def test_parallel_file_operations(temp_workspace):
     """Test parallel file operations and synchronization."""
@@ -158,6 +170,7 @@ def test_parallel_file_operations(temp_workspace):
     file_count = len(list(temp_workspace.glob("worker_*_file_*.txt")))
     assert file_count == 50
 
+
 @pytest.mark.skipif(sys.platform != "darwin", reason="MacOS specific test")
 def test_macos_advanced_features(temp_workspace):
     """Test advanced MacOS-specific features."""
@@ -169,17 +182,22 @@ def test_macos_advanced_features(temp_workspace):
     subprocess.run(['chflags', 'hidden', str(test_file)])
 
     # Verify file is hidden
-    result = subprocess.run(['ls', '-lO', str(test_file)],
-                          capture_output=True, text=True)
+    result = subprocess.run(
+        ['ls', '-lO', str(test_file)], capture_output=True, text=True
+    )
     assert 'hidden' in result.stdout.lower()
 
     # Test file metadata
-    subprocess.run(['xattr', '-w', 'com.apple.metadata:kMDLabel_1', 'TestLabel', str(test_file)])
+    subprocess.run(
+        ['xattr', '-w', 'com.apple.metadata:kMDLabel_1', 'TestLabel', str(test_file)]
+    )
 
     # Verify metadata
-    result = subprocess.run(['xattr', '-l', str(test_file)],
-                          capture_output=True, text=True)
+    result = subprocess.run(
+        ['xattr', '-l', str(test_file)], capture_output=True, text=True
+    )
     assert 'com.apple.metadata:kMDLabel_1' in result.stdout
+
 
 class TestAdvancedEnvironment:
     """Test class for advanced environment operations."""
@@ -207,15 +225,19 @@ class TestAdvancedEnvironment:
         os.chdir(temp_workspace / "dir1" / "dir2")
 
         # Set up environment variables
-        os.environ.update({
-            'TEST_VAR1': 'value1',
-            'TEST_VAR2': 'value2',
-            'TEST_PATH': os.pathsep.join([
-                str(temp_workspace / "bin"),
-                str(temp_workspace / "usr/local/bin"),
-                os.environ.get('PATH', '')
-            ])
-        })
+        os.environ.update(
+            {
+                'TEST_VAR1': 'value1',
+                'TEST_VAR2': 'value2',
+                'TEST_PATH': os.pathsep.join(
+                    [
+                        str(temp_workspace / "bin"),
+                        str(temp_workspace / "usr/local/bin"),
+                        os.environ.get('PATH', ''),
+                    ]
+                ),
+            }
+        )
 
         # Verify environment
         assert os.getcwd().endswith('dir2')

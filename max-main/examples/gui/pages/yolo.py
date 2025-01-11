@@ -68,9 +68,7 @@ def resize_and_pad(image, shape):
     min_ratio = min(target_h / h, target_w / w)
     unpadded_h = int(round(min_ratio * h))
     unpadded_w = int(round(min_ratio * w))
-    image = cv2.resize(
-        image, (unpadded_w, unpadded_h), interpolation=cv2.INTER_LINEAR
-    )
+    image = cv2.resize(image, (unpadded_w, unpadded_h), interpolation=cv2.INTER_LINEAR)
 
     # Pad to be the same size as `shape`.
     delta_h = (target_h - unpadded_h) / 2
@@ -153,8 +151,7 @@ if button_placeholder.button("Start Webcam"):
         img = resize_and_pad(img, (height, width))
         # Preprocess inputs.
         input = (
-            img[np.newaxis, :, :, ::-1].transpose(0, 3, 1, 2).astype(np.float32)
-            / 255
+            img[np.newaxis, :, :, ::-1].transpose(0, 3, 1, 2).astype(np.float32) / 255
         ).copy()
         start = time.time()
         outputs = list(yolo.execute_legacy(images=input).values())

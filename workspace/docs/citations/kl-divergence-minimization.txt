@@ -85,7 +85,7 @@ fn main():
 
     # Update the student model - dummy gradient for demonstration
     update_student_model(student_model, loss)
-    
+
     print("Student model updated with a simple placeholder routine.")
 
 Low-Level Utilization of Mojo Constructs & Potential Improvements
@@ -107,7 +107,7 @@ Below is a second snippet that uses the same concept (minimizing a difference) b
 
 # --------------------------------------------------------------------------------
 # This example demonstrates how to compare sensor readings from a "GoldStandardSensor"
-# and an "ExperimentalSensor" in a similar manner, albeit using a basic L2 distance 
+# and an "ExperimentalSensor" in a similar manner, albeit using a basic L2 distance
 # instead of KL divergence. We show it in Mojo to illustrate how
 # you might handle a second scenario with the same techniques.
 # --------------------------------------------------------------------------------

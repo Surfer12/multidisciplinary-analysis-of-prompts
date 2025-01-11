@@ -140,10 +140,7 @@ class LlamaSafetensorWeights(SafetensorWeights, WeightsConverter):
         if self._has_rope_scaling and self.name == "rope_freqs.weight":
             tensor = self._rope_freqs_tensor
             assert isinstance(tensor, torch.Tensor)
-            if (
-                dtype is not None
-                and torch_to_modular_type(tensor.dtype) != dtype
-            ):
+            if dtype is not None and torch_to_modular_type(tensor.dtype) != dtype:
                 tensor = tensor.to(modular_to_torch_type(dtype))
             return tensor
         tensor = super()._load_tensor(dtype)
@@ -196,9 +193,7 @@ def _permute_weights(weights: torch.Tensor, n_head: int, n_head_kv: int | None):
     if n_head_kv is not None and n_head != n_head_kv:
         n_head = n_head_kv
     return (
-        weights.reshape(
-            n_head, 2, weights.shape[0] // n_head // 2, *weights.shape[1:]
-        )
+        weights.reshape(n_head, 2, weights.shape[0] // n_head // 2, *weights.shape[1:])
         .swapaxes(1, 2)
         .reshape(weights.shape)
     )

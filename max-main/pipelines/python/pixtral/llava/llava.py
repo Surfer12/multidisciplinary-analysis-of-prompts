@@ -42,9 +42,7 @@ class LlavaConditionalGeneration(Layer):
         self,
         input_ids: TensorValue,  # Shape (batch_size, sequence_length). Indices of input sequence tokens in the vocabulary. Indices can be obtained from language model tokenizer.
         pixel_values: TensorValue,  # (height, width, num_channels).
-        kv_cache_inputs: tuple[
-            TensorValue, TensorValue, TensorValue, TensorValue
-        ],
+        kv_cache_inputs: tuple[TensorValue, TensorValue, TensorValue, TensorValue],
         **kwargs,
     ) -> TensorValue:
         """

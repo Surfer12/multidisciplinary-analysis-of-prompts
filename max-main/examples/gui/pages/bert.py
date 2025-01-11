@@ -128,9 +128,7 @@ if st.button("Predict Word"):
         clean_up_tokenization_spaces=True,
     )
 
-    st.text_area(
-        "Filled Mask", input_text.replace("[MASK]", predicted_tokens, 40)
-    )
+    st.text_area("Filled Mask", input_text.replace("[MASK]", predicted_tokens, 40))
 
     if show_predictions:
         # Get top N predictions for the [MASK] token

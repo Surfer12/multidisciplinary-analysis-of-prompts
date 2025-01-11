@@ -56,7 +56,7 @@ mixed_list.storage = 0
     error: Expression [8]:20:26: cannot implicitly convert 'Int' value to '!pop.pack<[!kgen.declref<_"$Builtin"::_"$Int"::_Int>, !kgen.declref<_"$Builtin"::_"$FloatLiteral"::_FloatLiteral>, !kgen.declref<_"$Builtin"::_"$Bool"::_Bool>]>' in assignment
         mixed_list.storage = 0
                              ^
-    
+
     expression failed to parse (no further compiler diagnostics)
 
 ## len

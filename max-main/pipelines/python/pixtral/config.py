@@ -23,8 +23,6 @@ def get_pixtral_huggingface_file(
         raise ValueError(f"Pixtral does not support: {encoding}")
     elif encoding == SupportedEncoding.bfloat16:
         # using official mistral weights
-        return HuggingFaceFile(
-            "mistralai/Pixtral-12B-2409", "consolidated.safetensors"
-        )
+        return HuggingFaceFile("mistralai/Pixtral-12B-2409", "consolidated.safetensors")
     else:
         raise ValueError(f"Pixtral does not support: {encoding}")

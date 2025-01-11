@@ -18,9 +18,7 @@ import numpy as np
 from .causal_attention_mask import causal_attention_mask
 
 
-def _alibi_bias(
-    max_seq_len: int, alibi_bias_max: int, n_heads: int
-) -> np.ndarray:
+def _alibi_bias(max_seq_len: int, alibi_bias_max: int, n_heads: int) -> np.ndarray:
     # This bias has to be calculated in fp32, as numpy does not have support for bf16.
     bias = np.arange(1 - max_seq_len, 1, 1).reshape((1, 1, 1, max_seq_len))
     rounded_n_heads = int(

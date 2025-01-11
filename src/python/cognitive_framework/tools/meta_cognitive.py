@@ -1,32 +1,37 @@
-from typing import Dict, List, Optional, Any
-from datetime import datetime
 from dataclasses import dataclass
-from .base import ToolCollection, ToolResult
-from ..visitors import (
-    VisitorCoordinator,
-    ValidationVisitor,
-    ParsingVisitor,
-    TransformationVisitor,
-    CompositionalVisitor
-)
+from datetime import datetime
+from typing import Any, Dict, List, Optional
+
+from ..context import SharedContext
 from ..observers import (
+    BoundaryObserver,
+    ObservationCoordinator,
     StateObserver,
     TransformationObserver,
-    BoundaryObserver,
-    ObservationCoordinator
 )
-from ..context import SharedContext
+from ..visitors import (
+    CompositionalVisitor,
+    ParsingVisitor,
+    TransformationVisitor,
+    ValidationVisitor,
+    VisitorCoordinator,
+)
+from .base import ToolCollection, ToolResult
+
 
 @dataclass
 class MetaCognitiveState:
     """Tracks the cognitive state of tool execution"""
+
     patterns: List[Dict[str, Any]] = list()
     adaptations: List[Dict[str, Any]] = list()
     metrics: Dict[str, float] = dict()
     timestamp: str = datetime.now().isoformat()
 
+
 class ToolVisitor(CompositionalVisitor):
     """Visitor for tool execution analysis"""
+
     def __init__(self):
         self.validation_visitor = ValidationVisitor()
         self.parsing_visitor = ParsingVisitor()
@@ -39,8 +44,10 @@ class ToolVisitor(CompositionalVisitor):
         result = self.transformation_visitor.visit(result)
         return result
 
+
 class MetaCognitiveToolCollection(ToolCollection):
     """Enhanced tool collection with meta-cognitive capabilities"""
+
     def __init__(self, *tools, config: Optional[Dict] = None):
         super().__init__(*tools)
         self.config = config or {}
@@ -54,7 +61,7 @@ class MetaCognitiveToolCollection(ToolCollection):
         self.observers = {
             "state": StateObserver(),
             "transform": TransformationObserver(),
-            "boundary": BoundaryObserver()
+            "boundary": BoundaryObserver(),
         }
         for observer in self.observers.values():
             self.observation_coordinator.register(observer)
@@ -83,14 +90,15 @@ class MetaCognitiveToolCollection(ToolCollection):
         self._update_cognitive_state(result, adaptations)
 
         # Update shared context
-        self.shared_context.update({
-            "tool_result": result,
-            "cognitive_state": self.cognitive_state
-        })
+        self.shared_context.update(
+            {"tool_result": result, "cognitive_state": self.cognitive_state}
+        )
 
         return result
 
-    def _update_cognitive_state(self, result: ToolResult, adaptations: List[Dict]) -> None:
+    def _update_cognitive_state(
+        self, result: ToolResult, adaptations: List[Dict]
+    ) -> None:
         """Update the cognitive state with execution results"""
         # Update patterns
         if hasattr(result, "patterns"):
@@ -106,8 +114,10 @@ class MetaCognitiveToolCollection(ToolCollection):
 
         self.cognitive_state.timestamp = datetime.now().isoformat()
 
+
 class MetaComputerTool:
     """Enhanced computer tool with meta-cognitive capabilities"""
+
     def __init__(self):
         self.state_history: List[Dict] = []
         self.pattern_history: List[Dict] = []
@@ -139,21 +149,25 @@ class MetaComputerTool:
         return {
             "timestamp": datetime.now().isoformat(),
             "memory_usage": self._get_memory_usage(),
-            "active_processes": self._get_active_processes()
+            "active_processes": self._get_active_processes(),
         }
 
-    def _analyze_patterns(self, pre_state: Dict, post_state: Dict, result: ToolResult) -> List[Dict]:
+    def _analyze_patterns(
+        self, pre_state: Dict, post_state: Dict, result: ToolResult
+    ) -> List[Dict]:
         """Analyze execution patterns"""
         patterns = []
 
         # Analyze state changes
         state_changes = self._compute_state_changes(pre_state, post_state)
         if state_changes:
-            patterns.append({
-                "type": "state_change",
-                "changes": state_changes,
-                "timestamp": datetime.now().isoformat()
-            })
+            patterns.append(
+                {
+                    "type": "state_change",
+                    "changes": state_changes,
+                    "timestamp": datetime.now().isoformat(),
+                }
+            )
 
         # Analyze result patterns
         if hasattr(result, "output"):
@@ -165,9 +179,10 @@ class MetaComputerTool:
     def _calculate_metrics(self) -> Dict[str, float]:
         """Calculate tool performance metrics"""
         return {
-            "state_change_frequency": len(self.state_history) / max(1, len(self.pattern_history)),
+            "state_change_frequency": len(self.state_history)
+            / max(1, len(self.pattern_history)),
             "pattern_diversity": len(set(p["type"] for p in self.pattern_history)),
-            "execution_stability": self._calculate_stability()
+            "execution_stability": self._calculate_stability(),
         }
 
     def _calculate_stability(self) -> float:
@@ -177,7 +192,7 @@ class MetaComputerTool:
 
         stability_scores = []
         for i in range(1, len(self.state_history)):
-            prev_state = self.state_history[i-1]
+            prev_state = self.state_history[i - 1]
             curr_state = self.state_history[i]
 
             # Compare states and calculate stability score

@@ -15,23 +15,23 @@ from typing import Optional
 
 from max.dtype import DType
 from max.graph import Graph, TensorType, TensorValue, ops
-from max.graph.weights import GGUFWeights
 from max.graph.quantization import QuantizationEncoding
+from max.graph.weights import GGUFWeights
 from max.pipelines import PipelineConfig
+from max.pipelines.kv_cache import (
+    FetchContinuousBatchingKVCacheCollection,
+    KVCacheManager,
+    KVCacheParams,
+)
 from nn import (
-    AttentionImpl,
     Attention,
+    AttentionImpl,
     Embedding,
     Linear,
     LPLayerNorm,
     Sequential,
     Transformer,
     TransformerBlock,
-)
-from max.pipelines.kv_cache import (
-    KVCacheParams,
-    KVCacheManager,
-    FetchContinuousBatchingKVCacheCollection,
 )
 
 
@@ -114,9 +114,7 @@ def _transformer(
         # Initialize Attention.
         layers = [
             TransformerBlock(
-                attention=_attention(
-                    pipeline_config, weights.blk[i], kv_params, i
-                ),
+                attention=_attention(pipeline_config, weights.blk[i], kv_params, i),
                 mlp=_feed_forward(
                     pipeline_config.dtype,
                     pipeline_config.quantization_encoding.quantization_encoding,  # type: ignore

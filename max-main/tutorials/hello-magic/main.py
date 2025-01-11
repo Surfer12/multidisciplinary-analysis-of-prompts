@@ -12,6 +12,7 @@
 # ===----------------------------------------------------------------------=== #
 
 import subprocess
+
 from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
@@ -34,13 +35,9 @@ def zero():
         while True:
             output = p.stdout.readline()
             if output == "" and p.poll() is not None:
-                raise HTTPException(
-                    status_code=500, detail="Failed to produce zero"
-                )
+                raise HTTPException(status_code=500, detail="Failed to produce zero")
 
             return {"message": f"answer is {output}"}
 
     except subprocess.SubprocessError:
-        raise HTTPException(
-            status_code=500, detail="Failed to execute subprocess"
-        )
+        raise HTTPException(status_code=500, detail="Failed to execute subprocess")

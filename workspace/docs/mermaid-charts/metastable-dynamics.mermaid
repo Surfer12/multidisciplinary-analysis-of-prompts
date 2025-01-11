@@ -1,10 +1,10 @@
 flowchart TB
     subgraph MetastableStates["Metastable State Dynamics"]
         direction TB
-        MS1[Semi-Stable State A\nEnergy Well] 
+        MS1[Semi-Stable State A\nEnergy Well]
         MS2[Transition Zone\nPhase Shift]
         MS3[Semi-Stable State B\nEnergy Well]
-        
+
         MS1 <--> |"Phase Transition\nEnergy Threshold"| MS2
         MS2 <--> |"Phase Transition\nEnergy Threshold"| MS3
     end
@@ -14,7 +14,7 @@ flowchart TB
         EL1[Local Minima\nStable Performance]
         EL2[Saddle Points\nFlexible Adaptation]
         EL3[Global Optimization\nMetastable Balance]
-        
+
         EL1 --> EL2
         EL2 --> EL3
     end
@@ -24,7 +24,7 @@ flowchart TB
         AF1[Resource Allocation]
         AF2[Network Reconfiguration]
         AF3[State Optimization]
-        
+
         AF1 --> AF2
         AF2 --> AF3
         AF3 -.-> AF1

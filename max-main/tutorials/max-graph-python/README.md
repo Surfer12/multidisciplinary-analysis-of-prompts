@@ -37,7 +37,7 @@ You should see the following output:
 platform darwin -- Python 3.12.7, pytest-8.3.3, pluggy-1.5.0
 rootdir: /max-repo
 configfile: pyproject.toml
-collected 6 items                                           
+collected 6 items
 
 tests/test_addition.py ......                         [100%]
 

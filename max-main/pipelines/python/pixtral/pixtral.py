@@ -105,17 +105,14 @@ class PixtralModel(PipelineModel):
         # Pre-allocate a buffer for input_row_offsets in multistep execution.
         # We do this to avoid materializing and copying a buffer with each multistep step
         self._input_row_offsets_prealloc = Tensor.from_numpy(
-            np.arange(
-                self.pipeline_config.max_cache_batch_size + 1, dtype=np.uint32
-            )
+            np.arange(self.pipeline_config.max_cache_batch_size + 1, dtype=np.uint32)
         ).to(self.pipeline_config.device)
 
         self._weights = self.pipeline_config.load_weights()
 
         if not isinstance(self._weights, SafetensorWeights):
             msg = (
-                "only safetensors weights are currently supported in Pixtral"
-                " models."
+                "only safetensors weights are currently supported in Pixtral" " models."
             )
             raise ValueError(msg)
 
@@ -127,9 +124,7 @@ class PixtralModel(PipelineModel):
                 tensor,
             ) in self.pipeline_config._tensors.items():  # type:ignore
                 weights_registry[name] = tensor.data
-            logging.info(
-                "Loading serialized model from ", serialized_path, "..."
-            )
+            logging.info("Loading serialized model from ", serialized_path, "...")
             return session.load(
                 serialized_path,
                 weights_registry=weights_registry,
@@ -143,6 +138,4 @@ class PixtralModel(PipelineModel):
                 self.kv_manager,
             )
             logging.info("Compiling...")
-            return session.load(
-                graph, weights_registry=self._weights.allocated_weights
-            )
+            return session.load(graph, weights_registry=self._weights.allocated_weights)

@@ -1,7 +1,6 @@
 from unittest.mock import AsyncMock, patch
 
 import pytest
-
 from computer_use_demo.tools.computer import (
     ComputerTool,
     ScalingSource,

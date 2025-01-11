@@ -41,7 +41,7 @@ print(x)
 In Python, `x` is actually a pointer to `heap` allocated memory.
 
 ::: tip CS Fundamentals
-`stack` and `heap` memory are really important concepts to understand, [this YouTube video](https://www.youtube.com/watch?v=_8-ht2AKyH4) does a fantastic job of explaining it visually. 
+`stack` and `heap` memory are really important concepts to understand, [this YouTube video](https://www.youtube.com/watch?v=_8-ht2AKyH4) does a fantastic job of explaining it visually.
 
 If the video doesn't make sense, for now you can use the mental model that:
 
@@ -85,7 +85,7 @@ py.print(py.id(x))
 127017920909896
 ```
 
-This is pointing to a C object in Python, and Mojo behaves the same when using a `PythonObject`, accessing the value actually uses the address to lookup the data on the `heap` which comes with a performance cost. 
+This is pointing to a C object in Python, and Mojo behaves the same when using a `PythonObject`, accessing the value actually uses the address to lookup the data on the `heap` which comes with a performance cost.
 
 This is a simplified representation of how the `C Object` being pointed to would look if it were a Python dict:
 
@@ -185,7 +185,7 @@ print(y)
 [1, 2, 3, 4]
 ```
 
-In the definition `[DType.uint8, 4]` are known as `parameters` which means they must be compile-time known, while `(1, 2, 3, 4)` are the `arguments` which can be compile-time or runtime known. 
+In the definition `[DType.uint8, 4]` are known as `parameters` which means they must be compile-time known, while `(1, 2, 3, 4)` are the `arguments` which can be compile-time or runtime known.
 
 For example user input or data retrieved from an API is runtime known, and so can't be used as a `parameter` during the compilation process.
 
@@ -449,7 +449,7 @@ False
 Int is the same size as your architecture e.g. on a 64 bit machine it's 64 bits
 
 ```mojo
-var i: Int = 2 
+var i: Int = 2
 print(i)
 ```
 
@@ -609,7 +609,7 @@ for i in range(4):
 ### Exercise 1
 
 ```mojo
-var pow = Python.evaluate("2 ** 8") 
+var pow = Python.evaluate("2 ** 8")
 pow
 ```
 

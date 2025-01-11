@@ -2,7 +2,6 @@ from unittest import mock
 
 from anthropic.types import TextBlock, ToolUseBlock
 from anthropic.types.beta import BetaMessage, BetaMessageParam, BetaTextBlockParam
-
 from computer_use_demo.loop import APIProvider, sampling_loop
 
 

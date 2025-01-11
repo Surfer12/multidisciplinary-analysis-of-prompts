@@ -70,4 +70,4 @@
 - Understanding cognitive limitations
 - Structured analytical approaches
 - Holistic system perspectives
-- Adaptable and iterative methodologies 
+- Adaptable and iterative methodologies

@@ -14,10 +14,9 @@
 from pathlib import Path
 
 import torch
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-
 from max import engine
 from max.dtype import DType
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 # The HuggingFace model name and TorchScript file name
 HF_MODEL_NAME = "cardiffnlp/twitter-roberta-base-emotion-multilabel-latest"
@@ -42,14 +41,11 @@ def main():
     model = session.load(MODEL_PATH, input_specs=input_spec_list)
 
     for tensor in model.input_metadata:
-        print(
-            f"name: {tensor.name}, shape: {tensor.shape}, dtype: {tensor.dtype}"
-        )
+        print(f"name: {tensor.name}, shape: {tensor.shape}, dtype: {tensor.dtype}")
 
     # The model input
     text_input = (
-        "There are many exciting developments in the field of AI"
-        " Infrastructure!"
+        "There are many exciting developments in the field of AI" " Infrastructure!"
     )
 
     # Tokenize the input

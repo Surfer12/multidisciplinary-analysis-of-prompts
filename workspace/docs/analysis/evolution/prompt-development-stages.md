@@ -128,4 +128,4 @@ Now, please address the following user input:
 {{user_input}}
 </user_input>
 
-Begin your response by opening a <cognitive_process> tag to start your step-by-step analysis." though this system prompt is a work in progress and should be refined continually. 
+Begin your response by opening a <cognitive_process> tag to start your step-by-step analysis." though this system prompt is a work in progress and should be refined continually.

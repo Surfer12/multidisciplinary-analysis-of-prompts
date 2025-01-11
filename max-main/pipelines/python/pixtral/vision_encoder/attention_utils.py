@@ -12,8 +12,8 @@
 # ===----------------------------------------------------------------------=== #
 
 from __future__ import annotations
-from typing import List
 
+from typing import List
 
 import numpy as np
 from max.graph import ops
@@ -52,9 +52,7 @@ def causal_attention_mask_2d_from_imgs(
 
     # Expand the mask dimensions to match the expected input shape
     fill_matrix = np.expand_dims(fill_matrix, axis=(0, 1))  # Add two new axes
-    fill_matrix = np.broadcast_to(
-        fill_matrix, (batch_size, 1, seq_len, seq_len)
-    )
+    fill_matrix = np.broadcast_to(fill_matrix, (batch_size, 1, seq_len, seq_len))
     return fill_matrix
 
 

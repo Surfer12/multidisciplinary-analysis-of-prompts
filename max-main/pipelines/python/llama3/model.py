@@ -146,9 +146,7 @@ class Llama3Model(PipelineModel):
                 next_tokens, prev_model_inputs
             )
         else:
-            return self._prepare_naive_next_token_inputs(
-                next_tokens, prev_model_inputs
-            )
+            return self._prepare_naive_next_token_inputs(next_tokens, prev_model_inputs)
 
     def _get_kv_params(self) -> KVCacheParams:
         cache_dtype = (
@@ -191,9 +189,7 @@ class Llama3Model(PipelineModel):
         # Pre-allocate a buffer for input_row_offsets in multistep execution.
         # We do this to avoid materializing and copying a buffer with each multistep step
         self._input_row_offsets_prealloc = Tensor.from_numpy(
-            np.arange(
-                self.pipeline_config.max_cache_batch_size + 1, dtype=np.uint32
-            )
+            np.arange(self.pipeline_config.max_cache_batch_size + 1, dtype=np.uint32)
         ).to(self.pipeline_config.device)
 
         # Read in weights.
@@ -207,9 +203,7 @@ class Llama3Model(PipelineModel):
 
             logging.info("Loading serialized model from %s", serialized_path)
 
-            return session.load(
-                serialized_path, weights_registry=weights_registry
-            )
+            return session.load(serialized_path, weights_registry=weights_registry)
 
         else:
             logging.info("Building model...")
@@ -218,10 +212,7 @@ class Llama3Model(PipelineModel):
             model = session.load(
                 graph, weights_registry=self._weights.allocated_weights
             )
-            if (
-                export_path
-                := self.pipeline_config.save_to_serialized_model_path
-            ):
+            if export_path := self.pipeline_config.save_to_serialized_model_path:
                 logging.info("Exporting serialized model to %s", export_path)
                 model._export_mef(export_path)
             return model
@@ -246,9 +237,7 @@ class Llama3Model(PipelineModel):
                 self._get_kv_params(),
             )
             tokens, input_row_offsets, *kv_cache = graph.inputs
-            outputs = model(
-                tokens, kv_cache, input_row_offsets=input_row_offsets
-            )
+            outputs = model(tokens, kv_cache, input_row_offsets=input_row_offsets)
             graph.output(*outputs)
             return graph
 
@@ -277,9 +266,7 @@ class Llama3Model(PipelineModel):
                 weights,
                 self._get_kv_params(),
             )
-            tokens, attention_mask, k_cache, v_cache, start_pos, _ = (
-                graph.inputs
-            )
+            tokens, attention_mask, k_cache, v_cache, start_pos, _ = graph.inputs
             mask_dtype = (
                 self.pipeline_config.dtype
                 if self.pipeline_config.quantization_encoding
@@ -348,9 +335,7 @@ class Llama3Model(PipelineModel):
                         )
                     )
                 else:
-                    batch_logits = next_token_logits[
-                        batch_index : batch_index + 1
-                    ]
+                    batch_logits = next_token_logits[batch_index : batch_index + 1]
                     samples = sampled_tokens[batch_index : batch_index + 1]
                 return batch_logits, samples
 
@@ -375,9 +360,7 @@ class Llama3Model(PipelineModel):
                         )
                     )
                 else:
-                    batch_logits = next_token_logits[
-                        batch_index : batch_index + 1, :
-                    ]
+                    batch_logits = next_token_logits[batch_index : batch_index + 1, :]
                     samples = sampled_tokens[batch_index : batch_index + 1]
                 return batch_logits, samples
 

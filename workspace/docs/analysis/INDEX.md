@@ -69,7 +69,7 @@ Higher-level analysis and theoretical foundations.
 ```mojo
 struct TagEvolutionAnalyzer:
     var tag_patterns: Dictionary[String, List[String]]
-    
+
     fn __init__(inout self):
         self.tag_patterns = {
             "traditional": ["<thinking>analysis</thinking>"],
@@ -81,7 +81,7 @@ struct TagEvolutionAnalyzer:
                 "</meta_cognitive>"
             ]
         }
-    
+
     fn analyze_evolution(self, tag_pattern: String) -> Dictionary[String, String]:
         """
         Analyze the evolution stage of a tag pattern
@@ -93,7 +93,7 @@ struct TagEvolutionAnalyzer:
                     "complexity": self.calculate_complexity(stage)
                 }
         return {"stage": "unknown", "complexity": "undefined"}
-    
+
     fn calculate_complexity(self, stage: String) -> String:
         """
         Calculate the complexity of a tag stage
@@ -158,4 +158,4 @@ struct TagEvolutionAnalyzer:
 4. Cross-Cultural Integration
 5. Meta-Cognitive Enhancement
 
-Remember: This project represents an ongoing exploration of AI cognitive processes, with particular emphasis on emergent behaviors and cross-cultural integration. 
+Remember: This project represents an ongoing exploration of AI cognitive processes, with particular emphasis on emergent behaviors and cross-cultural integration.

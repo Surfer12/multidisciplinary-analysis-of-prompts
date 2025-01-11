@@ -43,7 +43,7 @@ add_positives[-2, 4]()
     Expression [2]:6:24:               constraint failed: param assertion failed
         assert_param[x > 0]()
                            ^
-    
+
     expression failed to parse (no further compiler diagnostics)
 
 You can also add a message to change the compiler error output:
@@ -62,7 +62,7 @@ print(res)
     Expression [5]:6:73:               constraint failed: x is not positve, use a positve number over 0
         assert_param[x > 0, "x is not positve, use a positve number over 0"]()
                                                                             ^
-    
+
     expression failed to parse (no further compiler diagnostics)
 
 ## debug_assert

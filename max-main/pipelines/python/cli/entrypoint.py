@@ -22,8 +22,7 @@ class ModelGroup(click.Group):
             return rv
         supported = ", ".join(self.list_commands(ctx))
         ctx.fail(
-            f"Command not supported: {cmd_name}\nSupported commands:"
-            f" {supported}"
+            f"Command not supported: {cmd_name}\nSupported commands:" f" {supported}"
         )
 
 

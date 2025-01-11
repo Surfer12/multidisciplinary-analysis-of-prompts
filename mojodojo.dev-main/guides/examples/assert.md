@@ -6,7 +6,7 @@ fn asrt(cond: Bool, msg: StringLiteral):
             return
         print("Assert Error:", msg)
         llvm_intrinsic["llvm.trap", NoneType]()
- 
+
 
 asrt(5 == 10, "5 does not equal 10")
 ```
@@ -30,4 +30,3 @@ print(x)
 ```
 
     billy@gmail.com
-

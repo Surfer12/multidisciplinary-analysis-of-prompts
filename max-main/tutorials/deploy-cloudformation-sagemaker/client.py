@@ -17,10 +17,11 @@ import os
 os.environ["TRANSFORMERS_VERBOSITY"] = "critical"
 
 import json
+
 import boto3
+import numpy as np
 import transformers
 from botocore.config import Config
-import numpy as np
 
 config = Config(region_name="us-east-1")
 client = boto3.client("sagemaker-runtime", config=config)
@@ -31,9 +32,7 @@ endpoint_name = "YOUR-ENDPOINT-GOES-HERE"
 text = "The quick brown fox jumped over the lazy dog."
 
 tokenizer = transformers.BertTokenizer.from_pretrained("bert-base-uncased")
-inputs = tokenizer(
-    text, padding="max_length", max_length=128, return_tensors="pt"
-)
+inputs = tokenizer(text, padding="max_length", max_length=128, return_tensors="pt")
 
 # Convert tensor inputs to list for payload
 input_ids = inputs["input_ids"].tolist()[0]
@@ -84,9 +83,7 @@ for output in outputs:
 
     print(f"Logits shape: {logits.shape}")
 
-    if (
-        len(logits.shape) == 3
-    ):  # Shape [batch_size, sequence_length, num_classes]
+    if len(logits.shape) == 3:  # Shape [batch_size, sequence_length, num_classes]
         token_probabilities = softmax(logits)
         predicted_classes = np.argmax(token_probabilities, axis=-1)
 
@@ -109,7 +106,5 @@ for output in outputs:
         print("-" * 45)
         for input_token, predicted_token in token_pairs:
             if input_token != "[PAD]":  # Exclude padding tokens
-                print(
-                    "| {:<20} | {:<18} |".format(input_token, predicted_token)
-                )
+                print("| {:<20} | {:<18} |".format(input_token, predicted_token))
         print("-" * 45)

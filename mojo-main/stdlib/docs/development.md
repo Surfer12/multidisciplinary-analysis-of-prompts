@@ -95,7 +95,7 @@ If you wish to run the unit tests that are in a specific test file, you can do
 so with
 
 ```bash
-./stdlib/scripts/run-tests.sh ./stdlib/test/utils/test_span.mojo 
+./stdlib/scripts/run-tests.sh ./stdlib/test/utils/test_span.mojo
 ```
 
 You can do the same for a directory with

@@ -18,7 +18,6 @@ os.environ["TRANSFORMERS_VERBOSITY"] = "critical"
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 import numpy as np
-
 import tritonclient.http as httpclient
 from transformers import AutoTokenizer
 
@@ -41,12 +40,8 @@ inputs = tokenizer(
 # Set the input data
 triton_inputs = [
     httpclient.InferInput("input_ids", inputs["input_ids"].shape, "INT32"),
-    httpclient.InferInput(
-        "attention_mask", inputs["attention_mask"].shape, "INT32"
-    ),
-    httpclient.InferInput(
-        "token_type_ids", inputs["token_type_ids"].shape, "INT32"
-    ),
+    httpclient.InferInput("attention_mask", inputs["attention_mask"].shape, "INT32"),
+    httpclient.InferInput("token_type_ids", inputs["token_type_ids"].shape, "INT32"),
 ]
 triton_inputs[0].set_data_from_numpy(inputs["input_ids"].astype(np.int32))
 triton_inputs[1].set_data_from_numpy(inputs["attention_mask"].astype(np.int32))

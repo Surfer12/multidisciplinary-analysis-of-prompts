@@ -1,7 +1,9 @@
 from typing import Dict, List, Type
+
 from .base import BaseCognitiveTool, CognitiveToolResult
-from .mojo_tools import MojoStructureTool
 from .meta_analysis import MetaAnalysisTool
+from .mojo_tools import MojoStructureTool
+
 
 class CognitiveToolCollection:
     """Collection of tools for the cognitive framework."""
@@ -30,31 +32,21 @@ class CognitiveToolCollection:
             {
                 "name": tool.name,
                 "description": tool.description,
-                "version": tool.version
+                "version": tool.version,
             }
             for tool in self.tools.values()
         ]
 
     def to_anthropic_params(self) -> List[Dict]:
         """Convert all tools to Anthropic tool parameters."""
-        return [
-            tool.to_anthropic_param()
-            for tool in self.tools.values()
-        ]
+        return [tool.to_anthropic_param() for tool in self.tools.values()]
 
-    def execute_tool(
-        self,
-        tool_name: str,
-        **kwargs
-    ) -> CognitiveToolResult:
+    def execute_tool(self, tool_name: str, **kwargs) -> CognitiveToolResult:
         """Execute a tool by name with the given arguments."""
         tool = self.get_tool(tool_name)
 
         # Record tool execution in history
-        execution_record = {
-            "tool": tool_name,
-            "arguments": kwargs
-        }
+        execution_record = {"tool": tool_name, "arguments": kwargs}
 
         try:
             result = tool(**kwargs)
@@ -80,19 +72,13 @@ class CognitiveToolCollection:
 
     @classmethod
     def create_default_collection(
-        cls,
-        mojo_type_registry: Dict,
-        analysis_config: Dict
+        cls, mojo_type_registry: Dict, analysis_config: Dict
     ) -> "CognitiveToolCollection":
         """Create a default tool collection with standard tools."""
         collection = cls()
 
         # Register standard tools
-        collection.register_tool(
-            MojoStructureTool(type_registry=mojo_type_registry)
-        )
-        collection.register_tool(
-            MetaAnalysisTool(analysis_config=analysis_config)
-        )
+        collection.register_tool(MojoStructureTool(type_registry=mojo_type_registry))
+        collection.register_tool(MetaAnalysisTool(analysis_config=analysis_config))
 
         return collection

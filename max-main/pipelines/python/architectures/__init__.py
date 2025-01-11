@@ -16,13 +16,12 @@ from max.pipelines import PIPELINE_REGISTRY
 
 def register_all_models():
     """Imports model architectures, thus registering the architecture in the shared PIPELINE_REGISTRY."""
+    import coder as coder
     import llama3 as llama3
     import llama_vision as llama_vision
     import pixtral as pixtral
     import replit as replit
     from mistral import mistral_arch
-
-    import coder as coder
 
     PIPELINE_REGISTRY.register(mistral_arch)
 

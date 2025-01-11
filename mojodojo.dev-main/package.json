@@ -12,7 +12,7 @@
         "@vuepress/plugin-shiki": "next",
         "@vuepress/theme-default": "next",
         "@vuepress/bundler-vite": "next",
-        "@vuepress/plugin-feed": "next", 
+        "@vuepress/plugin-feed": "next",
         "@vuepress/plugin-comment": "next",
         "vuepress": "next"
     },

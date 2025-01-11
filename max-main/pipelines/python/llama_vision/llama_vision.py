@@ -201,9 +201,7 @@ class LlamaVision(PipelineModel):
             shape=[batch_size, 1, max_num_tiles, height, width, num_channels],
             dtype=self.pipeline_config.dtype,
         )
-        aspect_ratio_ids = Tensor.zeros(
-            shape=[batch_size, 1], dtype=DType.int64
-        )
+        aspect_ratio_ids = Tensor.zeros(shape=[batch_size, 1], dtype=DType.int64)
         aspect_ratio_mask = Tensor.zeros(
             shape=[batch_size, 1, max_num_tiles], dtype=DType.int64
         )
@@ -220,9 +218,7 @@ class LlamaVision(PipelineModel):
         # Input Ids: ["total_seq_len"], Int64
         # Create a ragged token vector of length: sum(len(t) for t in tokens).
         tokens = np.concatenate([ctx.next_tokens for ctx in context_batch])
-        input_id_values = Tensor.from_numpy(tokens).to(
-            self.pipeline_config.device
-        )
+        input_id_values = Tensor.from_numpy(tokens).to(self.pipeline_config.device)
 
         return (
             pixel_values,
@@ -241,9 +237,7 @@ class LlamaVision(PipelineModel):
         raise NotImplementedError("not yet implemented.")
 
     def execute(self, *model_inputs: Tensor) -> ModelOutputs:
-        model_outputs = self.model.execute(
-            *model_inputs, copy_inputs_to_device=False
-        )
+        model_outputs = self.model.execute(*model_inputs, copy_inputs_to_device=False)
         assert not self.pipeline_config.enable_echo
         assert isinstance(model_outputs[0], Tensor)
         return ModelOutputs(next_token_logits=model_outputs[0])
@@ -253,8 +247,7 @@ class LlamaVision(PipelineModel):
             dtype=self.pipeline_config.dtype,
             n_kv_heads=self.text_config.num_key_value_heads,
             head_dim=(
-                self.text_config.hidden_size
-                // self.text_config.num_attention_heads
+                self.text_config.hidden_size // self.text_config.num_attention_heads
             ),
             cache_strategy=self.pipeline_config.cache_strategy,
         )

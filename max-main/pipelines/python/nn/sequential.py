@@ -15,7 +15,9 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
+
 from max.graph import TensorValue
+
 from .layer import Layer
 
 
@@ -25,9 +27,7 @@ class Sequential(Layer):
 
     def __post_init__(self):
         if len(self.layers) == 0:
-            raise ValueError(
-                "more than one layer must be provided to sequential."
-            )
+            raise ValueError("more than one layer must be provided to sequential.")
 
     def __call__(self, *args, **kwargs) -> TensorValue:
         x = self.layers[0](*args, **kwargs)

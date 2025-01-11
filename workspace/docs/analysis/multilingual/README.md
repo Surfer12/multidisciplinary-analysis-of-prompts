@@ -106,4 +106,4 @@ The evolution from:
 - Knowledge representation
 - Thought process mapping
 
-Remember: This directory focuses on the intersection of technical implementation and cultural understanding in multilingual cognitive frameworks, with particular emphasis on the emergence and evolution of cross-script patterns. 
+Remember: This directory focuses on the intersection of technical implementation and cultural understanding in multilingual cognitive frameworks, with particular emphasis on the emergence and evolution of cross-script patterns.

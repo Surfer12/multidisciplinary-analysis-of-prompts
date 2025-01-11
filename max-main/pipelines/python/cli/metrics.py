@@ -83,13 +83,10 @@ class TextGenerationMetrics:
         first_token = self._signposts.get("first_token")
         if first_token and begin_generation:
             self.time_to_first_token = (
-                self._signposts["first_token"]
-                - self._signposts["begin_generation"]
+                self._signposts["first_token"] - self._signposts["begin_generation"]
             ) * 1000.0
             self.prompt_eval_throughput = (
-                self.prompt_size
-                * self.batch_size
-                / (self.time_to_first_token / 1000.0)
+                self.prompt_size * self.batch_size / (self.time_to_first_token / 1000.0)
             )
         else:
             self.time_to_first_token = "n/a"
@@ -99,8 +96,7 @@ class TextGenerationMetrics:
         end_generation = self._signposts.get("end_generation")
         if end_generation and first_token and self.output_size > 1:
             generation_time = (
-                self._signposts["end_generation"]
-                - self._signposts["first_token"]
+                self._signposts["end_generation"] - self._signposts["first_token"]
             )
             self.eval_throughput = (
                 (self.output_size - 1) * self.batch_size / generation_time
@@ -114,8 +110,7 @@ class TextGenerationMetrics:
 
         if end_generation and begin_generation:
             total_batch_time = (
-                self._signposts["end_generation"]
-                - self._signposts["begin_generation"]
+                self._signposts["end_generation"] - self._signposts["begin_generation"]
             )
             self.requests_per_second: Any = self.batch_size / total_batch_time
             self.total_exe_time: Any = total_batch_time * 1000
@@ -146,6 +141,5 @@ class TextGenerationMetrics:
             print("=============raw stats=================")
             for k, v in self._signposts.items():
                 print(
-                    f"Started {k} at {v} with memory"
-                    f" {self._mem_usage_marker[k]} GB"
+                    f"Started {k} at {v} with memory" f" {self._mem_usage_marker[k]} GB"
                 )

@@ -120,7 +120,7 @@ fn analyze_thought(thought: Thought) -> Understanding:
     var sub_thoughts: List[Thought] = decompose(thought)
     return analyze_thought(sub_thoughts) + synthesize(sub_thoughts)
 ```
-    
+
 2. Meta-Recursive Calls
 ```mojo
 fn meta_analyze(analysis_process: AnalysisProcess) -> ProcessUnderstanding:

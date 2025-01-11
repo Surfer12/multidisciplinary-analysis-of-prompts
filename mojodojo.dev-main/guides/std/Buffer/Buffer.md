@@ -59,7 +59,7 @@ var y = x
 y.dynamic_size = 4
 
 for i in range(y.dynamic_size):
-    y[i] *= 10 
+    y[i] *= 10
 ```
 
 Now print the values from the original buffer `x`, to show they point to the same data:

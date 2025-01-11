@@ -28,7 +28,7 @@ config.suffixes = [".mojo", ".🔥"]
 config.excludes = [
     # No RUN: directive, just bare examples
     "hello_interop.mojo",
-    "matmul.mojo"
+    "matmul.mojo",
 ]
 
 # Have the examples run in the build directory.

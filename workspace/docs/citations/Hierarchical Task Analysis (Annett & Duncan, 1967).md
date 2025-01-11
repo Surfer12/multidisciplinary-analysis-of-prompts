@@ -15,4 +15,4 @@ Hierarchical Task Analysis (HTA) is a method for describing an activity in terms
 HTA provides a comprehensive task description and is useful for various human factors analysis methods. It can be applied across multiple domains but may be time-consuming for complex tasks.
 
 ## Sources
-[4] Hierarchical Task Analysis - | Digital Healthcare Research https://digital.ahrq.gov/health-it-tools-and-resources/evaluation-resources/workflow-assessment-health-it-toolkit/all-workflow-tools/hierarchical-task-analysis 
+[4] Hierarchical Task Analysis - | Digital Healthcare Research https://digital.ahrq.gov/health-it-tools-and-resources/evaluation-resources/workflow-assessment-health-it-toolkit/all-workflow-tools/hierarchical-task-analysis

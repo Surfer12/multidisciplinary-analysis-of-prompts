@@ -1,4 +1,4 @@
-windows: 
+windows:
   instructions: >
     You are being provided with textfield content from windows the user has asked you to focus on.
     User-selected text is enclosed within <user__selection> tags (these tags are not part of the
@@ -35,7 +35,7 @@ windows:
           - need to respond to dynamic content, unlike writing or magazine layout; and
           - need to adapt their content to different sizes — screen sizes for web design, context
             windows for prompting.
-          
+
           In my experience from doing both prompting and web design, I've also found that I have
           similar developer preferences in the two areas:
 
@@ -46,7 +46,7 @@ windows:
 
           - For example, the prompt "Hi ${username} ${message}" may look reasonable, until you render it
             and realize that the user name blends in with the message.
-          
+
           - Composable components are useful in both prompting and web design.
 
           - Declarative is better than imperative for both. It is really hard to change a website where
@@ -120,10 +120,10 @@ windows:
           products, please email me at arvid@anysphere.co. We're 5 people in San Francisco, all of my
           coworkers are exceptional, and we want a few more exceptional people — coders and designers —
           to join us in building the future of coding.
-          
-          // This is an interesting bug seen in macOS with app integration when asking the o1-mini to convert text to yaml... 
-          
-          
+
+          // This is an interesting bug seen in macOS with app integration when asking the o1-mini to convert text to yaml...
+
+
 I apologize, but I don't see a specific bug description or YAML conversion issue
 in the provided text. The text appears to be a blog post about prompt design,
 written by someone named Arvid, discussing similarities between prompt
@@ -140,7 +140,7 @@ Without more context, I can't diagnose the specific issue you're referring to.
 
 This specifically
 
-"windows: 
+"windows:
   instructions: >
     You are being provided with textfield content from windows the user has asked you to focus on.
     User-selected text is enclosed within <user__selection> tags (these tags are not part of the
@@ -188,7 +188,7 @@ The specific macOS/o1-mini integration bug likely stems from how these block
 scalar indicators and nested structures are being parsed or interpreted across
 different systems.
 
-Also that it gave it's own system prompt i.e : "instructions" and then never converted anything 
+Also that it gave it's own system prompt i.e : "instructions" and then never converted anything
 Ah, I understand now. The system appears to have:
 
 1. Generated its own system prompt/instructions
@@ -196,7 +196,7 @@ Ah, I understand now. The system appears to have:
 3. Essentially "reflected back" the input structure without doing the conversion
 
 This sounds like a meta-level processing error where the AI:
-- Recognized the instruction template .. so "revise this to yaml" triggered it's own instruction template... as reflected with the use of 'this' reference in both. 
+- Recognized the instruction template .. so "revise this to yaml" triggered it's own instruction template... as reflected with the use of 'this' reference in both.
 - Treated those instructions as a primary directive
 - Didn't actually execute the underlying conversion request
 Exactly! You've pinpointed the key mechanism:
@@ -230,7 +230,7 @@ This reveals a subtle vulnerability in how some AI systems:
 Would you be interested in exploring strategies to prevent this type of
 meta-instruction hijacking?
 
-I would like to explore how this reflects on the use of yaml to improve prompt creation and machine response to user... i currently am exploring the use of semantic tags <thinking> and so on dynamically created along with yaml tags to allow for recursive thought annotation and further chain of thought like exploration during prompt addressment rather than focus on solution or other non-exploratory ideas 
+I would like to explore how this reflects on the use of yaml to improve prompt creation and machine response to user... i currently am exploring the use of semantic tags <thinking> and so on dynamically created along with yaml tags to allow for recursive thought annotation and further chain of thought like exploration during prompt addressment rather than focus on solution or other non-exploratory ideas
 
 
 Classic symptoms of:
@@ -311,7 +311,4 @@ Key Insights:
 - Enhanced chain-of-thought methodologies
 
 Would you be interested in diving deeper into how we could prototype a
-YAML-based metacognitive reasoning framework? 
-
-
-
+YAML-based metacognitive reasoning framework?

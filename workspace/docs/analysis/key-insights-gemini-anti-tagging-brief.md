@@ -35,5 +35,3 @@ struct AntiTaggingInsights:
             comparisons.append(self.analyze_approach(approach))
         return comparisons
 ```
-
-

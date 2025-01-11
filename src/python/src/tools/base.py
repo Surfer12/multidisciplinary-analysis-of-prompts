@@ -1,13 +1,16 @@
 from abc import ABCMeta, abstractmethod
 from dataclasses import dataclass
-from typing import Any, Literal, TypeVar, Generic
+from typing import Any, Generic, Literal, TypeVar
+
 from anthropic.types.beta import BetaToolUnionParam
 
 T = TypeVar('T')
 
+
 @dataclass
 class CognitiveToolResult(Generic[T]):
     """Result from a cognitive framework tool execution."""
+
     success: bool
     data: T | None = None
     error: str | None = None
@@ -15,6 +18,7 @@ class CognitiveToolResult(Generic[T]):
 
     def __bool__(self) -> bool:
         return self.success
+
 
 class BaseCognitiveTool(metaclass=ABCMeta):
     """Base class for cognitive framework tools."""
@@ -38,6 +42,7 @@ class BaseCognitiveTool(metaclass=ABCMeta):
         """Validate the arguments for this tool."""
         ...
 
+
 class CognitiveProcessorTool(BaseCognitiveTool):
     """Tool for interacting with the cognitive processor."""
 
@@ -47,13 +52,16 @@ class CognitiveProcessorTool(BaseCognitiveTool):
     def __init__(self, processor_config: dict):
         self.config = processor_config
 
-    def __call__(self, *, input_data: Any, operation: str, **kwargs) -> CognitiveToolResult:
+    def __call__(
+        self, *, input_data: Any, operation: str, **kwargs
+    ) -> CognitiveToolResult:
         try:
             # Validate arguments
-            if not self.validate_args(input_data=input_data, operation=operation, **kwargs):
+            if not self.validate_args(
+                input_data=input_data, operation=operation, **kwargs
+            ):
                 return CognitiveToolResult(
-                    success=False,
-                    error="Invalid arguments provided"
+                    success=False, error="Invalid arguments provided"
                 )
 
             # Process the operation
@@ -62,16 +70,10 @@ class CognitiveProcessorTool(BaseCognitiveTool):
             return CognitiveToolResult(
                 success=True,
                 data=result,
-                metadata={
-                    "operation": operation,
-                    "config": self.config
-                }
+                metadata={"operation": operation, "config": self.config},
             )
         except Exception as e:
-            return CognitiveToolResult(
-                success=False,
-                error=str(e)
-            )
+            return CognitiveToolResult(success=False, error=str(e))
 
     def to_anthropic_param(self) -> BetaToolUnionParam:
         return {
@@ -84,17 +86,17 @@ class CognitiveProcessorTool(BaseCognitiveTool):
                     "properties": {
                         "input_data": {
                             "type": "object",
-                            "description": "The input data to process"
+                            "description": "The input data to process",
                         },
                         "operation": {
                             "type": "string",
                             "description": "The operation to perform",
-                            "enum": ["analyze", "process", "transform"]
-                        }
+                            "enum": ["analyze", "process", "transform"],
+                        },
                     },
-                    "required": ["input_data", "operation"]
-                }
-            }
+                    "required": ["input_data", "operation"],
+                },
+            },
         }
 
     def validate_args(self, **kwargs) -> bool:
@@ -113,7 +115,7 @@ class CognitiveProcessorTool(BaseCognitiveTool):
         operations = {
             "analyze": self._analyze,
             "process": self._process,
-            "transform": self._transform
+            "transform": self._transform,
         }
 
         return operations[operation](input_data, **kwargs)

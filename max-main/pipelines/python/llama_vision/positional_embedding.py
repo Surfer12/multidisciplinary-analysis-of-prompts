@@ -122,9 +122,7 @@ class PrecomputedPositionEmbedding(Layer):
                 self.hidden_size,
             )
         )
-        gated_tile_position_embedding = (
-            ops.tanh(self.gate) * tile_position_embedding
-        )
+        gated_tile_position_embedding = ops.tanh(self.gate) * tile_position_embedding
         # This explicit reshape is called only to match num_tiles dim in
         # tile_position_embedding.
         hidden_state = hidden_state.reshape(tile_position_embedding.shape)

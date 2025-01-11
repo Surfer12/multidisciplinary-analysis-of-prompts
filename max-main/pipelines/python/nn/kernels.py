@@ -17,10 +17,7 @@ from __future__ import annotations
 import numpy as np
 from max.dtype import DType
 from max.graph import TensorType, TensorValue, TensorValueLike, ops
-from max.pipelines.kv_cache import (
-    ContinuousBatchingKVCacheCollection,
-    KVCacheParams,
-)
+from max.pipelines.kv_cache import ContinuousBatchingKVCacheCollection, KVCacheParams
 
 
 def fused_qkv_ragged_matmul(
@@ -102,9 +99,7 @@ def fused_qkv_matmul(
 
     wqkv_rank_expected = 2
     if wqkv.rank != wqkv_rank_expected:
-        msg = (
-            f"expected wqkv to have rank {wqkv_rank_expected}, was {wqkv.rank}"
-        )
+        msg = f"expected wqkv to have rank {wqkv_rank_expected}, was {wqkv.rank}"
         raise ValueError(msg)
 
     if layer_idx.dtype != DType.uint32:
@@ -219,9 +214,7 @@ def fused_qk_ragged_rope(
             ops.constant(interleaved, DType.bool),
         ],
         out_types=[
-            TensorType(
-                dtype=input.dtype, shape=input.shape, device=input.device
-            )
+            TensorType(dtype=input.dtype, shape=input.shape, device=input.device)
         ],
     )[0].tensor
 
@@ -237,9 +230,7 @@ def fused_qk_rope(
     """Computes fused query-key attention with rotary positional encodings."""
     input_rank_expected = 4
     if input.rank != input_rank_expected:
-        msg = (
-            f"expected input of rank {input_rank_expected} but got {input.rank}"
-        )
+        msg = f"expected input of rank {input_rank_expected} but got {input.rank}"
         raise ValueError(msg)
 
     freqs_cis_rank_expected = 2
@@ -266,9 +257,7 @@ def fused_qk_rope(
             ops.constant(interleaved, DType.bool),
         ],
         out_types=[
-            TensorType(
-                dtype=input.dtype, shape=input.shape, device=input.device
-            )
+            TensorType(dtype=input.dtype, shape=input.shape, device=input.device)
         ],
     )[0].tensor
 
@@ -284,9 +273,7 @@ def flash_attention(
     """Computes flash attention provided the mo.opaque KV Cache."""
     input_rank_expected = 4
     if input.rank != input_rank_expected:
-        msg = (
-            f"expected input of rank {input_rank_expected} but got {input.rank}"
-        )
+        msg = f"expected input of rank {input_rank_expected} but got {input.rank}"
         raise ValueError(msg)
 
     if layer_idx.dtype != DType.uint32:
@@ -320,9 +307,7 @@ def flash_attention(
             scale,
         ],
         out_types=[
-            TensorType(
-                dtype=input.dtype, shape=input.shape, device=input.device
-            )
+            TensorType(dtype=input.dtype, shape=input.shape, device=input.device)
         ],
     )[0].tensor
 
@@ -346,9 +331,7 @@ def flash_attention_with_causal_mask(
         raise ValueError(msg)
 
     if input.dtype != kv_params.dtype:
-        msg = (
-            f"expected input to be dtype: {kv_params.dtype}, got {input.dtype}"
-        )
+        msg = f"expected input to be dtype: {kv_params.dtype}, got {input.dtype}"
         raise ValueError(msg)
 
     if layer_idx.dtype != DType.uint32:
@@ -367,9 +350,7 @@ def flash_attention_with_causal_mask(
         op_name,
         values=[input, kv_collection, layer_idx, valid_lengths, scale],
         out_types=[
-            TensorType(
-                dtype=input.dtype, shape=input.shape, device=input.device
-            )
+            TensorType(dtype=input.dtype, shape=input.shape, device=input.device)
         ],
     )[0].tensor
 
@@ -390,15 +371,11 @@ def flash_attention_ragged_with_causal_mask(
 
     input_rank_expected = 3
     if input.rank != input_rank_expected:
-        msg = (
-            f"expected input of rank {input_rank_expected} but got {input.rank}"
-        )
+        msg = f"expected input of rank {input_rank_expected} but got {input.rank}"
         raise ValueError(msg)
 
     if input.dtype != kv_params.dtype:
-        msg = (
-            f"expected input to be dtype: {kv_params.dtype}, got {input.dtype}"
-        )
+        msg = f"expected input to be dtype: {kv_params.dtype}, got {input.dtype}"
         raise ValueError(msg)
 
     if layer_idx.dtype != DType.uint32:
@@ -417,9 +394,7 @@ def flash_attention_ragged_with_causal_mask(
         op_name,
         values=[input, input_row_offsets, kv_collection, layer_idx, scale],  # type: ignore
         out_types=[
-            TensorType(
-                dtype=input.dtype, shape=input.shape, device=input.device
-            )
+            TensorType(dtype=input.dtype, shape=input.shape, device=input.device)
         ],
     )[0]
 

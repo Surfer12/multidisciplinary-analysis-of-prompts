@@ -1,8 +1,10 @@
 """Test module for validating computer interaction capabilities."""
 
 import os
-import pytest
 from pathlib import Path
+
+import pytest
+
 
 def test_file_creation(temp_workspace):
     """Test creating a file and verifying its contents."""
@@ -15,6 +17,7 @@ def test_file_creation(temp_workspace):
     # Verify file exists and contains correct content
     assert test_file.exists()
     assert test_file.read_text() == test_content
+
 
 def test_directory_operations(temp_workspace):
     """Test directory creation and navigation."""
@@ -31,6 +34,7 @@ def test_directory_operations(temp_workspace):
     assert test_dir.is_dir()
     assert test_file.exists()
     assert test_file.read_text() == "Nested content"
+
 
 def test_file_manipulation(temp_workspace):
     """Test file manipulation operations."""
@@ -50,11 +54,15 @@ def test_file_manipulation(temp_workspace):
     assert target_file.read_text() == "Original content"
     assert source_file.read_text() == "Modified content"
 
-@pytest.mark.parametrize("file_name,content", [
-    ("test1.txt", "Content 1"),
-    ("test2.txt", "Content 2"),
-    ("test3.txt", "Content 3"),
-])
+
+@pytest.mark.parametrize(
+    "file_name,content",
+    [
+        ("test1.txt", "Content 1"),
+        ("test2.txt", "Content 2"),
+        ("test3.txt", "Content 3"),
+    ],
+)
 def test_multiple_files(temp_workspace, file_name, content):
     """Test handling multiple files with different contents."""
     test_file = temp_workspace / file_name
@@ -62,6 +70,7 @@ def test_multiple_files(temp_workspace, file_name, content):
 
     assert test_file.exists()
     assert test_file.read_text() == content
+
 
 def test_file_deletion(temp_workspace):
     """Test file deletion capabilities."""
@@ -72,6 +81,7 @@ def test_file_deletion(temp_workspace):
     assert test_file.exists()
     test_file.unlink()
     assert not test_file.exists()
+
 
 class TestFileSystem:
     """Test class for file system operations."""

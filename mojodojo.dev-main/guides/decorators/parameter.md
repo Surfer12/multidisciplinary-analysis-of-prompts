@@ -28,7 +28,7 @@ This will run at compile time, so that you pay no runtime price for anything ins
 
 
 ```mojo
-fn add_print[a: Int, b: Int](): 
+fn add_print[a: Int, b: Int]():
     @parameter
     fn add[a: Int, b: Int]() -> Int:
         return a + b
@@ -46,7 +46,7 @@ What this essentially translates to is:
 
 
 ```mojo
-fn add_print(): 
+fn add_print():
     let x = 15
     print(x)
 
@@ -56,6 +56,6 @@ add_print()
     15
 
 
-The `add` calculation ran at compile time, so those extra instructions don't happen at runtime 
+The `add` calculation ran at compile time, so those extra instructions don't happen at runtime
 
 <CommentService />

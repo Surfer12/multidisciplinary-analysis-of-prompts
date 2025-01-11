@@ -17,11 +17,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from max.graph import TensorValue, TensorValueLike, Weight, ops, Device
-
-from .layer import Layer
+from max.graph import Device, TensorValue, TensorValueLike, Weight, ops
 
 from .kernels import swish_glu
+from .layer import Layer
 
 
 @dataclass

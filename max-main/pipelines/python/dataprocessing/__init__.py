@@ -13,11 +13,7 @@
 
 from .causal_attention_mask import causal_attention_mask
 from .causal_attention_mask_with_alibi import causal_attention_mask_with_alibi
-from .collate_batch import (
-    PaddingDirection,
-    batch_padded_tokens_and_mask,
-    collate_batch,
-)
+from .collate_batch import PaddingDirection, batch_padded_tokens_and_mask, collate_batch
 from .max_tokens_to_generate import max_tokens_to_generate
 
 __all__ = [

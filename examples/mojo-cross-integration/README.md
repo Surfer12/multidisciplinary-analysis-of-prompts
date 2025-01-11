@@ -53,4 +53,4 @@ Ryan Oates - Project Lead
 
 ## Research Citations
 - Bloom, B. S. (1956). Taxonomy of Educational Objectives
-- Sweller, J. (1988). Cognitive Load Theory 
+- Sweller, J. (1988). Cognitive Load Theory

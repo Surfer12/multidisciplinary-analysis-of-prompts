@@ -44,9 +44,7 @@ def resize_and_pad(image, shape):
     min_ratio = min(target_h / h, target_w / w)
     unpadded_h = int(round(min_ratio * h))
     unpadded_w = int(round(min_ratio * w))
-    image = cv2.resize(
-        image, (unpadded_w, unpadded_h), interpolation=cv2.INTER_LINEAR
-    )
+    image = cv2.resize(image, (unpadded_w, unpadded_h), interpolation=cv2.INTER_LINEAR)
 
     # Pad to be the same size as `shape`.
     delta_h = (target_h - unpadded_h) / 2
@@ -122,9 +120,7 @@ def process_webcam(args):
     print("Loading and compiling model...")
     if args.onnx:
         engine_name = "ONNX Runtime"
-        yolo = onnxruntime.InferenceSession(
-            f"{args.model_dir}/yolov8n-seg.onnx"
-        )
+        yolo = onnxruntime.InferenceSession(f"{args.model_dir}/yolov8n-seg.onnx")
     else:
         engine_name = "MAX Engine"
         session = InferenceSession()
@@ -162,10 +158,7 @@ def process_webcam(args):
 
         # Preprocess inputs.
         input = (
-            frame[np.newaxis, :, :, ::-1]
-            .transpose(0, 3, 1, 2)
-            .astype(np.float32)
-            / 255
+            frame[np.newaxis, :, :, ::-1].transpose(0, 3, 1, 2).astype(np.float32) / 255
         ).copy()
 
         # Run prediction.
@@ -248,10 +241,7 @@ def process_video(args):
 
         # Preprocess inputs.
         input = (
-            frame[np.newaxis, :, :, ::-1]
-            .transpose(0, 3, 1, 2)
-            .astype(np.float32)
-            / 255
+            frame[np.newaxis, :, :, ::-1].transpose(0, 3, 1, 2).astype(np.float32) / 255
         ).copy()
 
         # Run prediction.
@@ -320,10 +310,7 @@ def main():
         "--onnx-runtime",
         action="store_true",
         default=False,
-        help=(
-            "Run video segmentation with the ONNX Runtime to compare"
-            " performance"
-        ),
+        help=("Run video segmentation with the ONNX Runtime to compare" " performance"),
     )
     video_parser = subparsers.add_parser("video", help="Segment a video file")
     video_parser.add_argument(

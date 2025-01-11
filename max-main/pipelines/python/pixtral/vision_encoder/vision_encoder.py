@@ -48,9 +48,7 @@ class VisionEncoder(Layer):
         """
         # Images go through a convolution independently to get patched.
         # Returns a list of [batch_size, hidden_size, height/patch_size, width/patch_size] tensors
-        patch_embeds_list = [
-            self.patch_conv(ops.unsqueeze(img, 0)) for img in imgs
-        ]
+        patch_embeds_list = [self.patch_conv(ops.unsqueeze(img, 0)) for img in imgs]
 
         # Flatten all images to a single tensor of patches of size (n_patches=seq_length, hidden_size).
         # 1. Flattens each image's patches to (batch_size, n_patches in image, hidden_size).
@@ -59,8 +57,7 @@ class VisionEncoder(Layer):
         # TODO(MSDK-1195): replace p.reshape((p.shape[0], p.shape[1], -1)) by p.flatten(2)
         patch_embeds = ops.concat(
             [  # p.shape = batch_size, patches_per_height, patches_per_width, hidden_size
-                p.reshape((p.shape[0], -1, p.shape[3]))
-                for p in patch_embeds_list
+                p.reshape((p.shape[0], -1, p.shape[3])) for p in patch_embeds_list
             ],
             axis=1,
         )
@@ -76,9 +73,7 @@ class VisionEncoder(Layer):
 
         # Positional Encodings
         # map each position id to its corresponding embedding representing that posiiton
-        position_embedding = self.patch_positional_embedding(
-            patch_embeds, position_ids
-        )
+        position_embedding = self.patch_positional_embedding(patch_embeds, position_ids)
 
         # p.shape = batch_size, patches_per_height, patches_per_width, hidden_size
         attention_mask = causal_attention_mask_2d(

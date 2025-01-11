@@ -48,9 +48,7 @@ def run_stable_diffusion(
         max_length=tokenizer.model_max_length,
     )
 
-    input_ids = np.stack((prompt_p.input_ids, prompt_n.input_ids)).astype(
-        np.int32
-    )
+    input_ids = np.stack((prompt_p.input_ids, prompt_n.input_ids)).astype(np.int32)
     encoder_hidden_states = txt_encoder.execute_legacy(input_ids=input_ids)[
         "last_hidden_state"
     ]
@@ -60,9 +58,7 @@ def run_stable_diffusion(
     print("Initializing latent...")
 
     # Note: For onnx, shapes are given in NCHW format.
-    latent = np.random.normal(
-        size=(1, LATENT_CHANNELS, LATENT_HEIGHT, LATENT_WIDTH)
-    )
+    latent = np.random.normal(size=(1, LATENT_CHANNELS, LATENT_HEIGHT, LATENT_WIDTH))
     latent = latent * scheduler.init_noise_sigma
     latent = latent.astype(np.float32)
 

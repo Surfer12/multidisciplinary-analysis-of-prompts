@@ -1,5 +1,5 @@
 ---
-title: Mojo First Impressions 
+title: Mojo First Impressions
 author: Mojo Dojo
 author_site: https://mojodojo.dev
 author_image: https://mojodojo.dev/hero.png
@@ -18,7 +18,7 @@ _I wrote this blog before I started working at Modular, these views are not repr
 
 ## My Journey
 
-I'm an engineer that has fallen into optimizing Machine Learning (ML) performance by converting Python to Rust, I really enjoy the work because it's so much more challenging than any other programming I've done, but the ML engineers struggle using Rust and so can no longer contribute to the code I was tasked with converting. In my spare time I've been working on a high level Rust ML inference library to try and ease this problem, but the unsafe code, type system complexity, and compiling the dependent C++ libraries for different hardware is a huge pain. 
+I'm an engineer that has fallen into optimizing Machine Learning (ML) performance by converting Python to Rust, I really enjoy the work because it's so much more challenging than any other programming I've done, but the ML engineers struggle using Rust and so can no longer contribute to the code I was tasked with converting. In my spare time I've been working on a high level Rust ML inference library to try and ease this problem, but the unsafe code, type system complexity, and compiling the dependent C++ libraries for different hardware is a huge pain.
 
 I first saw the Mojo launch announcement on hackernews which stated that `Chris Lattner` was involved, and so I started reading [Why Mojo](https://docs.modular.com/mojo/why-mojo.html) where they explicitly called out my exact problems, once I got to the end of the [programming manual](https://docs.modular.com/mojo/programming-manual.html) and watched [Jeremy Howard's launch demo](https://www.youtube.com/watch?v=6GvB5lZJqcE) I was completely sold and so bought the [mojodojo.dev](https://mojodojo.dev) domain.
 

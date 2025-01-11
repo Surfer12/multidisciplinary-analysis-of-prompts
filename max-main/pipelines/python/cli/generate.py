@@ -12,19 +12,18 @@
 # ===----------------------------------------------------------------------=== #
 """Utilities for generating text in the cli."""
 
-import uuid
 import asyncio
 import logging
+import uuid
 from typing import Optional
-from max.pipelines import (
-    PipelineConfig,
-    PIPELINE_REGISTRY,
-)
+
+from max.pipelines import PIPELINE_REGISTRY, PipelineConfig
 from max.pipelines.interfaces import (
-    TokenGeneratorRequest,
     PipelineTokenizer,
     TokenGenerator,
+    TokenGeneratorRequest,
 )
+
 from .metrics import TextGenerationMetrics
 
 logger = logging.getLogger(__name__)
@@ -47,9 +46,7 @@ async def stream_text_to_console(
 
     req_id = str(uuid.uuid4())
     context = await tokenizer.new_context(
-        TokenGeneratorRequest(
-            id=req_id, index=0, prompt=prompt, model_name=MODEL_NAME
-        )
+        TokenGeneratorRequest(id=req_id, index=0, prompt=prompt, model_name=MODEL_NAME)
     )
     decoded_responses[req_id] = [prompt]
     request_id_context[req_id] = context

@@ -31,9 +31,7 @@ mistral_arch = SupportedArchitecture(
             encodings={
                 SupportedEncoding.bfloat16: (
                     [
-                        HuggingFaceFile(
-                            "mistralai/Mistral-Nemo-Instruct-2407", f
-                        )
+                        HuggingFaceFile("mistralai/Mistral-Nemo-Instruct-2407", f)
                         for f in [
                             "model-00001-of-00005.safetensors",
                             "model-00002-of-00005.safetensors",

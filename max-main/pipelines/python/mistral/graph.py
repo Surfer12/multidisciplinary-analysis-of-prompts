@@ -67,9 +67,7 @@ def linear(
     out_features: int,
     weights: SafetensorWeights,
 ) -> Linear:
-    return Linear(
-        weights.weight.allocate(dtype, [in_features, out_features], None)
-    )
+    return Linear(weights.weight.allocate(dtype, [in_features, out_features], None))
 
 
 def rms_norm(dims: int, eps: float, weights: SafetensorWeights) -> RMSNorm:
@@ -233,9 +231,7 @@ def _build_graph(
     kv_manager: KVCacheManager,
 ) -> Graph:
     tokens_type = TensorType(DType.int64, shape=["total_seq_len"])
-    input_row_offsets_type = TensorType(
-        DType.uint32, shape=["input_row_offsets_len"]
-    )
+    input_row_offsets_type = TensorType(DType.uint32, shape=["input_row_offsets_len"])
 
     kv_cache_args = kv_manager.input_symbols()[0]
 

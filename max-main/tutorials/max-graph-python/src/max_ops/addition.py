@@ -22,9 +22,7 @@ from max.graph import Graph, TensorType, ops
 def add_tensors(a: np.ndarray, b: np.ndarray) -> dict[str, Any]:
     # 1. Build the graph
     input_type = TensorType(dtype=DType.float32, shape=(1,))
-    with Graph(
-        "simple_add_graph", input_types=(input_type, input_type)
-    ) as graph:
+    with Graph("simple_add_graph", input_types=(input_type, input_type)) as graph:
         lhs, rhs = graph.inputs
         out = ops.add(lhs, rhs)
         graph.output(out)
@@ -35,9 +33,7 @@ def add_tensors(a: np.ndarray, b: np.ndarray) -> dict[str, Any]:
     model = session.load(graph)
 
     for tensor in model.input_metadata:
-        print(
-            f"name: {tensor.name}, shape: {tensor.shape}, dtype: {tensor.dtype}"
-        )
+        print(f"name: {tensor.name}, shape: {tensor.shape}, dtype: {tensor.dtype}")
 
     # 3. Execute the graph
     ret = model.execute(a, b)[0]

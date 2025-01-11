@@ -67,9 +67,7 @@ class RequestFuncOutput:
     success: bool = False
     latency: float = 0.0
     ttft: float = 0.0  # Time to first token
-    itl: List[float] = field(
-        default_factory=list
-    )  # List of inter-token latencies
+    itl: List[float] = field(default_factory=list)  # List of inter-token latencies
     prompt_len: int = 0
     error: str = ""
 
@@ -104,9 +102,7 @@ async def async_request_trt_llm(
                         if not chunk_bytes:
                             continue
 
-                        chunk = remove_prefix(
-                            chunk_bytes.decode("utf-8"), "data:"
-                        )
+                        chunk = remove_prefix(chunk_bytes.decode("utf-8"), "data:")
 
                         data = json.loads(chunk)
                         output.generated_text += data["text_output"]
@@ -158,9 +154,7 @@ async def async_request_openai_completions(
             "ignore_eos": True,
         }
 
-        headers = {
-            "Authorization": f"Bearer {os.environ.get('OPENAI_API_KEY')}"
-        }
+        headers = {"Authorization": f"Bearer {os.environ.get('OPENAI_API_KEY')}"}
 
         output = RequestFuncOutput()
         output.prompt_len = request_func_input.prompt_len
@@ -179,9 +173,7 @@ async def async_request_openai_completions(
                         if not chunk_bytes:
                             continue
 
-                        chunk = remove_prefix(
-                            chunk_bytes.decode("utf-8"), "data: "
-                        )
+                        chunk = remove_prefix(chunk_bytes.decode("utf-8"), "data: ")
                         latency = time.perf_counter() - st
                         if chunk == "[DONE]":
                             pass
@@ -200,9 +192,7 @@ async def async_request_openai_completions(
 
                                 # Decoding phase
                                 else:
-                                    output.itl.append(
-                                        timestamp - most_recent_timestamp
-                                    )
+                                    output.itl.append(timestamp - most_recent_timestamp)
 
                                 most_recent_timestamp = timestamp
                                 generated_text += data["choices"][0]["text"]
@@ -266,9 +256,7 @@ async def async_request_openai_chat_completions(
                         if not chunk_bytes:
                             continue
 
-                        chunk = remove_prefix(
-                            chunk_bytes.decode("utf-8"), "data: "
-                        )
+                        chunk = remove_prefix(chunk_bytes.decode("utf-8"), "data: ")
                         latency = time.perf_counter() - st
                         if chunk == "[DONE]":
                             pass
@@ -285,9 +273,7 @@ async def async_request_openai_chat_completions(
 
                                 # Decoding phase
                                 else:
-                                    output.itl.append(
-                                        timestamp - most_recent_timestamp
-                                    )
+                                    output.itl.append(timestamp - most_recent_timestamp)
 
                                 generated_text += delta["content"]
 
@@ -427,9 +413,7 @@ def sample_sharegpt_requests(
         completion_token_ids = tokenizer(completion).input_ids
         prompt_len = len(prompt_token_ids)
         output_len = (
-            len(completion_token_ids)
-            if fixed_output_len is None
-            else fixed_output_len
+            len(completion_token_ids) if fixed_output_len is None else fixed_output_len
         )
         if prompt_len < 4 or output_len < 4:
             # Prune too short sequences.
@@ -460,9 +444,9 @@ def sample_sonnet_requests(
 
     # Tokenize the poem lines.
     poem_token_ids = tokenizer(poem_lines).input_ids
-    average_poem_len = sum(
-        len(token_ids) for token_ids in poem_token_ids
-    ) / len(poem_token_ids)
+    average_poem_len = sum(len(token_ids) for token_ids in poem_token_ids) / len(
+        poem_token_ids
+    )
 
     # Base prefix for all requests.
     base_prompt = "Pick as many lines as you can from these poem lines:\n"
@@ -488,17 +472,14 @@ def sample_sonnet_requests(
         prefix_len > base_prompt_offset
     ), f"Please set 'args.sonnet-prefix-len' higher than {base_prompt_offset}."
 
-    num_prefix_lines = round(
-        (prefix_len - base_prompt_offset) / average_poem_len
-    )
+    num_prefix_lines = round((prefix_len - base_prompt_offset) / average_poem_len)
     prefix_lines = poem_lines[:num_prefix_lines]
 
     # Sample the rest of lines per request.
     sampled_requests: List[Tuple[str, str, int, int]] = []
     for _ in range(num_requests):
         sampled_lines = "".join(
-            prefix_lines
-            + random.sample(poem_lines, num_input_lines - num_prefix_lines)
+            prefix_lines + random.sample(poem_lines, num_input_lines - num_prefix_lines)
         )
 
         prompt = f"{base_prompt}{sampled_lines}"
@@ -512,9 +493,7 @@ def sample_sonnet_requests(
             message, add_generation_prompt=True, tokenize=False
         )
         prompt_len = len(tokenizer(prompt_formatted).input_ids)
-        sampled_requests.append(
-            (prompt, prompt_formatted, prompt_len, output_len)
-        )
+        sampled_requests.append((prompt, prompt_formatted, prompt_len, output_len))
 
     return sampled_requests
 
@@ -540,10 +519,7 @@ def sample_random_requests(
     input_requests = []
     for i in range(num_prompts):
         prompt = tokenizer.decode(
-            [
-                (offsets[i] + i + j) % tokenizer.vocab_size
-                for j in range(input_lens[i])
-            ]
+            [(offsets[i] + i + j) % tokenizer.vocab_size for j in range(input_lens[i])]
         )
         input_requests.append((prompt, int(input_lens[i]), int(output_lens[i])))
 
@@ -592,16 +568,12 @@ def calculate_metrics(
             # multiple output tokens may be bundled together
             # Note : this may inflate the output token count slightly
             output_len = len(
-                tokenizer(
-                    outputs[i].generated_text, add_special_tokens=False
-                ).input_ids
+                tokenizer(outputs[i].generated_text, add_special_tokens=False).input_ids
             )
             actual_output_lens.append(output_len)
             total_input += input_requests[i][1]
             if output_len > 1:
-                tpots.append(
-                    (outputs[i].latency - outputs[i].ttft) / (output_len - 1)
-                )
+                tpots.append((outputs[i].latency - outputs[i].ttft) / (output_len - 1))
             itls += outputs[i].itl
             ttfts.append(outputs[i].ttft)
             completed += 1
@@ -656,15 +628,11 @@ def calculate_metrics(
         max_input=max_input,
         max_output=max_output,
         max_total=max_total,
-        peak_gpu_memory_mib=gpu_metrics.get(
-            "benchmark/gpu:0/memory_used (MiB)/max"
-        ),
+        peak_gpu_memory_mib=gpu_metrics.get("benchmark/gpu:0/memory_used (MiB)/max"),
         available_gpu_memory_mib=gpu_metrics.get(
             "benchmark/gpu:0/memory_free (MiB)/min"
         ),
-        gpu_utilization=gpu_metrics.get(
-            "benchmark/gpu:0/gpu_utilization (%)/mean"
-        ),
+        gpu_utilization=gpu_metrics.get("benchmark/gpu:0/gpu_utilization (%)/mean"),
     )
 
     return metrics, actual_output_lens
@@ -707,9 +675,7 @@ async def benchmark(
                 f" {test_output.error}"
             )
         else:
-            logger.info(
-                "Initial test run completed. Starting main benchmark run..."
-            )
+            logger.info("Initial test run completed. Starting main benchmark run...")
 
     logger.info(f"Traffic request rate: {request_rate}")
 
@@ -763,13 +729,9 @@ async def benchmark(
     print("{s:{c}^{n}}".format(s=" Serving Benchmark Result ", n=50, c="="))
     print("{:<40} {:<10}".format("Successful requests:", metrics.completed))
     print("{:<40} {:<10}".format("Failed requests:", metrics.failures))
-    print(
-        "{:<40} {:<10.2f}".format("Benchmark duration (s):", benchmark_duration)
-    )
+    print("{:<40} {:<10.2f}".format("Benchmark duration (s):", benchmark_duration))
     print("{:<40} {:<10}".format("Total input tokens:", metrics.total_input))
-    print(
-        "{:<40} {:<10}".format("Total generated tokens:", metrics.total_output)
-    )
+    print("{:<40} {:<10}".format("Total generated tokens:", metrics.total_output))
     print(
         "{:<40} {:<10.2f}".format(
             "Request throughput (req/s):", metrics.request_throughput
@@ -787,19 +749,13 @@ async def benchmark(
     )
     print("{s:{c}^{n}}".format(s="Time to First Token", n=50, c="-"))
     print("{:<40} {:<10.2f}".format("Mean TTFT (ms):", metrics.mean_ttft_ms))
-    print(
-        "{:<40} {:<10.2f}".format("Median TTFT (ms):", metrics.median_ttft_ms)
-    )
+    print("{:<40} {:<10.2f}".format("Median TTFT (ms):", metrics.median_ttft_ms))
     print("{:<40} {:<10.2f}".format("P99 TTFT (ms):", metrics.p99_ttft_ms))
     print(
-        "{s:{c}^{n}}".format(
-            s="Time per Output Token (excl. 1st token)", n=50, c="-"
-        )
+        "{s:{c}^{n}}".format(s="Time per Output Token (excl. 1st token)", n=50, c="-")
     )
     print("{:<40} {:<10.2f}".format("Mean TPOT (ms):", metrics.mean_tpot_ms))
-    print(
-        "{:<40} {:<10.2f}".format("Median TPOT (ms):", metrics.median_tpot_ms)
-    )
+    print("{:<40} {:<10.2f}".format("Median TPOT (ms):", metrics.median_tpot_ms))
     print("{:<40} {:<10.2f}".format("P99 TPOT (ms):", metrics.p99_tpot_ms))
     print("{s:{c}^{n}}".format(s="Inter-token Latency", n=50, c="-"))
     print("{:<40} {:<10.2f}".format("Mean ITL (ms):", metrics.mean_itl_ms))
@@ -812,9 +768,7 @@ async def benchmark(
     if collect_gpu_stats:
         print("{s:{c}^{n}}".format(s="GPU Stats", n=50, c="-"))
         print(
-            "{:<40} {:<10.2f}".format(
-                "GPU Utilization (%):", metrics.gpu_utilization
-            )
+            "{:<40} {:<10.2f}".format("GPU Utilization (%):", metrics.gpu_utilization)
         )
         print(
             "{:<40} {:<10.2f}".format(
@@ -888,9 +842,7 @@ def main(args: argparse.Namespace):
         base_url = f"http://{args.host}:{args.port}"
 
     logger.info(f"getting tokenizer. api url: {api_url}, base_url: {base_url}")
-    tokenizer = get_tokenizer(
-        tokenizer_id, trust_remote_code=args.trust_remote_code
-    )
+    tokenizer = get_tokenizer(tokenizer_id, trust_remote_code=args.trust_remote_code)
 
     logger.info("sampling requests")
     if args.dataset is not None:
@@ -1051,8 +1003,7 @@ if __name__ == "__main__":
         type=str,
         default=None,
         help=(
-            "Path to the ShareGPT dataset, will be deprecated in the "
-            "next release."
+            "Path to the ShareGPT dataset, will be deprecated in the " "next release."
         ),
     )
     parser.add_argument(
@@ -1097,42 +1048,31 @@ if __name__ == "__main__":
         "--sonnet-input-len",
         type=int,
         default=550,
-        help=(
-            "Number of input tokens per request, used only for sonnet dataset."
-        ),
+        help=("Number of input tokens per request, used only for sonnet dataset."),
     )
     parser.add_argument(
         "--sonnet-output-len",
         type=int,
         default=150,
-        help=(
-            "Number of output tokens per request, used only for sonnet dataset."
-        ),
+        help=("Number of output tokens per request, used only for sonnet dataset."),
     )
     parser.add_argument(
         "--sonnet-prefix-len",
         type=int,
         default=200,
-        help=(
-            "Number of prefix tokens per request, used only for sonnet dataset."
-        ),
+        help=("Number of prefix tokens per request, used only for sonnet dataset."),
     )
     parser.add_argument(
         "--random-input-len",
         type=int,
         default=1024,
-        help=(
-            "Number of input tokens per request, used only for random sampling."
-        ),
+        help=("Number of input tokens per request, used only for random sampling."),
     )
     parser.add_argument(
         "--random-output-len",
         type=int,
         default=128,
-        help=(
-            "Number of output tokens per request, used only for random"
-            " sampling."
-        ),
+        help=("Number of output tokens per request, used only for random" " sampling."),
     )
     parser.add_argument(
         "--random-range-ratio",

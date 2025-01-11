@@ -71,9 +71,7 @@ class RotaryEmbedding(Layer):
                 out_dim=self.max_seq_len * 2,
             )
             freqs = ops.outer(t, freqs)
-            self._freqs_cis = ops.stack(
-                [ops.cos(freqs), ops.sin(freqs)], axis=-1
-            )
+            self._freqs_cis = ops.stack([ops.cos(freqs), ops.sin(freqs)], axis=-1)
         return TensorValue(self._freqs_cis)
 
     @cached_property

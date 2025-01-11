@@ -59,9 +59,7 @@ class Attention(Layer):
 
         return scores @ xv
 
-    def __call__(
-        self, x: TensorValue, attention_mask: TensorValue
-    ) -> TensorValue:
+    def __call__(self, x: TensorValue, attention_mask: TensorValue) -> TensorValue:
         """Computes attention on x, reusing the KV cache.
 
         Args:

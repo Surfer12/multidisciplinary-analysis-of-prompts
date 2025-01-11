@@ -1,5 +1,5 @@
 ---
-usage: Causes body of the function to be copied directly into the body of the calling function in the final binary 
+usage: Causes body of the function to be copied directly into the body of the calling function in the final binary
 ---
 
 # @always_inline

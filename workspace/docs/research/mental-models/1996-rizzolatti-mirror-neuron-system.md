@@ -56,7 +56,7 @@ The mirror neuron system plays a crucial role in:
 
 - **Original Publication Year:** 1996
 - **Research Domain:** Cognitive Neuroscience
-- **Related Researchers:** 
+- **Related Researchers:**
   - Vittorio Gallese
   - Christian Keysers
 

@@ -26,10 +26,7 @@ from gguf import Union
 from huggingface_hub import hf_hub_download, snapshot_download
 from llama_index.core import SimpleDirectoryReader
 from max.pipelines import TokenGenerator
-from streamlit.runtime.scriptrunner import (
-    add_script_run_ctx,
-    get_script_run_ctx,
-)
+from streamlit.runtime.scriptrunner import add_script_run_ctx, get_script_run_ctx
 from tqdm.auto import tqdm
 
 RAG_SYSTEM_PROMPT = """You are a helpful document search assistant.
@@ -219,8 +216,7 @@ class TextGenerationMetrics:
         first_token = self.signposts.get("first_token")
         if first_token and begin_generation:
             self.time_to_first_token = (
-                self.signposts["first_token"]
-                - self.signposts["begin_generation"]
+                self.signposts["first_token"] - self.signposts["begin_generation"]
             ) * 1000.0
         else:
             self.time_to_first_token = "n/a"

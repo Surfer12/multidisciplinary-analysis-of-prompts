@@ -359,7 +359,7 @@ Mojo now has an `Option` type.
 
 - [2023-08-10 Github Chris Lattner](https://discord.com/channels/1087530497313357884/1138854784930172928/1138902579640807566)
 
-## Syntax 
+## Syntax
 
 ### Syntactic Sugar
 
@@ -388,7 +388,7 @@ alias (regardless of what it is called) is a declaration of a thing. We need spo
 Also, "let" values are not aliases. They've very different. A let isn't mutable after it is initialized, which is a flow sensitive property, e.g. this is allowed:
 
 ```mojo
-var x : Int 
+var x : Int
 if cond:
     x = foo()
 else:
@@ -729,7 +729,7 @@ These are two loop decorators to tell the compiler to unroll a loop, see [wikipe
 Fully unroll the loop's 10 iterations into 10 `do_something` calls and remove the for-loop:
 
 ```mojo
-@unroll 
+@unroll
 for i in range(10):
   do_something(i)
 ```
@@ -786,7 +786,7 @@ Julia is far more mature and advanced in many ways. Many folks have and will con
 
 ### Typescript
 
-TypeScript is very popular, a lot of people use it and it fits right into the JavaScript ecosystem, Mojo has a similar relationship to Python where it's a superset. All the Python packages work in Mojo which is really important to us, we don't want to break the Python community. 
+TypeScript is very popular, a lot of people use it and it fits right into the JavaScript ecosystem, Mojo has a similar relationship to Python where it's a superset. All the Python packages work in Mojo which is really important to us, we don't want to break the Python community.
 
 There's a big difference though, Python already allows you to add types like TypeScript, but they're just for tools to identify bugs and obvious mistakes in your code, those types aren't used to improve runtime performance. Mojo takes it to the next step, we often see 10x-20x performance improvements just by adding a few type annotations.
 
@@ -802,7 +802,7 @@ I also don't see Rust and Mojo in competition, while I'm hoping that Mojo can le
 
 If you're interested in language nerdery, then yes, there are ways in which Mojo can provide better performance than Rust. There are two categories:
 
-1. There are very low level implementation details (e.g. borrow by default instead of move, moves not implying memcpy etc) that can affect idiomatic use of the language at scale. As others say, it will be difficult to know how these work out until Mojo is more complete and there are more at-scale applications like your caching system. Mojo's trait system in particular is missing, and it's hard to write much realistic generic code without that! 
+1. There are very low level implementation details (e.g. borrow by default instead of move, moves not implying memcpy etc) that can affect idiomatic use of the language at scale. As others say, it will be difficult to know how these work out until Mojo is more complete and there are more at-scale applications like your caching system. Mojo's trait system in particular is missing, and it's hard to write much realistic generic code without that!
 
 2. Mojo open new frontiers for GPUs and other accelerators. We can all have different opinions about what the "end of moore's" law means for computing, but if computers keep getting weirder, and if that matters for important workloads that you care about, then Mojo will be interesting because it can talk to them in ways that other languages weren't really built for.
 
@@ -828,7 +828,7 @@ We love JAX and PyTorch and TensorFlow and all the other APIs with all their bea
 
 ### IREE
 
-I'm not sure, while I know many folks that work on IREE but I haven't used it myself. My understanding is that it is research focused and doesn't provide (e.g.) full compatibility with all tensorflow and pytorch models. It also seems difficult to extend unless you yourself are a compiler engineer. It is also 4+ years old and is Google led, so it is hard to predict where it will go and when. 
+I'm not sure, while I know many folks that work on IREE but I haven't used it myself. My understanding is that it is research focused and doesn't provide (e.g.) full compatibility with all tensorflow and pytorch models. It also seems difficult to extend unless you yourself are a compiler engineer. It is also 4+ years old and is Google led, so it is hard to predict where it will go and when.
 
 The Modular stack is production quality, run by an independent company and has extremely different internal design premises and is focusing on ensuring our customers and users succeed in real world deployments. It is designed for extensibility by non-compiler-engineers writing Python and Mojo 🔥 code, and is designed for an open ecosystem of operators and numerics.
 
@@ -919,7 +919,7 @@ Mojo generators happen in [SSA](https://en.wikipedia.org/wiki/Static_single-assi
 
 I worked on Google TPUs (which have several public architecture papers), I'm familiar with difficult to program accelerators w funky requirements 🙂.
 
-One of the major ideas in Mojo wrt MLIR and hardware is to expose "compiler engineering" to library developers instead of having to hack the compiler. That said, we have great ambitions and plans, and I don't want to get us over our skiis. We need to get lifetimes and traits (and numerous other smaller features) [explained in the roadmap](https://docs.modular.com/mojo/roadmap.html) done before we can go out and play. The architecture is in place though. 
+One of the major ideas in Mojo wrt MLIR and hardware is to expose "compiler engineering" to library developers instead of having to hack the compiler. That said, we have great ambitions and plans, and I don't want to get us over our skiis. We need to get lifetimes and traits (and numerous other smaller features) [explained in the roadmap](https://docs.modular.com/mojo/roadmap.html) done before we can go out and play. The architecture is in place though.
 
 - [2023-06-02](https://discord.com/channels/1087530497313357884/1113898580885917786/1113915440587079680)
 
@@ -1102,7 +1102,7 @@ The engine itself can stand alone and you can use the engine as a drop-in replac
 
 One of the things also that our customers love is that Google and Meta don't actually support TensorFlow or PyTorch, people forget that these are not products, these are open source projects and more like hobbies for the megacorps. So what we're essentially offering is a supported and performance optimized version of TensorFlow and PyTorch, the enterprises we talked to that care about their costs often they want somebody that they can call. It's analogous to running your own mail server, very few companies do that, so why do we do it with AI infrastructure.
 
-Currently it's because there's no choice, there's nobody to reach out to who can actually can do this. The technology platform at Meta and Google has diverged a lot from what the rest of the industry uses, they both have their own chips and specific use cases, so they're not focused on the traditional CPU, GPU and public cloud use case. Because it's a product for us we can actually support it, invest a huge amount of energy into it, and it's why we have such phenomenal results as well. 
+Currently it's because there's no choice, there's nobody to reach out to who can actually can do this. The technology platform at Meta and Google has diverged a lot from what the rest of the industry uses, they both have their own chips and specific use cases, so they're not focused on the traditional CPU, GPU and public cloud use case. Because it's a product for us we can actually support it, invest a huge amount of energy into it, and it's why we have such phenomenal results as well.
 
 - [2023-06-20 YouTube Chris Lattner](https://youtu.be/-8TbsCUuwQQ?t=2498)
 
@@ -1118,7 +1118,7 @@ Python has a dependence on C/C++ for performance and hardware-focused tasks, Moj
 
 - [2023-06-21 YouTube Chris Lattner](https://youtu.be/-8TbsCUuwQQ?t=143)
 
-### Debugging Complicated Problems 
+### Debugging Complicated Problems
 
 What happens when you need to deploy a model through Core ML or one of the many other hardware interfaces, and the results don't work. Well now you need to know not just PyTorch, not just your model, not just Core ML, but also the translator, compiler and all these other things. You keep digging and you find out it's handling the edge padding on a convolution slightly differently. All of these tools were supposed to be making it easy aren't reliable, it's a leaky abstraction where if something goes wrong you have to understand all of this complexity.
 
@@ -1134,7 +1134,7 @@ We have not done any analysis about energy efficiency, my guess is that Mojo wou
 
 - [2023-06-26 GitHub Abdul](https://github.com/modularml/mojo/discussions/302?notification_referrer_id=NT_kwDOB-auX7Q2NjI5NTQwODg4OjEzMjU1ODQzMQ)
 
-### Top level code in REPL and Jupyter 
+### Top level code in REPL and Jupyter
 
 The default right now is in a bit of a weird place, Mojo top-level code behaves differently than anything else. It is "strict" by default, however the problem right now is that top-level Mojo code is neither "static" in the `fn` sense or "dynamic" in the `def` sense. The goal is to make it behave like an imperative body of code.
 
@@ -1145,7 +1145,7 @@ The default right now is in a bit of a weird place, Mojo top-level code behaves 
 
 We definitely want the community to be able to use the Mojo logo and name. We should get a proper web page up that describes this.
 
-We're mostly getting the details sorted out. My current understanding: we want people to be free to use the word Mojo and Mojo🔥, and using the Mojo🔥 logo is fine. The things we need to protect are: 
+We're mostly getting the details sorted out. My current understanding: we want people to be free to use the word Mojo and Mojo🔥, and using the Mojo🔥 logo is fine. The things we need to protect are:
 
 1. Don't represent that you are speaking on behalf of modular
 2. Don't use the "Modular M" with the notch taken out without permission.
@@ -1193,7 +1193,7 @@ JSON is super important, but right now we are tracking more basic things, e.g. g
 
 - [2023-07-29 Github Chris Lattner](https://github.com/modularml/mojo/issues/478#issuecomment-1654623649)
 
-### Rewriting Libraries 
+### Rewriting Libraries
 
 In the case of modular and why we built Mojo, our business objective is go make ML really awesome, we care about the matrix multiplications and the convolutions and the core operations that people spend all their time on in AI. And so we rewrote all of that stuff in Mojo, this isn't like rewriting Matplotlib, this is like rewriting Intel MKL, or the CUDA implementation of these CUDA kernels equivalent. That's where we've put our energy into
 because that's what enables unlocking of the hardware, performance, and usability.
@@ -1242,7 +1242,7 @@ Why is it so difficult that it takes a team of 45 people to deploy a model when 
 
 The main thing that Modular is fighting against is all this complexity:
 
-- Hardware accelerators and software stacks to interact with the hardware 
+- Hardware accelerators and software stacks to interact with the hardware
 - Modeling constantly changing with new research and huge amounts of diversity
 - Serving technology like zero copy networking, asyncio etc. that hasn't made it into machine learning
 

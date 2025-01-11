@@ -82,9 +82,7 @@ def _call_with_hooks(call_fn):
         for hook in _LAYER_HOOKS:
             # Call the hook. Note that the first argument in `bound_args.args`
             # is the layer, so it is skipped.
-            hook_outputs = hook(
-                layer, bound_args.args[1:], bound_args.kwargs, outputs
-            )
+            hook_outputs = hook(layer, bound_args.args[1:], bound_args.kwargs, outputs)
             if hook_outputs is not None:
                 outputs = hook_outputs
         return outputs

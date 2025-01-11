@@ -222,7 +222,7 @@ and [Patterns](https://docs.python.org/3/reference/compound_stmts.html#patterns)
 (closely related)
 which we need for compatibility with the Python ecosystem.  These are the basis
 for `match` statements, unpack assignment syntax `(a,b) = foo()` and other
-things.  
+things.
 
 Mojo currently has support for targets, but not patterns.  When we implement
 patterns, we will extend `var` and `for` statements to work with them and we
@@ -269,7 +269,7 @@ declare local references on the stack.
     b += "foo"
 
     # I don't see a reason not to allow `ref` in "target" syntax, so let's do
-    # that too: 
+    # that too:
     ref c = mutlist[i]
     c += "foo"
 

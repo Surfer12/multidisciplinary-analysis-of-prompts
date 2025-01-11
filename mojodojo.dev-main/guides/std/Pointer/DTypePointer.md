@@ -45,7 +45,7 @@ print("p1 and p2 are not equal:", p1 != p2)
 
 
 ## Storing and loading SIMD data
-First zero all the values for this exercise to make it clear what's happening. 
+First zero all the values for this exercise to make it clear what's happening.
 
 
 ```mojo
@@ -263,10 +263,10 @@ matrix[0] = fourth_row
 matrix.print_all()
 ```
 
-    
+
     forth row: [9, 3, 3, 3, 3, 3, 3, 9]
-    modified: [18, 6, 6, 6, 6, 6, 6, 18] 
-    
+    modified: [18, 6, 6, 6, 6, 6, 6, 18]
+
     --------matrix--------
     [18, 6, 6, 6, 6, 6, 6, 18]
     [9, 1, 1, 1, 1, 1, 1, 9]

@@ -1,23 +1,31 @@
-import pytest
 import os
 import sys
 
+import pytest
+
 # Add project root to Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src/python')))
+sys.path.insert(
+    0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src/python'))
+)
+
 
 @pytest.fixture
 def test_data_dir():
     """Fixture providing path to test data directory."""
     return os.path.join(os.path.dirname(__file__), '..', 'data')
 
+
 @pytest.fixture
 def sample_config():
     """Fixture providing sample configuration for tests."""
     return {
-        'project_root': os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')),
+        'project_root': os.path.abspath(
+            os.path.join(os.path.dirname(__file__), '../..')
+        ),
         'data_dir': 'data',
-        'output_dir': 'output'
+        'output_dir': 'output',
     }
+
 
 @pytest.fixture
 def temp_workspace(tmp_path):

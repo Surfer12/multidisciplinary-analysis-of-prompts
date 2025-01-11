@@ -118,9 +118,7 @@ def _build_graph(
         [304, 400, 3],  # ["height", "width", "num_channels"]
     )
     # Type of start and end position of each batch in the combined total_seq_len dimension.
-    input_row_offsets_type = TensorType(
-        DType.uint32, shape=["input_row_offsets_len"]
-    )
+    input_row_offsets_type = TensorType(DType.uint32, shape=["input_row_offsets_len"])
 
     # TODO: Use symbolic dims.
     # Initialize Graph.
@@ -134,9 +132,7 @@ def _build_graph(
         ],
     ) as graph:
         model = _llava(graph, params, weights, kv_params)
-        input_ids, pixel_values, input_row_offsets, *kv_cache_inputs = (
-            graph.inputs
-        )
+        input_ids, pixel_values, input_row_offsets, *kv_cache_inputs = graph.inputs
         logits = model(
             input_ids=input_ids,  # type: ignore
             pixel_values=pixel_values,  # type: ignore

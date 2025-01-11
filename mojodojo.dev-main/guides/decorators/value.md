@@ -22,7 +22,7 @@ let pair = Pair(5, 10)
     error: Expression [2]:16:20: 'Pair' does not implement any '__init__' methods in 'let' initializer
         let pair = Pair(5, 10)
                    ~~~~^~~~~~~
-    
+
 
 
 Until we implement `__init__`:
@@ -57,7 +57,7 @@ let pair2 = pair
     error: Expression [5]:16:17: value of type 'Pair' cannot be copied into its destination
         let pair2 = pair
                     ^~~~
-    
+
 
 
 
@@ -68,11 +68,11 @@ let pair2 = pair^
     error: Expression [16]:18:21: value of type 'Pair' cannot be copied into its destination
         let pair2 = pair^
                         ^
-    
+
     error: Expression [16]:18:21: expression does not designate a value with a lifetime
         let pair2 = pair^
                         ^
-    
+
 
 
 Until we implement `__moveinit__` and `__copyinit__`:

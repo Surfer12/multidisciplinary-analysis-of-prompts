@@ -41,7 +41,7 @@ MONITORED_OPERATIONS:
               risk_level: Medium
           - anomaly_detection:
               risk_level: High
-      
+
       resources:
         access_patterns:
           - file_operations
@@ -77,11 +77,11 @@ MONITORED_OPERATIONS:
       security_events: 180 days
       performance_metrics: 90 days
       debug_logs: 30 days
-    
+
     compression:
       algorithm: gzip
       retention_policy: compress_after_7_days
-    
+
     encryption:
       algorithm: AES-256
       key_rotation: 90_days
@@ -92,7 +92,7 @@ MONITORED_OPERATIONS:
       memory_percent: 85
       disk_usage_percent: 90
       network_saturation: 75
-    
+
     security_events:
       failed_operations:
         threshold: 5/minute
@@ -115,7 +115,7 @@ MONITORED_OPERATIONS:
       - security_violations
       - resource_exhaustion
       - critical_errors
-    
+
     periodic:
       hourly:
         - performance_metrics
@@ -133,7 +133,7 @@ MONITORED_OPERATIONS:
       - splunk
       - datadog
       - prometheus
-    
+
     notification_channels:
       - slack
       - email
@@ -146,7 +146,7 @@ MONITORED_OPERATIONS:
       - security_events
       - configuration_changes
       - access_patterns
-    
+
     data_governance:
       - PII_handling
       - data_classification
@@ -158,7 +158,7 @@ MONITORED_OPERATIONS:
       frequency: hourly
       retention: 30_days
       type: incremental
-    
+
     restore:
       verification: required
       test_frequency: weekly
@@ -170,7 +170,7 @@ MONITORED_OPERATIONS:
           purpose: anomaly_detection, risk_scoring
       - statistical_analysis
       - behavior_profiling
-    
+
     visualization:
       - grafana_dashboards
       - kibana_visualizations
@@ -181,7 +181,7 @@ MONITORED_OPERATIONS:
       max_cpu_percent: 5
       max_memory_mb: 512
       max_disk_iops: 1000
-    
+
     sampling_rates:
       high_frequency: 100%
       normal_operations: 10%
@@ -192,7 +192,7 @@ MONITORED_OPERATIONS:
       max_events_per_second: 10000
       buffer_size_mb: 1024
       batch_size: 1000
-    
+
     storage_scaling:
       initial_size_gb: 100
       growth_rate: 10GB/month

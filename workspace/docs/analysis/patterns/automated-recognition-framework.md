@@ -11,14 +11,14 @@
             <regex><.*?></regex>
             <validation>tag_closure_check</validation>
         </tag_pattern>
-        
+
         <!-- Script Detection -->
         <script_pattern type="multi">
             <latin>[A-Za-z]+</latin>
             <bengali>[\u0980-\u09FF]+</bengali>
             <devanagari>[\u0900-\u097F]+</devanagari>
         </script_pattern>
-        
+
         <!-- Boundary Detection -->
         <boundary_pattern>
             <explicit>meta_cognitive|thought|thinking</explicit>
@@ -111,15 +111,15 @@ tag_evolution:
     - name: "Traditional"
       pattern: "<thinking>.*?</thinking>"
       weight: 1.0
-    
+
     - name: "Transitional"
       pattern: "<thought>.*?</thought>"
       weight: 1.2
-    
+
     - name: "Emergent"
       pattern: "<.*?তহought>"
       weight: 1.5
-    
+
     - name: "Integrated"
       pattern: "<meta_cognitive.*?>.*?</meta_cognitive>"
       weight: 2.0
@@ -221,7 +221,7 @@ class PatternEvolutionTracker:
             'current': {},
             'emerging': set()
         }
-        
+
     def track_evolution(self, new_pattern):
         if self.is_novel(new_pattern):
             self.emerging.add(new_pattern)
@@ -240,4 +240,4 @@ adaptation_rules:
 ```
 
 Remember: This framework is designed to detect, analyze, and adapt to evolving patterns in cognitive responses, with particular attention to the interplay between structured tags, natural language, and cross-script integration.
-``` 
+```

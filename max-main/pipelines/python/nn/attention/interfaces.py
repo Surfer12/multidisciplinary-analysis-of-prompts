@@ -98,7 +98,8 @@ class AttentionImpl(ABC, Layer):
         x: TensorValue,
         kv_collection: ContinuousBatchingKVCacheCollection,
         **kwargs,
-    ) -> TensorValue: ...
+    ) -> TensorValue:
+        ...
 
 
 @dataclass
@@ -179,4 +180,5 @@ class AttentionImplQKV(ABC, Layer):
         x: TensorValue,
         kv_collection: ContinuousBatchingKVCacheCollection,
         **kwargs,
-    ) -> TensorValue: ...
+    ) -> TensorValue:
+        ...

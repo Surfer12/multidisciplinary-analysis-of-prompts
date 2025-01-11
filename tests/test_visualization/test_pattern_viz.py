@@ -1,13 +1,16 @@
 """Tests for the pattern visualization module."""
-import pytest
-import pandas as pd
 import numpy as np
+import pandas as pd
+import pytest
+
 from src.visualization.pattern_viz import PatternVisualizer
+
 
 @pytest.fixture
 def visualizer():
     """Create a PatternVisualizer instance for testing."""
     return PatternVisualizer()
+
 
 @pytest.fixture
 def sample_usage_data():
@@ -17,21 +20,21 @@ def sample_usage_data():
     data = np.random.rand(len(tools), len(periods))
     return pd.DataFrame(data, index=tools, columns=periods)
 
+
 @pytest.fixture
 def sample_performance_data():
     """Create sample performance data for testing."""
     tools = ['Tool A', 'Tool B', 'Tool C'] * 10
     metrics = np.random.rand(30)
-    return pd.DataFrame({
-        'tool_name': tools,
-        'execution_time': metrics
-    })
+    return pd.DataFrame({'tool_name': tools, 'execution_time': metrics})
+
 
 def test_plot_tool_usage_heatmap(visualizer, sample_usage_data):
     """Test creation of tool usage heatmap."""
     visualizer.plot_tool_usage_heatmap(sample_usage_data)
     # Basic test to ensure no exceptions are raised
     assert True
+
 
 def test_create_cognitive_network(visualizer):
     """Test creation of cognitive network visualization."""
@@ -41,11 +44,13 @@ def test_create_cognitive_network(visualizer):
     assert fig is not None
     assert len(fig.data) == 2  # Edge trace and node trace
 
+
 def test_plot_tool_performance(visualizer, sample_performance_data):
     """Test creation of tool performance visualization."""
     visualizer.plot_tool_performance(sample_performance_data)
     # Basic test to ensure no exceptions are raised
     assert True
+
 
 def test_save_figure(visualizer, sample_usage_data, tmp_path):
     """Test figure saving functionality."""

@@ -41,10 +41,10 @@ status: "draft"
 
 - **Last Updated:** [YYYY-MM-DD]
 - **Research Domain:** [Specific Domain]
-- **Related Documents:** 
+- **Related Documents:**
   - [Link to related document 1]
   - [Link to related document 2]
 
 ## Revision History
 
-- **v1.0** - Initial draft 
+- **v1.0** - Initial draft
