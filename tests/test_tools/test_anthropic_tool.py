@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from src.tools.anthropic_tool import AnthropicTool
+from tools.anthropic_tool import AnthropicTool
 
 
 @pytest.fixture

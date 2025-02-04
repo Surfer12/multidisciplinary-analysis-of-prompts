@@ -1,0 +1,22 @@
+[project]
+authors = ["Ryan Oates <ryanfullstack@icloud.com>"]
+channels = ["https://conda.modular.com/max-nightly", "https://conda.modular.com/max", "https://repo.prefix.dev/modular-community", "conda-forge"]
+description = "Add a short description here"
+name = "multidisciplinary-analysis-of-prompts"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+max = ">=25.1.0.dev2025020205,<26"
+pip = ">=25.0,<26"
+python = "3.11.*"
+pytest = ">=8.3.4,<9"
+psutil = ">=6.1.1,<7"
+matplotlib = ">=3.10.0,<4"
+watchdog = ">=6.0.0,<7"
+ripgrep = ">=14.1.1,<15"
+networkx = ">=3.4.2,<4"
+plotly = ">=6.0.0,<7"
+seaborn = ">=0.13.2,<0.14"

@@ -6,7 +6,7 @@ import pytest
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.lines import Line2D
 
-from src.visualization.pattern_viz import PatternVisualizer
+from visualization.pattern_viz import PatternVisualizer
 
 
 @pytest.fixture

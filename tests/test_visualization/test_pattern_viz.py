@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from src.visualization.pattern_viz import PatternVisualizer
+from visualization.pattern_viz import PatternVisualizer
 
 
 @pytest.fixture
