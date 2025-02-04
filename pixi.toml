@@ -9,9 +9,9 @@ version = "0.1.0"
 [tasks]
 
 [dependencies]
-max = ">=25.1.0.dev2025020205,<26"
+max = ">=25.1.0.dev2025020316,<26"
 pip = ">=25.0,<26"
-python = "3.11.*"
+python = ">=3.12.8,<3.13"
 pytest = ">=8.3.4,<9"
 psutil = ">=6.1.1,<7"
 matplotlib = ">=3.10.0,<4"
@@ -20,3 +20,4 @@ ripgrep = ">=14.1.1,<15"
 networkx = ">=3.4.2,<4"
 plotly = ">=6.0.0,<7"
 seaborn = ">=0.13.2,<0.14"
+anthropic = ">=0.45.2,<0.46"
