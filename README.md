@@ -1,3 +1,5 @@
+Disclaimer: Files have been written and altered with Claude Sonnet with Thinking enabled as well as without. These models from Anthropic can be unpredictable and the results have not been personally vetted for clarity as of 07/04/25. Review by this unique human is in progress. 
+
 # Project Overview
 
 ## Current State
