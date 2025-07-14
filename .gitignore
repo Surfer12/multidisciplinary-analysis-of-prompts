@@ -36,3 +36,7 @@ Thumbs.db
 *.egg-info
 # magic environments
 .magic
+
+# Eclipse / IntelliJ builds
+.settings/
+.gradle/
