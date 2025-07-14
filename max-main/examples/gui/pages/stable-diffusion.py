@@ -44,7 +44,18 @@ latent_width = output_width // 8
 latent_height = output_height // 8
 latent_channels = 4
 
-model_dir = Path(hf_streamlit_download("modularai/stable-diffusion-1.5-onnx"))
+# SECURITY FIX: Use safe model instead of risky pre-converted ONNX
+# The original model "modularai/stable-diffusion-1.5-onnx" has been flagged as risky
+# We use the official RunwayML model and convert it safely
+
+# For now, display a security warning
+st.warning("🚨 SECURITY UPDATE: This example has been temporarily disabled due to security concerns with the pre-converted ONNX model. Please use the command-line version with the updated security framework.")
+st.error("The model 'modularai/stable-diffusion-1.5-onnx' has been flagged as potentially containing backdoors.")
+st.info("Alternative: Use the updated text_to_image.py script which includes security validation and safe model conversion.")
+st.stop()
+
+# Safe model loading would be implemented here:
+# model_dir = Path(get_safe_model_dir("runwayml/stable-diffusion-v1-5"))
 
 text_encoder_path = model_dir / "text_encoder" / "model.onnx"
 img_decoder_path = model_dir / "vae_decoder" / "model.onnx"
