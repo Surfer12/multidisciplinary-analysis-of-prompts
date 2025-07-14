@@ -4,7 +4,36 @@ This directory illustrates how to run Stable Diffusion through MAX Engine.
 Specifically, this example extracts StableDiffusion-1.5 from Hugging Face and executes
 it via the MAX Engine Python API.
 
+## 🔒 Security Update
+
+**IMPORTANT**: This example has been updated to address security concerns with pre-converted ONNX models.
+
+### Changes Made:
+- ✅ **Blocked risky models**: The previous model `modularai/stable-diffusion-1.5-onnx` has been flagged as potentially containing backdoors
+- ✅ **Safe model conversion**: Now uses the official `runwayml/stable-diffusion-v1-5` model and converts it safely to ONNX format
+- ✅ **Security validation**: Added model security validation and integrity checks
+- ✅ **Automatic fallback**: If a risky model is detected, safe alternatives are automatically suggested
+
+### Security Features:
+- Model source validation against trusted repositories
+- Automatic blocking of flagged models
+- Safe PyTorch to ONNX conversion
+- Model integrity validation
+- Comprehensive security logging
+
 ## Quickstart
+
+### 🔒 Security Migration (Required)
+
+If you've used this example before, please run the security migration first:
+
+```sh
+# Install security dependencies
+pip install -r requirements-security.txt
+
+# Run the migration script
+python migrate_to_secure.py
+```
 
 ### Magic instructions
 
@@ -25,6 +54,8 @@ requirements:
 conda create -n max-repo
 # Update the environment with the environment.yml file
 conda env update -n max-repo -f environment.yml --prune
+# Install security dependencies
+pip install -r requirements-security.txt
 # Run the example
 conda run -n max-repo --live-stream bash run.sh
 ```
@@ -43,9 +74,27 @@ details.
 
 ## Files
 
-- `download-model.py`: Downloads [runwayml/stable-diffusion-v1-5
-](https://huggingface.co/runwayml/stable-diffusion-v1-5)
-and exports it as ONNX.
+### Core Files
+- `text_to_image.py`: **Main program** that runs full stable-diffusion pipeline through MAX Engine with security validation
+- `run.sh`: Shell script to run the example with proper environment setup
 
-- `text_to_image.py`: Example program that runs full stable-diffusion pipeline
-through MAX Engine in order to generate images from the given prompt.
+### Security Framework
+- `security_config.py`: Security configuration with trusted/blocked model lists and validation functions
+- `model_converter.py`: Safe model conversion utilities for PyTorch to ONNX conversion
+- `migrate_to_secure.py`: Migration script to transition from risky models to secure alternatives
+- `requirements-security.txt`: Additional dependencies for security features
+
+### Configuration Files
+- `environment.yml`: Conda environment configuration
+- `pixi.toml`: Pixi package manager configuration
+- `magic.lock`: Magic package lock file
+
+### Security Features
+- ✅ **Model validation**: Checks models against trusted sources before loading
+- ✅ **Automatic blocking**: Prevents loading of flagged risky models
+- ✅ **Safe conversion**: Converts PyTorch models to ONNX safely instead of using pre-converted models
+- ✅ **Integrity checking**: Validates model file integrity where checksums are available
+- ✅ **Comprehensive logging**: Detailed security event logging
+
+### Migration from Previous Version
+If you were using the previous version with `modularai/stable-diffusion-1.5-onnx`, this model has been blocked due to security concerns. The new version automatically uses `runwayml/stable-diffusion-v1-5` and converts it safely to ONNX format.

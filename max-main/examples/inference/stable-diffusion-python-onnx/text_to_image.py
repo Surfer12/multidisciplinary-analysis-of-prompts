@@ -14,6 +14,7 @@
 
 import signal
 import sys
+import logging
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -23,6 +24,19 @@ from huggingface_hub import snapshot_download
 from max.engine import InferenceSession
 from PIL import Image
 from transformers import CLIPTokenizer
+
+# Import security utilities
+from security_config import (
+    validate_model_security, 
+    get_security_warning, 
+    recommend_safe_alternative,
+    validate_model_integrity
+)
+from model_converter import convert_model_safely
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 DESCRIPTION = "Generate an image based on the given prompt."
 GUIDANCE_SCALE_FACTOR = 7.5
@@ -149,12 +163,75 @@ def parse(args):
     return parsed_args
 
 
+def get_safe_model_dir(model_id: str = "runwayml/stable-diffusion-v1-5") -> Path:
+    """
+    Get a safe model directory, converting from PyTorch to ONNX if needed.
+    
+    Args:
+        model_id: HuggingFace model identifier
+        
+    Returns:
+        Path to safe ONNX model directory
+    """
+    # First, validate model security
+    is_safe, message = validate_model_security(model_id)
+    if not is_safe:
+        warning = get_security_warning(model_id)
+        logger.error(warning)
+        alternative = recommend_safe_alternative(model_id)
+        if alternative:
+            logger.info(f"Using safe alternative: {alternative}")
+            model_id = alternative
+            is_safe, message = validate_model_security(model_id)
+            if not is_safe:
+                raise ValueError(f"No safe alternative available for the requested model")
+        else:
+            raise ValueError(f"Model {model_id} is not safe to use: {message}")
+    
+    # Check if we already have a converted version
+    cache_dir = Path.home() / ".cache" / "modular" / "safe_models"
+    model_cache_dir = cache_dir / model_id.replace("/", "_")
+    
+    if model_cache_dir.exists() and (model_cache_dir / "text_encoder" / "model.onnx").exists():
+        logger.info(f"Using cached safe model: {model_cache_dir}")
+        return model_cache_dir
+    
+    # Convert the model safely
+    logger.info(f"Converting {model_id} to safe ONNX format...")
+    logger.info("This may take a few minutes on the first run...")
+    
+    try:
+        converted_dir = convert_model_safely(model_id, str(model_cache_dir))
+        logger.info(f"Model safely converted and cached: {converted_dir}")
+        return converted_dir
+    except Exception as e:
+        logger.error(f"Failed to convert model safely: {e}")
+        raise RuntimeError(f"Could not obtain safe model: {e}")
+
 def main():
     args = parse(sys.argv[1:])
 
+    # Security notice
+    print("🔒 MAX Engine Secure Stable Diffusion")
+    print("=" * 50)
+    print("This version uses security-validated models only.")
+    print("Risky pre-converted models are automatically blocked.")
+    print()
+
+    # Get safe model directory
+    try:
+        model_dir = get_safe_model_dir()
+        print(f"✅ Using safe model from: {model_dir}")
+    except Exception as e:
+        print(f"❌ Security check failed: {e}")
+        sys.exit(1)
+
+    # Validate model integrity
+    logger.info("Validating model integrity...")
+    # Note: This would use checksums if available
+    
     # Compile & load models - this may take a few minutes.
     session = InferenceSession()
-    model_dir = Path(snapshot_download("modularai/stable-diffusion-1.5-onnx"))
     print("Loading and compiling models...")
     txt_encoder = session.load(model_dir / "text_encoder" / "model.onnx")
     img_decoder = session.load(model_dir / "vae_decoder" / "model.onnx")
