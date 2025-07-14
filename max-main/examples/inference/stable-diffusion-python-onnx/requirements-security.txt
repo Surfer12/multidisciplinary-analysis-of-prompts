@@ -13,7 +13,7 @@ diffusers>=0.21.0
 
 # For secure model validation
 cryptography>=3.4.8
-hashlib2>=1.0.2
+# Note: hashlib is part of Python's standard library - no separate installation needed
 
 # For improved logging and monitoring
 colorlog>=6.7.0
