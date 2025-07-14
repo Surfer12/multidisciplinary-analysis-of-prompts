@@ -1,13 +1,20 @@
-arguments=--init-script /var/folders/y4/5x4nzwhd5wjb3k58lqw6pcrc0000gn/T/db3b08fc4a9ef609cb16b96b200fa13e563f396e9bb1ed0905fdab7bc3bc513b.gradle --init-script /var/folders/y4/5x4nzwhd5wjb3k58lqw6pcrc0000gn/T/52cde0cfcf3e28b8b7510e992210d9614505e0911af0c190bd590d7158574963.gradle
-auto.sync=true
-build.scans.enabled=false
+# Eclipse Buildship Core Preferences
+# This file contains generic buildship settings that should work across different environments
+# Personal IDE settings have been removed to prevent environment-specific paths from being committed
+
+# Gradle connection settings
 connection.gradle.distribution=GRADLE_DISTRIBUTION(VERSION(8.9))
 connection.project.dir=
-eclipse.preferences.version=1
-gradle.user.home=
-java.home=/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home
-jvm.arguments=
+
+# Build settings
+auto.sync=true
+build.scans.enabled=false
 offline.mode=false
 override.workspace.settings=true
+
+# UI settings
 show.console.view=true
 show.executions.view=true
+
+# Version
+eclipse.preferences.version=1

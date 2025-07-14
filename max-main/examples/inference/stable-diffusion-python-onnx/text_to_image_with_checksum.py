@@ -2,7 +2,7 @@
 # ===----------------------------------------------------------------------=== #
 # Copyright (c) 2024, Modular Inc. All rights reserved.
 #
-# Licensed under the Apache License v2.0 with LLVM Exceptions:
+# Licensed under the Apache License 2.0 with LLVM Exceptions:
 # https://llvm.org/LICENSE.txt
 #
 # Unless required by applicable law or agreed to in writing, software
@@ -11,12 +11,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ===----------------------------------------------------------------------=== #
-#
-# SECURITY WARNING: This script uses the "modularai/stable-diffusion-1.5-onnx" model
-# which has been flagged as potentially containing backdoor threats on HuggingFace.
-# For production use, consider using text_to_image_secure.py which includes
-# comprehensive model security validation.
-#
+
+"""
+Stable Diffusion Text-to-Image Generation with Checksum Verification
+
+This version includes checksum verification functionality and demonstrates
+proper help text formatting to avoid the backslash issue.
+"""
 
 import signal
 import sys
@@ -30,7 +31,10 @@ from max.engine import InferenceSession
 from PIL import Image
 from transformers import CLIPTokenizer
 
-DESCRIPTION = "Generate an image based on the given prompt."
+# Import our fixed checksum utilities
+from checksum_utils import load_checksums, verify_file_checksum, verify_checksums_against_files
+
+DESCRIPTION = "Generate an image based on the given prompt with optional checksum verification."
 GUIDANCE_SCALE_FACTOR = 7.5
 LATENT_SCALE_FACTOR = 0.18215
 OUTPUT_HEIGHT = 512
@@ -105,6 +109,41 @@ def run_stable_diffusion(
     return
 
 
+def verify_model_checksums(model_dir: Path, checksum_file: Path) -> bool:
+    """
+    Verify model files against checksums.
+    
+    Args:
+        model_dir: Directory containing model files
+        checksum_file: Path to the .sha256 checksum file
+        
+    Returns:
+        True if all files verify successfully, False otherwise
+    """
+    print(f"🔍 Verifying model checksums from {checksum_file}...")
+    
+    try:
+        results = verify_checksums_against_files(checksum_file, model_dir)
+        
+        all_valid = True
+        for filename, is_valid in results.items():
+            status = "✅" if is_valid else "❌"
+            print(f"   {status} {filename}")
+            if not is_valid:
+                all_valid = False
+        
+        if all_valid:
+            print("✅ All model files verified successfully!")
+        else:
+            print("❌ Some model files failed verification!")
+            
+        return all_valid
+        
+    except Exception as e:
+        print(f"❌ Checksum verification failed: {e}")
+        return False
+
+
 def parse(args):
     # Parse args.
     parser = ArgumentParser(description=DESCRIPTION)
@@ -144,6 +183,22 @@ def parse(args):
         default="output.png",
         help="Output filename.",
     )
+    # Fixed help text formatting - using parentheses instead of backslash
+    parser.add_argument(
+        "--checksum-file",
+        type=str,
+        metavar="<file>",
+        help=(
+            "Path to .sha256 checksum file for model verification. "
+            "The file should contain SHA256 hashes in the format: "
+            "<hash>  <filename> with exactly two spaces between hash and filename."
+        ),
+    )
+    parser.add_argument(
+        "--skip-checksum-verification",
+        action="store_true",
+        help="Skip checksum verification even if checksum file is provided.",
+    )
     parsed_args = parser.parse_args(args)
 
     signal.signal(signal.SIGINT, signal.SIG_DFL)
@@ -161,6 +216,14 @@ def main():
     # Compile & load models - this may take a few minutes.
     session = InferenceSession()
     model_dir = Path(snapshot_download("modularai/stable-diffusion-1.5-onnx"))
+    
+    # Verify checksums if requested
+    if args.checksum_file and not args.skip_checksum_verification:
+        checksum_file = Path(args.checksum_file)
+        if not verify_model_checksums(model_dir, checksum_file):
+            print("❌ Model verification failed. Use --skip-checksum-verification to continue anyway.")
+            return 1
+    
     print("Loading and compiling models...")
     txt_encoder = session.load(model_dir / "text_encoder" / "model.onnx")
     img_decoder = session.load(model_dir / "vae_decoder" / "model.onnx")
@@ -174,7 +237,9 @@ def main():
     run_stable_diffusion(
         args, txt_encoder, img_decoder, img_diffuser, tokenizer, scheduler
     )
+    
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

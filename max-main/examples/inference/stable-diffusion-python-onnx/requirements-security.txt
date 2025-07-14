@@ -1,0 +1,4 @@
+# Security validation dependencies
+onnx>=1.14.0
+huggingface-hub>=0.19.0
+netron>=6.0.0  # Optional: for visual model inspection
