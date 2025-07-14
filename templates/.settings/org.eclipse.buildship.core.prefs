@@ -1,13 +1,20 @@
-arguments=--init-script /home/ubuntu/.vm-daemon/vm-daemon-cursor-data/User/globalStorage/redhat.java/1.44.2025071108/config_linux/org.eclipse.osgi/58/0/.cp/gradle/init/init.gradle --init-script /home/ubuntu/.vm-daemon/vm-daemon-cursor-data/User/globalStorage/redhat.java/1.44.2025071108/config_linux/org.eclipse.osgi/58/0/.cp/gradle/protobuf/init.gradle
-auto.sync=false
-build.scans.enabled=false
+# Eclipse Buildship Core Preferences
+# This file contains generic buildship settings that should work across different environments
+# Personal IDE settings have been removed to prevent environment-specific paths from being committed
+
+# Gradle connection settings
 connection.gradle.distribution=GRADLE_DISTRIBUTION(VERSION(8.9))
 connection.project.dir=
-eclipse.preferences.version=1
-gradle.user.home=
-java.home=/usr/lib/jvm/java-21-openjdk-amd64
-jvm.arguments=
+
+# Build settings
+auto.sync=true
+build.scans.enabled=false
 offline.mode=false
 override.workspace.settings=true
+
+# UI settings
 show.console.view=true
 show.executions.view=true
+
+# Version
+eclipse.preferences.version=1
