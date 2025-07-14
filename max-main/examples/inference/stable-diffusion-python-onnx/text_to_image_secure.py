@@ -11,12 +11,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ===----------------------------------------------------------------------=== #
-#
-# SECURITY WARNING: This script uses the "modularai/stable-diffusion-1.5-onnx" model
-# which has been flagged as potentially containing backdoor threats on HuggingFace.
-# For production use, consider using text_to_image_secure.py which includes
-# comprehensive model security validation.
-#
+
+"""
+Secure Stable Diffusion Text-to-Image Generation
+
+This version includes comprehensive model security validation to prevent
+backdoor threats and ensure safe model execution.
+"""
 
 import signal
 import sys
@@ -25,12 +26,18 @@ from pathlib import Path
 
 import numpy as np
 from diffusers import PNDMScheduler
-from huggingface_hub import snapshot_download
 from max.engine import InferenceSession
 from PIL import Image
 from transformers import CLIPTokenizer
 
-DESCRIPTION = "Generate an image based on the given prompt."
+# Import our security validation module
+from model_security import (
+    download_and_validate_model,
+    get_safe_alternative_models,
+    SecurityException
+)
+
+DESCRIPTION = "Generate an image based on the given prompt with security validation."
 GUIDANCE_SCALE_FACTOR = 7.5
 LATENT_SCALE_FACTOR = 0.18215
 OUTPUT_HEIGHT = 512
@@ -38,6 +45,9 @@ OUTPUT_WIDTH = 512
 LATENT_WIDTH = OUTPUT_WIDTH // 8
 LATENT_HEIGHT = OUTPUT_HEIGHT // 8
 LATENT_CHANNELS = 4
+
+# Default model (can be overridden with --model-id)
+DEFAULT_MODEL_ID = "modularai/stable-diffusion-1.5-onnx"
 
 
 def run_stable_diffusion(
@@ -144,6 +154,28 @@ def parse(args):
         default="output.png",
         help="Output filename.",
     )
+    parser.add_argument(
+        "--model-id",
+        type=str,
+        metavar="<model_id>",
+        default=DEFAULT_MODEL_ID,
+        help="HuggingFace model ID to use (default: modularai/stable-diffusion-1.5-onnx)",
+    )
+    parser.add_argument(
+        "--strict-security",
+        action="store_true",
+        help="Enable strict security mode (blocks risky models)",
+    )
+    parser.add_argument(
+        "--skip-validation",
+        action="store_true",
+        help="Skip model security validation (not recommended)",
+    )
+    parser.add_argument(
+        "--list-safe-models",
+        action="store_true",
+        help="List known safe alternative models and exit",
+    )
     parsed_args = parser.parse_args(args)
 
     signal.signal(signal.SIGINT, signal.SIG_DFL)
@@ -158,19 +190,78 @@ def parse(args):
 def main():
     args = parse(sys.argv[1:])
 
+    # List safe models if requested
+    if args.list_safe_models:
+        print("Known safe alternative models:")
+        for model in get_safe_alternative_models():
+            print(f"  - {model}")
+        return
+
+    # Security validation
+    if not args.skip_validation:
+        print("🔒 Starting model security validation...")
+        try:
+            model_dir, validation_results = download_and_validate_model(
+                args.model_id, 
+                strict_mode=args.strict_security
+            )
+            
+            print(f"✅ Model validation completed for: {args.model_id}")
+            print(f"   Safe to use: {validation_results['safe_to_use']}")
+            
+            if not validation_results['safe_to_use']:
+                print("⚠️  WARNING: Model has security issues!")
+                print("   Recommendations:")
+                for rec in validation_results['recommendations']:
+                    print(f"   - {rec}")
+                
+                if args.strict_security:
+                    print("❌ Strict security mode enabled - blocking execution")
+                    return
+                else:
+                    print("⚠️  Proceeding with caution (strict mode disabled)")
+            
+            # Show validation warnings if any
+            if validation_results.get('file_validation', {}).get('warnings'):
+                print("⚠️  Validation warnings:")
+                for warning in validation_results['file_validation']['warnings']:
+                    print(f"   - {warning}")
+                    
+        except SecurityException as e:
+            print(f"❌ Security validation failed: {e}")
+            print("\n💡 Suggestions:")
+            print("   - Use --list-safe-models to see alternatives")
+            print("   - Try a different model with --model-id")
+            print("   - Use --skip-validation (not recommended)")
+            return
+        except Exception as e:
+            print(f"❌ Validation error: {e}")
+            if args.strict_security:
+                print("❌ Strict security mode enabled - blocking execution")
+                return
+            else:
+                print("⚠️  Proceeding without validation (strict mode disabled)")
+                # Fall back to direct download
+                from huggingface_hub import snapshot_download
+                model_dir = Path(snapshot_download(args.model_id))
+    else:
+        print("⚠️  Skipping model security validation (not recommended)")
+        from huggingface_hub import snapshot_download
+        model_dir = Path(snapshot_download(args.model_id))
+
     # Compile & load models - this may take a few minutes.
+    print("\n🔄 Loading and compiling models...")
     session = InferenceSession()
-    model_dir = Path(snapshot_download("modularai/stable-diffusion-1.5-onnx"))
-    print("Loading and compiling models...")
     txt_encoder = session.load(model_dir / "text_encoder" / "model.onnx")
     img_decoder = session.load(model_dir / "vae_decoder" / "model.onnx")
     img_diffuser = session.load(model_dir / "unet" / "model.onnx")
-    print("Models compiled.\n")
+    print("✅ Models compiled.\n")
 
     # Instantiate tokenizer and scheduler.
     tokenizer = CLIPTokenizer.from_pretrained(model_dir / "tokenizer")
     scheduler = PNDMScheduler.from_pretrained(model_dir / "scheduler")
 
+    # Run the stable diffusion pipeline
     run_stable_diffusion(
         args, txt_encoder, img_decoder, img_diffuser, tokenizer, scheduler
     )
